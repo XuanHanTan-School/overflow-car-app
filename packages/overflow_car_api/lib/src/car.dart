@@ -19,14 +19,26 @@ class Car {
     required this.videoPort,
   });
 
+  factory Car.fromJson(String json) {
+    var data = JsonDecoder().convert(json);
+    return Car(
+      name: data["name"],
+      host: data["host"],
+      commandPort: data["commandPort"],
+      videoPort: data["videoPort"],
+    );
+  }
+
   void checkIsConnected() {
     if (!_isConnected) {
-      throw StateError("Car has not been connected yet. Call the connect() method.");
+      throw StateError(
+          "Car has not been connected yet. Call the connect() method.");
     }
   }
 
-  void connect() async {
-    socket = await WebSocket.connect(Uri(scheme: "ws", host: host, port: commandPort));
+  Future<void> connect() async {
+    socket = await WebSocket.connect(
+        Uri(scheme: "ws", host: host, port: commandPort));
     _isConnected = true;
 
     socket!.events.listen((e) async {
@@ -44,13 +56,20 @@ class Car {
   void sendCommand(Command command) {
     checkIsConnected();
 
-    socket!.sendText(JsonEncoder().convert({
-      "type": command.type.typeStr,
-      ...command.data
-    }));
+    socket!.sendText(
+        JsonEncoder().convert({"type": command.type.typeStr, ...command.data}));
   }
 
-  void disconnect() async {
+  Future<void> disconnect() async {
     await socket?.close();
+  }
+
+  String toJson() {
+    return JsonEncoder().convert({
+      "name": name,
+      "host": host,
+      "commandPort": commandPort,
+      "videoPort": videoPort,
+    });
   }
 }
