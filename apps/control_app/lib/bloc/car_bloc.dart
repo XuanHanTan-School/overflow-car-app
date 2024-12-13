@@ -7,8 +7,10 @@ import 'package:overflow_car_api/overflow_car.dart';
 class CarBloc extends Bloc<CarEvent, CarState> {
   CarBloc() : super(CarState(isInitialized: false, currentCars: [])) {
     on<AppInitialize>(onAppInitialize);
+    on<AddCar>(onAddCar);
     on<ChangeSelectedCar>(onChangeSelectedCar);
     on<ConnectSelectedCar>(onConnectSelectedCar);
+    on<DisconnectSelectedCar>(onDisconnectSelectedCar);
   }
 
   void onAppInitialize(AppInitialize event, Emitter emit) async {
@@ -22,7 +24,10 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       await currentCar.connect();
     }
 
-    emit(state.copyWith(isInitialized: true, currentCars: cars, selectedCarIndex: selectedCarIndex));
+    emit(state.copyWith(
+        isInitialized: true,
+        currentCars: cars,
+        selectedCarIndex: selectedCarIndex));
   }
 
   void onAddCar(AddCar event, Emitter emit) async {
@@ -32,6 +37,8 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       commandPort: event.commandPort,
       videoPort: event.videoPort,
     );
+
+    await LocalStorage.storeCar(car);
 
     emit(state.copyWith(
       currentCars: state.currentCars + [car],
@@ -57,12 +64,28 @@ class CarBloc extends Bloc<CarEvent, CarState> {
 
   void onConnectSelectedCar(ConnectSelectedCar event, Emitter emit) async {
     checkCarSelected();
-    await state.currentCars[state.selectedCarIndex!].connect();
+    emit(state.copyWith(
+        selectedCarIndex: state.selectedCarIndex,
+        connectionState: CarConnectionState.connecting));
+    try {
+      await state.currentCars[state.selectedCarIndex!].connect();
+      emit(state.copyWith(
+          selectedCarIndex: state.selectedCarIndex,
+          connectionState: CarConnectionState.connected));
+    } catch (e) {
+      emit(state.copyWith(
+          selectedCarIndex: state.selectedCarIndex,
+          connectionState: CarConnectionState.disconnected));
+      rethrow;
+    }
   }
 
   void onDisconnectSelectedCar(
       DisconnectSelectedCar event, Emitter emit) async {
     checkCarSelected();
     await state.currentCars[state.selectedCarIndex!].disconnect();
+    emit(state.copyWith(
+        selectedCarIndex: state.selectedCarIndex,
+        connectionState: CarConnectionState.disconnected));
   }
 }

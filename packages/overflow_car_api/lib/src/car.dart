@@ -12,6 +12,8 @@ class Car {
   bool _isConnected = false;
   WebSocket? socket;
 
+  bool get isConnected => _isConnected;
+
   Car({
     required this.name,
     required this.host,
@@ -62,6 +64,7 @@ class Car {
 
   Future<void> disconnect() async {
     await socket?.close();
+    _isConnected = false;
   }
 
   String toJson() {

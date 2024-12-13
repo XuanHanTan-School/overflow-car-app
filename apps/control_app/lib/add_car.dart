@@ -18,6 +18,11 @@ class _AddCarPageState extends State<AddCarPage> {
   final videoPortController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  String? name;
+  String? host;
+  int? commandPort;
+  int? videoPort;
+
   @override
   void initState() {
     super.initState();
@@ -76,14 +81,16 @@ class _AddCarPageState extends State<AddCarPage> {
             key: _formKey,
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   spacing: 10,
                   children: [
                     Expanded(
                       child: ListView(
                         children: [
-                          const SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 16,
+                          ),
                           TextFormField(
                             decoration: InputDecoration(
                               label: Text("Name"),
@@ -91,8 +98,15 @@ class _AddCarPageState extends State<AddCarPage> {
                             ),
                             controller: nameController,
                             autovalidateMode: AutovalidateMode.onUnfocus,
+                            onChanged: (value) {
+                              setState(() {
+                                name = value;
+                              });
+                            },
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           TextFormField(
                             decoration: InputDecoration(
                               label: Text("Host"),
@@ -101,8 +115,15 @@ class _AddCarPageState extends State<AddCarPage> {
                             controller: hostController,
                             validator: validateHost,
                             autovalidateMode: AutovalidateMode.onUnfocus,
+                            onChanged: (value) {
+                              setState(() {
+                                host = value;
+                              });
+                            },
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           TextFormField(
                             decoration: InputDecoration(
                               label: Text("Command port"),
@@ -112,8 +133,15 @@ class _AddCarPageState extends State<AddCarPage> {
                             keyboardType: TextInputType.number,
                             validator: validatePort,
                             autovalidateMode: AutovalidateMode.onUnfocus,
+                            onChanged: (value) {
+                              setState(() {
+                                commandPort = int.tryParse(value);
+                              });
+                            },
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           TextFormField(
                             decoration: InputDecoration(
                               label: Text("Video port"),
@@ -123,6 +151,14 @@ class _AddCarPageState extends State<AddCarPage> {
                             keyboardType: TextInputType.number,
                             validator: validatePort,
                             autovalidateMode: AutovalidateMode.onUnfocus,
+                            onChanged: (value) {
+                              setState(() {
+                                videoPort = int.tryParse(value);
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
                           ),
                         ],
                       ),
@@ -130,14 +166,15 @@ class _AddCarPageState extends State<AddCarPage> {
                     FilledButton(
                       onPressed: _formKey.currentState?.validate() ?? false
                           ? () {
-                              context.read<CarBloc>().add(AddCar(
-                                    name: nameController.text,
-                                    host: hostController.text,
-                                    commandPort:
-                                        int.parse(commandPortController.text),
-                                    videoPort:
-                                        int.parse(videoPortController.text),
-                                  ));
+                              context.read<CarBloc>().add(
+                                    AddCar(
+                                      name: name!,
+                                      host: host!,
+                                      commandPort: commandPort!,
+                                      videoPort: videoPort!,
+                                    ),
+                                  );
+                              Navigator.pop(context);
                             }
                           : null,
                       child: Text("Finish"),
