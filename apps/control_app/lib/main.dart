@@ -214,12 +214,19 @@ class _HomePageState extends State<HomePage> {
                                         context
                                             .read<CarBloc>()
                                             .add(DisconnectSelectedCar());
+                                        setState(() {
+                                          isSettingsOverlayVisible = false;
+                                        });
                                       },
                                       icon: Icon(Icons.link_off_outlined),
                                       iconSize: 24,
                                     ),
                                     IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        setState(() {
+                                          isSettingsOverlayVisible = false;
+                                        });
+                                      },
                                       icon: Icon(Icons.settings_outlined),
                                       iconSize: 24,
                                     ),
@@ -257,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                                   child: IconButton.filledTonal(
                                     onPressed: () {},
                                     icon: RotatedBox(
-                                      quarterTurns: 1,
+                                      quarterTurns: 3,
                                       child: Icon(Icons.forward), // Forward
                                     ),
                                     iconSize: 56,

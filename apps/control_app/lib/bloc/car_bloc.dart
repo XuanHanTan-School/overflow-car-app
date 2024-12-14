@@ -70,8 +70,9 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     emit(state.copyWith(
         selectedCarIndex: state.selectedCarIndex,
         connectionState: CarConnectionState.connecting));
+    final currentCar = state.currentCars[state.selectedCarIndex!];
     try {
-      await state.currentCars[state.selectedCarIndex!].connect();
+      await currentCar.connect();
       emit(state.copyWith(
           selectedCarIndex: state.selectedCarIndex,
           connectionState: CarConnectionState.connected));
@@ -79,6 +80,15 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       emit(state.copyWith(
           selectedCarIndex: state.selectedCarIndex,
           connectionState: CarConnectionState.disconnected));
+    }
+
+    await for (var isConnected in currentCar.connectionState.stream) {
+      if (!isConnected) {
+        emit(state.copyWith(
+          selectedCarIndex: state.selectedCarIndex,
+          connectionState: CarConnectionState.disconnected));
+        break;
+      }
     }
   }
 

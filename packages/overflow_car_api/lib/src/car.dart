@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:overflow_car_api/src/command.dart';
@@ -8,11 +9,10 @@ class Car {
   final String host;
   final int commandPort;
   final int videoPort;
+  final StreamController<bool> connectionState = StreamController.broadcast();
 
   bool _isConnected = false;
   WebSocket? socket;
-
-  bool get isConnected => _isConnected;
 
   Car({
     required this.name,
@@ -42,12 +42,14 @@ class Car {
     socket = await WebSocket.connect(
         Uri(scheme: "ws", host: host, port: commandPort));
     _isConnected = true;
+    connectionState.add(_isConnected);
 
     socket!.events.listen((e) async {
       switch (e) {
         case CloseReceived(code: final code, reason: final reason):
           print('Connection to server closed: $code [$reason]');
           _isConnected = false;
+          connectionState.add(_isConnected);
           break;
         default:
           break;
@@ -65,6 +67,7 @@ class Car {
   Future<void> disconnect() async {
     await socket?.close();
     _isConnected = false;
+    connectionState.add(_isConnected);
   }
 
   String toJson() {
