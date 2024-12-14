@@ -6,18 +6,13 @@ class LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 20,
         children: [
           CircularProgressIndicator(),
-          Text(
-            message,
-            style: theme.textTheme.titleMedium,
-          ),
+          Text(message),
         ],
       ),
     );

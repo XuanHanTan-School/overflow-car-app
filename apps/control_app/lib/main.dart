@@ -8,6 +8,7 @@ import 'package:control_app/views/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motion_sensors/motion_sensors.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,11 +32,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Timer? showSettingsOverlayTimer;
   var isSettingsOverlayVisible = false;
+  late final StreamSubscription orientationStreamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    orientationStreamSubscription = motionSensors.orientation.listen((event) {
+      if (mounted) {
+        context.read<CarBloc>().add(UpdateDriveState(angle: event.yaw.round()));
+      }
+    });
+  }
 
   @override
   void dispose() {
     super.dispose();
     showSettingsOverlayTimer?.cancel();
+    orientationStreamSubscription.cancel();
   }
 
   Future<void> onPedalChanged(

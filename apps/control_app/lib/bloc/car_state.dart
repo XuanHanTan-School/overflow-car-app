@@ -55,4 +55,21 @@ class CarDrivingState {
   Map<String, dynamic> toMap() {
     return {"angle": angle, "forward": forward, "accelerate": accelerate};
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is CarDrivingState
+        && other.angle == angle
+        && other.forward == forward
+        && other.accelerate == accelerate;
+  }
+  
+  @override
+  int get hashCode => "$angle-$forward-$accelerate".hashCode;
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:control_app/bloc/car_event.dart';
 import 'package:control_app/bloc/car_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +7,8 @@ import 'package:local_storage/local_storage.dart';
 import 'package:overflow_car_api/overflow_car.dart';
 
 class CarBloc extends Bloc<CarEvent, CarState> {
+  Timer? sendDriveCommandTimer;
+
   CarBloc() : super(CarState(isInitialized: false, currentCars: [])) {
     on<AppInitialize>(onAppInitialize);
     on<AddCar>(onAddCar);
@@ -65,7 +69,8 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     }
   }
 
-  Future<void> onConnectSelectedCar(ConnectSelectedCar event, Emitter emit) async {
+  Future<void> onConnectSelectedCar(
+      ConnectSelectedCar event, Emitter emit) async {
     checkCarSelected();
     emit(state.copyWith(
         selectedCarIndex: state.selectedCarIndex,
@@ -76,7 +81,17 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       emit(state.copyWith(
           selectedCarIndex: state.selectedCarIndex,
           connectionState: CarConnectionState.connected));
+
+      CarDrivingState? prevDriveState;
+      sendDriveCommandTimer =
+          Timer.periodic(Duration(milliseconds: 30), (timer) {
+        if (prevDriveState != state.drivingState) {
+          add(SendDriveCommand());
+          prevDriveState = state.drivingState;
+        }
+      });
     } catch (e) {
+      await Future.delayed(Duration(milliseconds: 100));
       emit(state.copyWith(
           selectedCarIndex: state.selectedCarIndex,
           connectionState: CarConnectionState.disconnected));
@@ -84,16 +99,17 @@ class CarBloc extends Bloc<CarEvent, CarState> {
 
     await for (var isConnected in currentCar.connectionState.stream) {
       if (!isConnected) {
+        sendDriveCommandTimer?.cancel();
+        sendDriveCommandTimer = null;
         emit(state.copyWith(
-          selectedCarIndex: state.selectedCarIndex,
-          connectionState: CarConnectionState.disconnected));
+            selectedCarIndex: state.selectedCarIndex,
+            connectionState: CarConnectionState.disconnected));
         break;
       }
     }
   }
 
   void onUpdateDriveState(UpdateDriveState event, Emitter emit) {
-    checkCarSelected();
     emit(state.copyWith(
       selectedCarIndex: state.selectedCarIndex,
       drivingState: state.drivingState.copyWith(
@@ -116,8 +132,5 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       DisconnectSelectedCar event, Emitter emit) async {
     checkCarSelected();
     await state.currentCars[state.selectedCarIndex!].disconnect();
-    emit(state.copyWith(
-        selectedCarIndex: state.selectedCarIndex,
-        connectionState: CarConnectionState.disconnected));
   }
 }
