@@ -10,27 +10,30 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     on<AddCar>(onAddCar);
     on<ChangeSelectedCar>(onChangeSelectedCar);
     on<ConnectSelectedCar>(onConnectSelectedCar);
+    on<UpdateDriveState>(onUpdateDriveState);
+    on<SendDriveCommand>(onSendDriveCommand);
     on<DisconnectSelectedCar>(onDisconnectSelectedCar);
   }
 
-  void onAppInitialize(AppInitialize event, Emitter emit) async {
+  Future<void> onAppInitialize(AppInitialize event, Emitter emit) async {
     final cars = await LocalStorage.getCars();
     int? selectedCarIndex;
 
     if (cars.isNotEmpty) {
       selectedCarIndex = await LocalStorage.getSelectedCarIndex() ?? 0;
-
-      final currentCar = cars[selectedCarIndex];
-      await currentCar.connect();
     }
 
     emit(state.copyWith(
         isInitialized: true,
         currentCars: cars,
         selectedCarIndex: selectedCarIndex));
+
+    if (cars.isNotEmpty) {
+      await onConnectSelectedCar(ConnectSelectedCar(), emit);
+    }
   }
 
-  void onAddCar(AddCar event, Emitter emit) async {
+  Future<void> onAddCar(AddCar event, Emitter emit) async {
     final car = Car(
       name: event.name,
       host: event.host,
@@ -62,7 +65,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     }
   }
 
-  void onConnectSelectedCar(ConnectSelectedCar event, Emitter emit) async {
+  Future<void> onConnectSelectedCar(ConnectSelectedCar event, Emitter emit) async {
     checkCarSelected();
     emit(state.copyWith(
         selectedCarIndex: state.selectedCarIndex,
@@ -76,11 +79,30 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       emit(state.copyWith(
           selectedCarIndex: state.selectedCarIndex,
           connectionState: CarConnectionState.disconnected));
-      rethrow;
     }
   }
 
-  void onDisconnectSelectedCar(
+  void onUpdateDriveState(UpdateDriveState event, Emitter emit) {
+    checkCarSelected();
+    emit(state.copyWith(
+      selectedCarIndex: state.selectedCarIndex,
+      drivingState: state.drivingState.copyWith(
+        angle: event.angle,
+        forward: event.forward,
+        accelerate: event.accelerate,
+      ),
+    ));
+  }
+
+  void onSendDriveCommand(SendDriveCommand event, Emitter emit) {
+    checkCarSelected();
+    state.currentCars[state.selectedCarIndex!].sendCommand(Command(
+      type: CommandType.drive,
+      data: state.drivingState.toMap(),
+    ));
+  }
+
+  Future<void> onDisconnectSelectedCar(
       DisconnectSelectedCar event, Emitter emit) async {
     checkCarSelected();
     await state.currentCars[state.selectedCarIndex!].disconnect();

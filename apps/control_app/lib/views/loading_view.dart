@@ -11,7 +11,7 @@ class LoadingView extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 30,
+        spacing: 20,
         children: [
           CircularProgressIndicator(),
           Text(

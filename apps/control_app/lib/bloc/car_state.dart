@@ -5,25 +5,54 @@ class CarState {
   final List<Car> currentCars;
   final int? selectedCarIndex;
   final CarConnectionState connectionState;
+  late final CarDrivingState drivingState;
 
-  const CarState(
+  CarState(
       {required this.isInitialized,
       required this.currentCars,
       this.selectedCarIndex,
-      this.connectionState = CarConnectionState.disconnected});
+      this.connectionState = CarConnectionState.disconnected,
+      CarDrivingState? drivingState}) {
+    this.drivingState = drivingState ??
+        CarDrivingState(angle: 0, forward: true, accelerate: false);
+  }
 
-  CarState copyWith(
-      {bool? isInitialized,
-      List<Car>? currentCars,
-      required int? selectedCarIndex,
-      CarConnectionState? connectionState}) {
+  CarState copyWith({
+    bool? isInitialized,
+    List<Car>? currentCars,
+    required int? selectedCarIndex,
+    CarConnectionState? connectionState,
+    CarDrivingState? drivingState,
+  }) {
     return CarState(
       isInitialized: isInitialized ?? this.isInitialized,
       currentCars: currentCars ?? this.currentCars,
       selectedCarIndex: selectedCarIndex,
       connectionState: connectionState ?? this.connectionState,
+      drivingState: drivingState ?? this.drivingState,
     );
   }
 }
 
 enum CarConnectionState { disconnected, connecting, connected }
+
+class CarDrivingState {
+  final int angle;
+  final bool forward;
+  final bool accelerate;
+
+  const CarDrivingState(
+      {required this.angle, required this.forward, required this.accelerate});
+
+  CarDrivingState copyWith({int? angle, bool? forward, bool? accelerate}) {
+    return CarDrivingState(
+      angle: angle ?? this.angle,
+      forward: forward ?? this.forward,
+      accelerate: accelerate ?? this.accelerate,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {"angle": angle, "forward": forward, "accelerate": accelerate};
+  }
+}

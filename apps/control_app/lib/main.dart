@@ -14,7 +14,10 @@ void main() {
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
-    runApp(const HomePage());
+    runApp(BlocProvider(
+      create: (_) => CarBloc()..add(AppInitialize()),
+      child: const HomePage(),
+    ));
   });
 }
 
@@ -35,13 +38,30 @@ class _HomePageState extends State<HomePage> {
     showSettingsOverlayTimer?.cancel();
   }
 
+  Future<void> onPedalChanged(
+      {required bool isForward, required bool isPressed}) async {
+    final carBloc = context.read<CarBloc>();
+
+    carBloc.add(UpdateDriveState(
+      forward: isForward,
+      accelerate: isPressed,
+    ));
+
+    await carBloc.stream.firstWhere(
+      (state) =>
+          state.drivingState.forward == isForward &&
+          state.drivingState.accelerate == isPressed,
+    );
+    carBloc.add(SendDriveCommand());
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.of(context);
 
-    return BlocProvider(
-      create: (_) => CarBloc()..add(AppInitialize()),
+    return BlocProvider.value(
+      value: BlocProvider.of<CarBloc>(context),
       child: MaterialApp(
         home: Scaffold(
           body: BlocBuilder<CarBloc, CarState>(
@@ -182,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                             child: AnimatedOpacity(
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
-                              opacity: isSettingsOverlayVisible ? 1: 0,
+                              opacity: isSettingsOverlayVisible ? 1 : 0,
                               child: IgnorePointer(
                                 ignoring: !isSettingsOverlayVisible,
                                 child: Row(
@@ -215,21 +235,41 @@ class _HomePageState extends State<HomePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                IconButton.filledTonal(
-                                  onPressed: () {},
-                                  icon: RotatedBox(
-                                    quarterTurns: 1,
-                                    child: Icon(Icons.forward), // Reverse
+                                GestureDetector(
+                                  child: IconButton.filledTonal(
+                                    onPressed: () {},
+                                    icon: RotatedBox(
+                                      quarterTurns: 1,
+                                      child: Icon(Icons.forward), // Reverse
+                                    ),
+                                    iconSize: 56,
                                   ),
-                                  iconSize: 56,
+                                  onTapDown: (details) async {
+                                    await onPedalChanged(
+                                        isForward: false, isPressed: true);
+                                  },
+                                  onTapCancel: () async {
+                                    await onPedalChanged(
+                                        isForward: false, isPressed: false);
+                                  },
                                 ),
-                                IconButton.filledTonal(
-                                  onPressed: () {},
-                                  icon: RotatedBox(
-                                    quarterTurns: 3,
-                                    child: Icon(Icons.forward), // Forward
+                                GestureDetector(
+                                  child: IconButton.filledTonal(
+                                    onPressed: () {},
+                                    icon: RotatedBox(
+                                      quarterTurns: 1,
+                                      child: Icon(Icons.forward), // Forward
+                                    ),
+                                    iconSize: 56,
                                   ),
-                                  iconSize: 56,
+                                  onTapDown: (details) async {
+                                    await onPedalChanged(
+                                        isForward: true, isPressed: true);
+                                  },
+                                  onTapCancel: () async {
+                                    await onPedalChanged(
+                                        isForward: true, isPressed: false);
+                                  },
                                 ),
                               ],
                             ),
