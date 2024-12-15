@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:control_app/add_car.dart';
 import 'package:control_app/bloc/car_bloc.dart';
@@ -32,14 +33,24 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Timer? showSettingsOverlayTimer;
   var isSettingsOverlayVisible = false;
+  late final StreamSubscription screenOrientationStreamSubscription;
   late final StreamSubscription orientationStreamSubscription;
 
   @override
   void initState() {
     super.initState();
+
+    int? screenOrientationAngle;
+    screenOrientationStreamSubscription = motionSensors.screenOrientation.listen((event) {
+      screenOrientationAngle = event.angle?.toInt();
+    });
     orientationStreamSubscription = motionSensors.orientation.listen((event) {
       if (mounted) {
-        context.read<CarBloc>().add(UpdateDriveState(angle: event.yaw.round()));
+        var angle = min(max((event.pitch * 180 / pi).round(), -90), 90);
+        if (screenOrientationAngle == -90) {
+          angle *= -1;
+        }
+        context.read<CarBloc>().add(UpdateDriveState(angle: angle));
       }
     });
   }
@@ -49,6 +60,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
     showSettingsOverlayTimer?.cancel();
     orientationStreamSubscription.cancel();
+    screenOrientationStreamSubscription.cancel();
   }
 
   Future<void> onPedalChanged(

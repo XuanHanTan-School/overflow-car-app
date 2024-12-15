@@ -41,7 +41,10 @@ dependencies:
   flutter_bloc: ^8.1.6
   overflow_car_api: ^1.0.0
   local_storage: ^1.0.0
-  motion_sensors: ^0.1.0
+  motion_sensors:
+    git:
+      url: https://github.com/XuanHanTan-School/motion_sensors.git
+      ref: 360c0f05cfc14503046469382480bfb7162a277c
 
 dev_dependencies:
   flutter_test:

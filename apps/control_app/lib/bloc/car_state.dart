@@ -1,3 +1,4 @@
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:overflow_car_api/overflow_car.dart';
 
 class CarState {
@@ -6,31 +7,41 @@ class CarState {
   final int? selectedCarIndex;
   final CarConnectionState connectionState;
   late final CarDrivingState drivingState;
+  VlcPlayerController? _videoPlayerController;
 
   CarState(
       {required this.isInitialized,
       required this.currentCars,
       this.selectedCarIndex,
       this.connectionState = CarConnectionState.disconnected,
-      CarDrivingState? drivingState}) {
+      CarDrivingState? drivingState,
+      VlcPlayerController? videoPlayerController}) {
     this.drivingState = drivingState ??
         CarDrivingState(angle: 0, forward: true, accelerate: false);
+    _videoPlayerController = videoPlayerController;
   }
 
   CarState copyWith({
     bool? isInitialized,
     List<Car>? currentCars,
-    required int? selectedCarIndex,
+    int? selectedCarIndex,
     CarConnectionState? connectionState,
     CarDrivingState? drivingState,
   }) {
     return CarState(
       isInitialized: isInitialized ?? this.isInitialized,
       currentCars: currentCars ?? this.currentCars,
-      selectedCarIndex: selectedCarIndex,
+      selectedCarIndex: selectedCarIndex ?? this.selectedCarIndex,
       connectionState: connectionState ?? this.connectionState,
       drivingState: drivingState ?? this.drivingState,
+      videoPlayerController: _videoPlayerController,
     );
+  }
+
+  CarState copyWithVideoPlayerController({
+    required VlcPlayerController? videoPlayerController,
+  }) {
+    return copyWith().._videoPlayerController = videoPlayerController;
   }
 }
 
@@ -64,12 +75,12 @@ class CarDrivingState {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is CarDrivingState
-        && other.angle == angle
-        && other.forward == forward
-        && other.accelerate == accelerate;
+    return other is CarDrivingState &&
+        other.angle == angle &&
+        other.forward == forward &&
+        other.accelerate == accelerate;
   }
-  
+
   @override
   int get hashCode => "$angle-$forward-$accelerate".hashCode;
 }

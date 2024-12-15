@@ -202,10 +202,11 @@ packages:
   motion_sensors:
     dependency: "direct main"
     description:
-      name: motion_sensors
-      sha256: "4e2734a76cd6da633013bcdc68a9efe9fbbcff906e6d6c45040932edda3fa5d6"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "360c0f05cfc14503046469382480bfb7162a277c"
+      resolved-ref: "360c0f05cfc14503046469382480bfb7162a277c"
+      url: "https://github.com/XuanHanTan-School/motion_sensors.git"
+    source: git
     version: "0.1.0"
   nested:
     dependency: transitive

@@ -47,10 +47,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
 
     await LocalStorage.storeCar(car);
 
-    emit(state.copyWith(
-      currentCars: state.currentCars + [car],
-      selectedCarIndex: state.selectedCarIndex,
-    ));
+    emit(state.copyWith(currentCars: state.currentCars + [car]));
 
     if (state.selectedCarIndex == null) {
       onChangeSelectedCar(ChangeSelectedCar(0), emit);
@@ -72,15 +69,11 @@ class CarBloc extends Bloc<CarEvent, CarState> {
   Future<void> onConnectSelectedCar(
       ConnectSelectedCar event, Emitter emit) async {
     checkCarSelected();
-    emit(state.copyWith(
-        selectedCarIndex: state.selectedCarIndex,
-        connectionState: CarConnectionState.connecting));
+    emit(state.copyWith(connectionState: CarConnectionState.connecting));
     final currentCar = state.currentCars[state.selectedCarIndex!];
     try {
       await currentCar.connect();
-      emit(state.copyWith(
-          selectedCarIndex: state.selectedCarIndex,
-          connectionState: CarConnectionState.connected));
+      emit(state.copyWith(connectionState: CarConnectionState.connected));
 
       CarDrivingState? prevDriveState;
       sendDriveCommandTimer =
@@ -92,18 +85,14 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       });
     } catch (e) {
       await Future.delayed(Duration(milliseconds: 100));
-      emit(state.copyWith(
-          selectedCarIndex: state.selectedCarIndex,
-          connectionState: CarConnectionState.disconnected));
+      emit(state.copyWith(connectionState: CarConnectionState.disconnected));
     }
 
     await for (var isConnected in currentCar.connectionState.stream) {
       if (!isConnected) {
         sendDriveCommandTimer?.cancel();
         sendDriveCommandTimer = null;
-        emit(state.copyWith(
-            selectedCarIndex: state.selectedCarIndex,
-            connectionState: CarConnectionState.disconnected));
+        emit(state.copyWith(connectionState: CarConnectionState.disconnected));
         break;
       }
     }
@@ -111,7 +100,6 @@ class CarBloc extends Bloc<CarEvent, CarState> {
 
   void onUpdateDriveState(UpdateDriveState event, Emitter emit) {
     emit(state.copyWith(
-      selectedCarIndex: state.selectedCarIndex,
       drivingState: state.drivingState.copyWith(
         angle: event.angle,
         forward: event.forward,
