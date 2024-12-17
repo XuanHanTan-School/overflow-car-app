@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:control_app/bloc/car_event.dart';
 import 'package:control_app/bloc/car_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:local_storage/local_storage.dart';
 import 'package:overflow_car_api/overflow_car.dart';
 
@@ -73,7 +74,15 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     final currentCar = state.currentCars[state.selectedCarIndex!];
     try {
       await currentCar.connect();
-      emit(state.copyWith(connectionState: CarConnectionState.connected));
+
+      final videoPlayerController = VlcPlayerController.network(
+        "rtsp://${currentCar.host}:${currentCar.videoPort}/video_stream",
+        options: VlcPlayerOptions(),
+      ); // TODO: Fit screen and reduce buffer
+      emit(await state
+          .copyWith(connectionState: CarConnectionState.connected)
+          .copyWithVideoPlayerController(
+              videoPlayerController: videoPlayerController));
 
       CarDrivingState? prevDriveState;
       sendDriveCommandTimer =
@@ -92,7 +101,9 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       if (!isConnected) {
         sendDriveCommandTimer?.cancel();
         sendDriveCommandTimer = null;
-        emit(state.copyWith(connectionState: CarConnectionState.disconnected));
+        emit(await state
+            .copyWith(connectionState: CarConnectionState.disconnected)
+            .copyWithVideoPlayerController(videoPlayerController: null));
         break;
       }
     }

@@ -9,6 +9,8 @@ class CarState {
   late final CarDrivingState drivingState;
   VlcPlayerController? _videoPlayerController;
 
+  VlcPlayerController? get videoPlayerController => _videoPlayerController;
+
   CarState(
       {required this.isInitialized,
       required this.currentCars,
@@ -38,9 +40,12 @@ class CarState {
     );
   }
 
-  CarState copyWithVideoPlayerController({
+  Future<CarState> copyWithVideoPlayerController({
     required VlcPlayerController? videoPlayerController,
-  }) {
+  }) async {
+    if (videoPlayerController == null) {
+      await _videoPlayerController?.dispose();
+    }
     return copyWith().._videoPlayerController = videoPlayerController;
   }
 }
