@@ -68,6 +68,8 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider.value(
       value: BlocProvider.of<CarBloc>(context),
       child: MaterialApp(
+        theme: ThemeData(),
+        darkTheme: ThemeData.dark(),
         home: Scaffold(
           body: BlocBuilder<CarBloc, CarState>(
             buildWhen: (previous, current) {

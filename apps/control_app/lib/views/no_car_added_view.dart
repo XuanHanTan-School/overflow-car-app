@@ -1,4 +1,4 @@
-import 'package:control_app/add_car.dart';
+import 'package:control_app/pages/add_car.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

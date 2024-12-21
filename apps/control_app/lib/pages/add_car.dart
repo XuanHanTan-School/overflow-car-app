@@ -67,6 +67,8 @@ class _AddCarPageState extends State<AddCarPage> {
     return BlocProvider.value(
       value: BlocProvider.of<CarBloc>(context),
       child: MaterialApp(
+        theme: ThemeData(),
+        darkTheme: ThemeData.dark(),
         home: Scaffold(
           appBar: AppBar(
             title: Text("Add car"),

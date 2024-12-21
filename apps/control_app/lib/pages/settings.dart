@@ -1,3 +1,4 @@
+import 'package:control_app/pages/settings/car_management.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,6 +25,8 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        theme: ThemeData(),
+        darkTheme: ThemeData.dark(),
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -41,6 +44,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 leading: Icon(Icons.directions_car_outlined),
                 title: Text("Cars"),
                 subtitle: Text("Edit, add and remove cars"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CarManagementPage()));
+                },
               ),
               ListTile(
                 leading: Icon(Icons.speed_outlined),
