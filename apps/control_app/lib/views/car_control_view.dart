@@ -46,12 +46,18 @@ class _CarControlViewState extends State<CarControlView> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
+    final videoZoom =
+        mediaQuery.size.width / (mediaQuery.size.height * (16 / 9));
+
     return Stack(
       children: [
         if (widget.state.videoPlayerController != null)
-          VlcPlayer(
-            controller: widget.state.videoPlayerController!,
-            aspectRatio: mediaQuery.size.aspectRatio,
+          Transform.scale(
+            scale: videoZoom,
+            child: VlcPlayer(
+              controller: widget.state.videoPlayerController!,
+              aspectRatio: mediaQuery.size.aspectRatio,
+            ),
           ),
         Positioned.fill(
           child: GestureDetector(

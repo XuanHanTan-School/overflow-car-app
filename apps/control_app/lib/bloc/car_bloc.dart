@@ -77,8 +77,10 @@ class CarBloc extends Bloc<CarEvent, CarState> {
 
       final videoPlayerController = VlcPlayerController.network(
         "rtsp://${currentCar.host}:${currentCar.videoPort}/video_stream",
-        options: VlcPlayerOptions(),
-      ); // TODO: Fit screen and reduce buffer
+        options: VlcPlayerOptions(
+          rtp: VlcRtpOptions([":network-caching=100"])
+        ),
+      );
       emit(await state
           .copyWith(connectionState: CarConnectionState.connected)
           .copyWithVideoPlayerController(

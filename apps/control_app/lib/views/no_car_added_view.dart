@@ -1,5 +1,6 @@
 import 'package:control_app/add_car.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class NoCarAddedView extends StatelessWidget {
   const NoCarAddedView({super.key});
@@ -31,13 +32,17 @@ class NoCarAddedView extends StatelessWidget {
               child: const Text("Import settings"),
             ),
             OutlinedButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const AddCarPage(),
                   ),
                 );
+                SystemChrome.setPreferredOrientations([
+                  DeviceOrientation.landscapeRight,
+                  DeviceOrientation.landscapeLeft
+                ]);
               },
               child: const Text("Add car"),
             )

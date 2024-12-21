@@ -1,6 +1,8 @@
 import 'package:control_app/bloc/car_bloc.dart';
 import 'package:control_app/bloc/car_event.dart';
+import 'package:control_app/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:overflow_car_api/overflow_car.dart';
 
@@ -12,7 +14,7 @@ class CarDisconnectedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -38,7 +40,14 @@ class CarDisconnectedView extends StatelessWidget {
               child: const Text("Connect"),
             ),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () async {
+                await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SettingsPage()));
+                SystemChrome.setPreferredOrientations([
+                  DeviceOrientation.landscapeRight,
+                  DeviceOrientation.landscapeLeft
+                ]);
+              },
               child: const Text("Settings"),
             )
           ],
