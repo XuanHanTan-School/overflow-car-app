@@ -36,7 +36,14 @@ class _AddCarPageState extends State<AddCarPage> {
   }
 
   String? validateName(String? name) {
-    return name != null ? null : "Name must not be empty";
+    if (name == null || name == "") return "Name must not be empty";
+
+    final carBloc = context.read<CarBloc>();
+    if (carBloc.state.currentCars.any((car) => car.name == name)) {
+      return "Name has already been used";
+    }
+
+    return null;
   }
 
   String? validateHost(String? host) {
@@ -99,6 +106,7 @@ class _AddCarPageState extends State<AddCarPage> {
                               border: OutlineInputBorder(),
                             ),
                             controller: nameController,
+                            validator: validateName,
                             autovalidateMode: AutovalidateMode.onUnfocus,
                             onChanged: (value) {
                               setState(() {
