@@ -2,6 +2,7 @@ import 'package:control_app/bloc/car_bloc.dart';
 import 'package:control_app/bloc/car_state.dart';
 import 'package:control_app/pages/add_car.dart';
 import 'package:control_app/pages/settings/car_info.dart';
+import 'package:control_app/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,6 +43,9 @@ class CarManagementPage extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.file_upload_outlined),
                   title: Text("Import cars"),
+                  onTap: () async {
+                    await importCarsFromJson(context: context);
+                  },
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),

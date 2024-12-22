@@ -1,4 +1,5 @@
 import 'package:control_app/pages/add_car.dart';
+import 'package:control_app/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,8 +29,10 @@ class NoCarAddedView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FilledButton(
-              onPressed: () {},
-              child: const Text("Import settings"),
+              onPressed: () async {
+                await importCarsFromJson(context: context);
+              },
+              child: const Text("Import cars"),
             ),
             OutlinedButton(
               onPressed: () async {

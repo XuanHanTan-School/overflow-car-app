@@ -45,6 +45,7 @@ dependencies:
     git:
       url: https://github.com/XuanHanTan-School/motion_sensors.git
       ref: 360c0f05cfc14503046469382480bfb7162a277c
+  file_picker: ^8.1.6
 
 dev_dependencies:
   flutter_test:
