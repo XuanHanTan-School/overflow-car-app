@@ -18,6 +18,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     on<UpdateDriveState>(onUpdateDriveState);
     on<SendDriveCommand>(onSendDriveCommand);
     on<DisconnectSelectedCar>(onDisconnectSelectedCar);
+    on<DeleteCar>(onDeleteCar);
   }
 
   Future<void> onAppInitialize(AppInitialize event, Emitter emit) async {
@@ -28,10 +29,9 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       selectedCarIndex = await LocalStorage.getSelectedCarIndex() ?? 0;
     }
 
-    emit(state.copyWith(
-        isInitialized: true,
-        currentCars: cars,
-        selectedCarIndex: selectedCarIndex));
+    emit(state
+        .copyWith(isInitialized: true, currentCars: cars)
+        .copyWithSelectedCarIndex(selectedCarIndex: selectedCarIndex));
 
     if (cars.isNotEmpty) {
       await onConnectSelectedCar(ConnectSelectedCar(), emit);
@@ -51,13 +51,16 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     emit(state.copyWith(currentCars: state.currentCars + [car]));
 
     if (state.selectedCarIndex == null) {
-      onChangeSelectedCar(ChangeSelectedCar(0), emit);
-      onConnectSelectedCar(ConnectSelectedCar(), emit);
+      await onChangeSelectedCar(ChangeSelectedCar(0), emit);
+      await onConnectSelectedCar(ConnectSelectedCar(), emit);
     }
   }
 
-  void onChangeSelectedCar(ChangeSelectedCar event, Emitter emit) {
-    emit(state.copyWith(selectedCarIndex: event.selectedCarIndex));
+  Future<void> onChangeSelectedCar(
+      ChangeSelectedCar event, Emitter emit) async {
+    await LocalStorage.setSelectedCarIndex(event.selectedCarIndex);
+    emit(state.copyWithSelectedCarIndex(
+        selectedCarIndex: event.selectedCarIndex));
   }
 
   void checkCarSelected() {
@@ -77,9 +80,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
 
       final videoPlayerController = VlcPlayerController.network(
         "rtsp://${currentCar.host}:${currentCar.videoPort}/video_stream",
-        options: VlcPlayerOptions(
-          rtp: VlcRtpOptions([":network-caching=100"])
-        ),
+        options: VlcPlayerOptions(rtp: VlcRtpOptions([":network-caching=100"])),
       );
       emit(await state
           .copyWith(connectionState: CarConnectionState.connected)
@@ -133,5 +134,24 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       DisconnectSelectedCar event, Emitter emit) async {
     checkCarSelected();
     await state.currentCars[state.selectedCarIndex!].disconnect();
+  }
+
+  Future<void> onDeleteCar(DeleteCar event, Emitter emit) async {
+    var newSelectedCarIndex = state.selectedCarIndex;
+
+    if (state.currentCars.length - 1 <= (newSelectedCarIndex ?? 0)) {
+      newSelectedCarIndex = state.currentCars.length - 2;
+
+      if (newSelectedCarIndex < 0) {
+        newSelectedCarIndex = null;
+      }
+    }
+
+    await LocalStorage.setSelectedCarIndex(newSelectedCarIndex);
+    await LocalStorage.removeCar(event.car);
+
+    emit(state
+        .copyWith(currentCars: [...state.currentCars]..remove(event.car))
+        .copyWithSelectedCarIndex(selectedCarIndex: newSelectedCarIndex));
   }
 }

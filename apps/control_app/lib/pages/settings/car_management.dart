@@ -1,5 +1,7 @@
 import 'package:control_app/bloc/car_bloc.dart';
 import 'package:control_app/bloc/car_state.dart';
+import 'package:control_app/pages/add_car.dart';
+import 'package:control_app/pages/settings/car_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +28,12 @@ class CarManagementPage extends StatelessWidget {
             title: Text("Cars"),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddCarPage()),
+              );
+            },
             child: Icon(Icons.add_outlined),
           ),
           body: SafeArea(
@@ -64,8 +71,21 @@ class CarManagementPage extends StatelessWidget {
                         return ListTile(
                           title: Text(car.name),
                           trailing: state.selectedCarIndex == index
-                              ? Icon(Icons.check_outlined, color: Colors.green[theme.brightness == Brightness.light ? 700: 300],)
+                              ? Icon(
+                                  Icons.check_outlined,
+                                  color: Colors.green[
+                                      theme.brightness == Brightness.light
+                                          ? 700
+                                          : 300],
+                                )
                               : null,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CarInfoPage(car: car)),
+                            );
+                          },
                         );
                       },
                       itemCount: state.currentCars.length,

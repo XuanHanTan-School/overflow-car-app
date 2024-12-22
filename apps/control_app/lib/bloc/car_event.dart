@@ -1,3 +1,5 @@
+import 'package:overflow_car_api/overflow_car.dart';
+
 sealed class CarEvent {}
 
 final class AppInitialize extends CarEvent {}
@@ -35,3 +37,9 @@ final class UpdateDriveState extends CarEvent {
 final class SendDriveCommand extends CarEvent {}
 
 final class DisconnectSelectedCar extends CarEvent {}
+
+final class DeleteCar extends CarEvent {
+  final Car car;
+
+  DeleteCar({required this.car});
+}

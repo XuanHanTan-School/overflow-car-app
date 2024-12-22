@@ -8,7 +8,8 @@ class LocalStorage {
   static Future<List<Car>> getCars() async {
     final prefs = await SharedPreferences.getInstance();
     final carJsons = prefs.getStringList(carsKey) ?? [];
-    final cars = carJsons.map((eachCarJson) => Car.fromJson(eachCarJson)).toList();
+    final cars =
+        carJsons.map((eachCarJson) => Car.fromJson(eachCarJson)).toList();
     return cars;
   }
 
@@ -20,13 +21,30 @@ class LocalStorage {
     await prefs.setStringList(carsKey, carJsons);
   }
 
+  static Future<void> removeCar(Car car) async {
+    final prefs = await SharedPreferences.getInstance();
+    final cars = await getCars();
+    cars.removeWhere((eachCar) => eachCar.toJson() == car.toJson());
+    final carJsons = cars.map((eachCar) => eachCar.toJson()).toList();
+    await prefs.setStringList(carsKey, carJsons);
+  }
+
   static Future<int?> getSelectedCarIndex() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt(selectedCarIndexKey);
   }
 
-  static Future<void> setSelectedCarIndex(int selectedCarIndex) async {
+  static Future<void> setSelectedCarIndex(int? selectedCarIndex) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(selectedCarIndexKey, selectedCarIndex);
+    if (selectedCarIndex == null) {
+      await prefs.remove(selectedCarIndexKey);
+    } else {
+      await prefs.setInt(selectedCarIndexKey, selectedCarIndex);
+    }
+  }
+
+  static Future<void> clear() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 }
