@@ -43,3 +43,10 @@ final class DeleteCar extends CarEvent {
 
   DeleteCar({required this.car});
 }
+
+final class EditPerformanceSettings extends CarEvent {
+  final int? cacheMillis;
+  final int? updateIntervalMillis;
+
+  EditPerformanceSettings({this.cacheMillis, this.updateIntervalMillis});
+}

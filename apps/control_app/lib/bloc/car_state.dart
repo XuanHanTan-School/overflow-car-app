@@ -8,6 +8,7 @@ class CarState {
   final CarConnectionState connectionState;
   late final CarDrivingState drivingState;
   VlcPlayerController? _videoPlayerController;
+  final PerformanceSettings perfSettings;
 
   int? get selectedCarIndex => _selectedCarIndex;
   VlcPlayerController? get videoPlayerController => _videoPlayerController;
@@ -18,7 +19,8 @@ class CarState {
       int? selectedCarIndex,
       this.connectionState = CarConnectionState.disconnected,
       CarDrivingState? drivingState,
-      VlcPlayerController? videoPlayerController}) {
+      VlcPlayerController? videoPlayerController,
+      required this.perfSettings}) {
     this.drivingState = drivingState ??
         CarDrivingState(angle: 0, forward: true, accelerate: false);
     _selectedCarIndex = selectedCarIndex;
@@ -30,6 +32,7 @@ class CarState {
     List<Car>? currentCars,
     CarConnectionState? connectionState,
     CarDrivingState? drivingState,
+    PerformanceSettings? perfSettings,
   }) {
     return CarState(
       isInitialized: isInitialized ?? this.isInitialized,
@@ -38,6 +41,7 @@ class CarState {
       connectionState: connectionState ?? this.connectionState,
       drivingState: drivingState ?? this.drivingState,
       videoPlayerController: _videoPlayerController,
+      perfSettings: perfSettings ?? this.perfSettings,
     );
   }
 
@@ -93,4 +97,36 @@ class CarDrivingState {
 
   @override
   int get hashCode => "$angle-$forward-$accelerate".hashCode;
+}
+
+class PerformanceSettings {
+  final int cacheMillis;
+  final int updateIntervalMillis;
+
+  const PerformanceSettings(
+      {this.cacheMillis = 100, this.updateIntervalMillis = 30});
+
+  factory PerformanceSettings.fromMap(Map<String, dynamic> map) {
+    return PerformanceSettings(
+      cacheMillis: map["cacheMillis"] ?? 100,
+      updateIntervalMillis: map["updateIntervalMillis"] ?? 30,
+    );
+  }
+
+  PerformanceSettings copyWith({
+    int? cacheMillis,
+    int? updateIntervalMillis,
+  }) {
+    return PerformanceSettings(
+      cacheMillis: cacheMillis ?? this.cacheMillis,
+      updateIntervalMillis: updateIntervalMillis ?? this.updateIntervalMillis,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "cacheMillis": cacheMillis,
+      "updateIntervalMillis": updateIntervalMillis,
+    };
+  }
 }

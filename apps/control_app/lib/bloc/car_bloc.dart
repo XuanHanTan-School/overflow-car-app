@@ -10,7 +10,12 @@ import 'package:overflow_car_api/overflow_car.dart';
 class CarBloc extends Bloc<CarEvent, CarState> {
   Timer? sendDriveCommandTimer;
 
-  CarBloc() : super(CarState(isInitialized: false, currentCars: [])) {
+  CarBloc()
+      : super(CarState(
+          isInitialized: false,
+          currentCars: [],
+          perfSettings: PerformanceSettings(),
+        )) {
     on<AppInitialize>(onAppInitialize);
     on<AddCar>(onAddCar);
     on<ChangeSelectedCar>(onChangeSelectedCar);
@@ -19,9 +24,12 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     on<SendDriveCommand>(onSendDriveCommand);
     on<DisconnectSelectedCar>(onDisconnectSelectedCar);
     on<DeleteCar>(onDeleteCar);
+    on<EditPerformanceSettings>(onEditPerformanceSettings);
   }
 
   Future<void> onAppInitialize(AppInitialize event, Emitter emit) async {
+    final perfSettings =
+        PerformanceSettings.fromMap(await LocalStorage.getSettings());
     final cars = await LocalStorage.getCars();
     int? selectedCarIndex;
 
@@ -30,7 +38,8 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     }
 
     emit(state
-        .copyWith(isInitialized: true, currentCars: cars)
+        .copyWith(
+            isInitialized: true, currentCars: cars, perfSettings: perfSettings)
         .copyWithSelectedCarIndex(selectedCarIndex: selectedCarIndex));
 
     if (cars.isNotEmpty) {
@@ -88,7 +97,9 @@ class CarBloc extends Bloc<CarEvent, CarState> {
 
       final videoPlayerController = VlcPlayerController.network(
         "rtsp://${currentCar.host}:${currentCar.videoPort}/video_stream",
-        options: VlcPlayerOptions(rtp: VlcRtpOptions([":network-caching=100"])),
+        options: VlcPlayerOptions(
+            rtp: VlcRtpOptions(
+                [":network-caching=${state.perfSettings.cacheMillis}"])),
       );
       emit(await state
           .copyWith(connectionState: CarConnectionState.connected)
@@ -96,8 +107,9 @@ class CarBloc extends Bloc<CarEvent, CarState> {
               videoPlayerController: videoPlayerController));
 
       CarDrivingState? prevDriveState;
-      sendDriveCommandTimer =
-          Timer.periodic(Duration(milliseconds: 30), (timer) {
+      sendDriveCommandTimer = Timer.periodic(
+          Duration(milliseconds: state.perfSettings.updateIntervalMillis),
+          (timer) {
         if (prevDriveState != state.drivingState) {
           add(SendDriveCommand());
           prevDriveState = state.drivingState;
@@ -161,5 +173,15 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     emit(state
         .copyWith(currentCars: [...state.currentCars]..remove(event.car))
         .copyWithSelectedCarIndex(selectedCarIndex: newSelectedCarIndex));
+  }
+
+  Future<void> onEditPerformanceSettings(
+      EditPerformanceSettings event, Emitter emit) async {
+    final newSettings = state.perfSettings.copyWith(
+      cacheMillis: event.cacheMillis,
+      updateIntervalMillis: event.updateIntervalMillis,
+    );
+    await LocalStorage.storeSettings(newSettings.toMap());
+    emit(state.copyWith(perfSettings: newSettings));
   }
 }

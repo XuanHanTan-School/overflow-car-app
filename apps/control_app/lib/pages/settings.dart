@@ -1,4 +1,5 @@
 import 'package:control_app/pages/settings/car_management.dart';
+import 'package:control_app/pages/settings/performance_management.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -25,8 +26,8 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(),
-        darkTheme: ThemeData.dark(),
+      theme: ThemeData(),
+      darkTheme: ThemeData.dark(),
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -54,7 +55,13 @@ class _SettingsPageState extends State<SettingsPage> {
               ListTile(
                 leading: Icon(Icons.speed_outlined),
                 title: Text("Performance"),
-                subtitle: Text("Caching, update rate"),
+                subtitle: Text("Command update interval, video cache duration"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PerformanceManagementPage()));
+                },
               ),
               ListTile(
                 leading: Icon(Icons.restore_outlined),

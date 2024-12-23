@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:overflow_car_api/overflow_car.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,6 +44,16 @@ class LocalStorage {
     } else {
       await prefs.setInt(selectedCarIndexKey, selectedCarIndex);
     }
+  }
+
+  static Future<void> storeSettings(Map<String, dynamic> settings) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("settings", jsonEncode(settings));
+  }
+
+  static Future<Map<String, dynamic>> getSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    return jsonDecode(prefs.getString("settings") ?? "{}");
   }
 
   static Future<void> clear() async {

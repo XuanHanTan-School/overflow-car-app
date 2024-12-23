@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:control_app/bloc/car_bloc.dart';
 import 'package:control_app/bloc/car_event.dart';
 import 'package:control_app/bloc/car_state.dart';
+import 'package:control_app/pages/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
@@ -45,12 +47,25 @@ class _CarControlViewState extends State<CarControlView> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    final theme = Theme.of(context);
 
     final videoZoom =
         mediaQuery.size.width / (mediaQuery.size.height * (16 / 9));
 
     return Stack(
       children: [
+        Positioned.fill(
+          child: Container(
+            color: Colors.black,
+            child: Center(
+              child: Text(
+                "Waiting for video stream...",
+                style:
+                    theme.textTheme.bodyLarge!.copyWith(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
         if (widget.state.videoPlayerController != null)
           Transform.scale(
             scale: videoZoom,
@@ -101,10 +116,18 @@ class _CarControlViewState extends State<CarControlView> {
                     iconSize: 24,
                   ),
                   IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       setState(() {
                         isSettingsOverlayVisible = false;
                       });
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SettingsPage()));
+                      SystemChrome.setPreferredOrientations([
+                        DeviceOrientation.landscapeRight,
+                        DeviceOrientation.landscapeLeft
+                      ]);
                     },
                     icon: Icon(Icons.settings_outlined),
                     iconSize: 24,

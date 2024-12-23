@@ -64,12 +64,10 @@ class CarInfoPage extends StatelessWidget {
                 height: 20,
               ),
               ListTile(
-                leading: Icon(Icons.gamepad_outlined),
                 title: Text("Command port"),
                 subtitle: Text(car.commandPort.toString()),
               ),
               ListTile(
-                leading: Icon(Icons.videocam_outlined),
                 title: Text("Video port"),
                 subtitle: Text(car.videoPort.toString()),
               ),
