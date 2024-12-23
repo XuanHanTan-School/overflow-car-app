@@ -46,11 +46,17 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       videoPort: event.videoPort,
     );
 
-    // TODO: handle duplicate cars
+    if (state.currentCars.any((eachCar) => eachCar.name == car.name)) {
+      emit(state.copyWith(
+          currentCars: state.currentCars
+                  .where((eachCar) => eachCar.name != car.name)
+                  .toList() +
+              [car]));
+    } else {
+      emit(state.copyWith(currentCars: state.currentCars + [car]));
+    }
 
     await LocalStorage.storeCar(car);
-
-    emit(state.copyWith(currentCars: state.currentCars + [car]));
 
     if (state.selectedCarIndex == null) {
       await onChangeSelectedCar(ChangeSelectedCar(0), emit);

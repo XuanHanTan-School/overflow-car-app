@@ -16,6 +16,7 @@ class LocalStorage {
   static Future<void> storeCar(Car car) async {
     final prefs = await SharedPreferences.getInstance();
     final cars = await getCars();
+    cars.removeWhere((eachCar) => eachCar.name == car.name);
     cars.add(car);
     final carJsons = cars.map((eachCar) => eachCar.toJson()).toList();
     await prefs.setStringList(carsKey, carJsons);
