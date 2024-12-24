@@ -4,7 +4,7 @@ import 'package:control_app/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:overflow_car_api/overflow_car.dart';
+import 'package:car_api/overflow_car.dart';
 
 class CarDisconnectedView extends StatelessWidget {
   final Car car;

@@ -2,7 +2,7 @@ import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:overflow_car_api/overflow_car.dart';
+import 'package:car_api/overflow_car.dart';
 
 class CarInfoPage extends StatelessWidget {
   final Car car;

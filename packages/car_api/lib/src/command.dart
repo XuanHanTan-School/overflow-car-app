@@ -1,4 +1,4 @@
-import 'package:overflow_car_api/src/command_type.dart';
+import 'package:car_api/src/command_type.dart';
 
 class Command {
   final CommandType type;

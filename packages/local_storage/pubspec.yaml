@@ -9,7 +9,7 @@ environment:
 # Add regular dependencies here.
 dependencies:
   shared_preferences: ^2.3.3
-  overflow_car_api: ^1.0.0
+  car_api: ^1.0.0
   # path: ^1.8.0
 
 dev_dependencies:

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:overflow_car_api/src/command.dart';
+import 'package:car_api/src/command.dart';
 import 'package:web_socket/web_socket.dart';
 
 class Car {

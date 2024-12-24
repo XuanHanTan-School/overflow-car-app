@@ -25,6 +25,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  car_api:
+    dependency: "direct main"
+    description:
+      path: "../../packages/car_api"
+      relative: true
+    source: path
+    version: "1.0.0"
   car_bloc:
     dependency: "direct main"
     description:
@@ -246,13 +253,6 @@ packages:
       sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
-  overflow_car_api:
-    dependency: "direct main"
-    description:
-      path: "../../packages/overflow_car_api"
-      relative: true
-    source: path
     version: "1.0.0"
   path:
     dependency: transitive

@@ -1,4 +1,4 @@
-name: car_bloc
+name: time_trial_bloc
 description: A sample command-line application.
 version: 1.0.0
 # repository: https://github.com/my_org/my_repo
@@ -8,10 +8,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
-  car_api: ^1.0.0
-  local_storage: ^1.0.0
   flutter_bloc: ^8.1.6
-  flutter_vlc_player: ^7.4.2
 
 dev_dependencies:
   lints: ^5.0.0

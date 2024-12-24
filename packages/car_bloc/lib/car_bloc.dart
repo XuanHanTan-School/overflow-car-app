@@ -5,7 +5,7 @@ import 'package:car_bloc/car_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:local_storage/local_storage.dart';
-import 'package:overflow_car_api/overflow_car.dart';
+import 'package:car_api/overflow_car.dart';
 
 class CarBloc extends Bloc<CarEvent, CarState> {
   Timer? sendDriveCommandTimer;

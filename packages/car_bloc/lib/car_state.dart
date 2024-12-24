@@ -1,5 +1,5 @@
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
-import 'package:overflow_car_api/overflow_car.dart';
+import 'package:car_api/overflow_car.dart';
 
 class CarState {
   final bool isInitialized;

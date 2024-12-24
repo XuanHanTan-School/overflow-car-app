@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:overflow_car_api/overflow_car.dart';
+import 'package:car_api/overflow_car.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
