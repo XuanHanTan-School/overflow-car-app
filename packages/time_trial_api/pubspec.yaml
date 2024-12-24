@@ -8,6 +8,10 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  firebase_core: ^1.19.0
+  firebase_database: ^9.1.7
+  rxdart: ^0.28.0
+  uuid: ^4.5.1
   # path: ^1.8.0
 
 dev_dependencies:
