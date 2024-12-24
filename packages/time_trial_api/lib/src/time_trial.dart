@@ -64,7 +64,7 @@ class TimeTrial {
       endTime: endTime,
       duration: duration,
     );
-    await _dbRef.set(newTrial);
+    await _dbRef.set(newTrial.toMap());
   }
 
   Future<void> delete() async {

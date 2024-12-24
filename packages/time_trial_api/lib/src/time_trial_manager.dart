@@ -9,20 +9,27 @@ import 'package:uuid/uuid.dart';
 class TimeTrialManager {
   static final _timeTrialController = BehaviorSubject<TimeTrial>();
   static StreamSubscription<DatabaseEvent>? _timeTrialStreamSubscription;
+  static final _timeTrialDeleteController = BehaviorSubject<String>();
+  static StreamSubscription<DatabaseEvent>? _timeTrialDeleteStreamSubscription;
 
   static DatabaseReference get _dbRef =>
       FirebaseDatabase.instance.ref("trials");
 
-  static void startTimeTrialListener() {
-    _timeTrialStreamSubscription =
-        _dbRef.child("\$trialId").onValue.listen((event) {
+  static Future<void> startTimeTrialListeners() async {
+    _timeTrialStreamSubscription = _dbRef.onChildChanged.listen((event) {
       final timeTrial = TimeTrial.fromMap(
-          event.snapshot.key!, event.snapshot.value as Map<String, dynamic>);
+          event.snapshot.key!, Map.from(event.snapshot.value as Map));
       _timeTrialController.add(timeTrial);
+    });
+
+    _timeTrialDeleteStreamSubscription = _dbRef.onChildRemoved.listen((event) {
+      _timeTrialDeleteController.add(event.snapshot.key!);
     });
   }
 
   static Stream<TimeTrial> getTimeTrialUpdates() => _timeTrialController.stream;
+
+  static Stream<String> getTimeTrialDeletes() => _timeTrialDeleteController.stream;
 
   static Future<List<LeaderboardTimeTrial>> getLeaderboardTimeTrials(
       String userTrialId) async {
@@ -33,7 +40,7 @@ class TimeTrialManager {
       final eachTrialData = trialSnapshotList[i];
       trials.add(LeaderboardTimeTrial.fromMap(
         eachTrialData.key!,
-        eachTrialData.value as Map<String, dynamic>,
+        Map.from(eachTrialData.value as Map),
         position: i,
       ));
     }
@@ -60,6 +67,7 @@ class TimeTrialManager {
 
   static Future<void> dispose() async {
     await _timeTrialStreamSubscription?.cancel();
+    await _timeTrialDeleteStreamSubscription?.cancel();
   }
 }
 
