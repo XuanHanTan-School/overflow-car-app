@@ -38,6 +38,7 @@ dependencies:
   car_api: ^1.0.0
   local_storage: ^1.0.0
   car_bloc: ^1.0.0
+  time_trial_api: ^1.0.0
   flutter_vlc_player: ^7.4.2
   sensors_plus: ^6.1.0
   web_socket: ^0.1.6
@@ -47,6 +48,7 @@ dependencies:
       url: https://github.com/XuanHanTan-School/motion_sensors.git
       ref: 360c0f05cfc14503046469382480bfb7162a277c
   file_picker: ^8.1.6
+  firebase_core: ^3.9.0
 
 dev_dependencies:
   flutter_test:

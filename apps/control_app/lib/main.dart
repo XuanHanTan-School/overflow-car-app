@@ -4,17 +4,24 @@ import 'dart:math';
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
 import 'package:car_bloc/car_state.dart';
+import 'package:control_app/firebase_options.dart';
 import 'package:control_app/views/car_control_view.dart';
 import 'package:control_app/views/car_disconnected_view.dart';
 import 'package:control_app/views/loading_view.dart';
 import 'package:control_app/views/no_car_added_view.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
