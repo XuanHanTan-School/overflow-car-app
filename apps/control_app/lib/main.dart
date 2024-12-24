@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:control_app/bloc/car_bloc.dart';
-import 'package:control_app/bloc/car_event.dart';
-import 'package:control_app/bloc/car_state.dart';
+import 'package:car_bloc/car_bloc.dart';
+import 'package:car_bloc/car_event.dart';
+import 'package:car_bloc/car_state.dart';
 import 'package:control_app/views/car_control_view.dart';
 import 'package:control_app/views/car_disconnected_view.dart';
 import 'package:control_app/views/loading_view.dart';

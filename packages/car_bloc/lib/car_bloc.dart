@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:control_app/bloc/car_event.dart';
-import 'package:control_app/bloc/car_state.dart';
+import 'package:car_bloc/car_event.dart';
+import 'package:car_bloc/car_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:local_storage/local_storage.dart';

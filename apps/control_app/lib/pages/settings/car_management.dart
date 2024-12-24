@@ -1,5 +1,5 @@
-import 'package:control_app/bloc/car_bloc.dart';
-import 'package:control_app/bloc/car_state.dart';
+import 'package:car_bloc/car_bloc.dart';
+import 'package:car_bloc/car_state.dart';
 import 'package:control_app/pages/add_car.dart';
 import 'package:control_app/pages/settings/car_info.dart';
 import 'package:control_app/utilities/utilities.dart';

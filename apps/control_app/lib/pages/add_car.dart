@@ -1,5 +1,5 @@
-import 'package:control_app/bloc/car_bloc.dart';
-import 'package:control_app/bloc/car_event.dart';
+import 'package:car_bloc/car_bloc.dart';
+import 'package:car_bloc/car_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
