@@ -8,6 +8,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  async: ^2.11.0
   firebase_core: ^3.9.0
   firebase_database: ^11.2.0
   rxdart: ^0.28.0

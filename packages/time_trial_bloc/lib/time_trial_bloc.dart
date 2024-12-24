@@ -6,30 +6,52 @@ import 'package:time_trial_bloc/time_trial_event.dart';
 import 'package:time_trial_bloc/time_trial_state.dart';
 
 class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
-  final StreamController<TimeTrial?> _currentTimeTrialStreamController = StreamController.broadcast();
+  StreamController<TimeTrial?>? _currentTimeTrialStreamController;
+  StreamSubscription<TimeTrial>? _timeTrialUpdatesStreamSubscription;
+  StreamSubscription<String>? _timeTrialDeletesStreamSubscription;
 
   TimeTrialBloc() : super(TimeTrialState()) {
-    on<AppInitialize>(onAppInitialize);
+    on<TimeTrialAppInitialize>(onAppInitialize);
     on<SetCar>(onSetCar);
   }
 
-  Future<void> onAppInitialize(AppInitialize event, Emitter emit) async {
+  Future<void> onAppInitialize(
+      TimeTrialAppInitialize event, Emitter emit) async {
     await TimeTrialManager.startTimeTrialListeners();
+  }
 
-    TimeTrialManager.getTimeTrialUpdates().listen((trial) {
+  Future<void> setupTimeTrialStreamController() async {
+    await _timeTrialUpdatesStreamSubscription?.cancel();
+    await _timeTrialDeletesStreamSubscription?.cancel();
+    await _currentTimeTrialStreamController?.close();
+    _currentTimeTrialStreamController = StreamController.broadcast();
+
+    _timeTrialUpdatesStreamSubscription =
+        TimeTrialManager.getTimeTrialUpdates().listen((trial) {
       if (trial.carName != state.carName) return;
 
-      _currentTimeTrialStreamController.add(trial);
+      _currentTimeTrialStreamController?.add(trial);
     });
 
-    TimeTrialManager.getTimeTrialDeletes().listen((trialId) async {
-      if (trialId != (await _currentTimeTrialStreamController.stream.last)?.id) return;
+    _timeTrialDeletesStreamSubscription =
+        TimeTrialManager.getTimeTrialDeletes().listen((trialId) async {
+          print("del $trialId"); // TODO: broken
+      if (trialId !=
+          (await _currentTimeTrialStreamController?.stream.last)?.id) {
+        return;
+      }
 
-      _currentTimeTrialStreamController.add(null);
+      _currentTimeTrialStreamController?.add(null);
     });
   }
 
-  void onSetCar(SetCar event, Emitter emit) {
-    emit(state.copyWith(carName: event.carName));
+  Future<void> onSetCar(SetCar event, Emitter emit) async {
+    emit(state.copyWithCarName(carName: event.carName));
+
+    await setupTimeTrialStreamController();
+    await for (final currentTrial
+        in _currentTimeTrialStreamController!.stream) {
+      emit(state.copyWithCurrentTrial(currentTrial: currentTrial));
+    }
   }
 }

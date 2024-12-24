@@ -2,7 +2,7 @@ import 'package:car_api/overflow_car.dart';
 
 sealed class CarEvent {}
 
-final class AppInitialize extends CarEvent {}
+final class CarAppInitialize extends CarEvent {}
 
 final class AddCar extends CarEvent {
   final String name;

@@ -16,7 +16,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
           currentCars: [],
           perfSettings: PerformanceSettings(),
         )) {
-    on<AppInitialize>(onAppInitialize);
+    on<CarAppInitialize>(onAppInitialize);
     on<AddCar>(onAddCar);
     on<ChangeSelectedCar>(onChangeSelectedCar);
     on<ConnectSelectedCar>(onConnectSelectedCar);
@@ -27,7 +27,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     on<EditPerformanceSettings>(onEditPerformanceSettings);
   }
 
-  Future<void> onAppInitialize(AppInitialize event, Emitter emit) async {
+  Future<void> onAppInitialize(CarAppInitialize event, Emitter emit) async {
     final perfSettings =
         PerformanceSettings.fromMap(await LocalStorage.getSettings());
     final cars = await LocalStorage.getCars();

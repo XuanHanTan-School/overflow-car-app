@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:async/async.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:time_trial_api/src/time_trial.dart';
@@ -16,7 +17,9 @@ class TimeTrialManager {
       FirebaseDatabase.instance.ref("trials");
 
   static Future<void> startTimeTrialListeners() async {
-    _timeTrialStreamSubscription = _dbRef.onChildChanged.listen((event) {
+    _timeTrialStreamSubscription =
+        StreamGroup.merge([_dbRef.onChildAdded, _dbRef.onChildChanged])
+            .listen((event) {
       final timeTrial = TimeTrial.fromMap(
           event.snapshot.key!, Map.from(event.snapshot.value as Map));
       _timeTrialController.add(timeTrial);
@@ -29,7 +32,8 @@ class TimeTrialManager {
 
   static Stream<TimeTrial> getTimeTrialUpdates() => _timeTrialController.stream;
 
-  static Stream<String> getTimeTrialDeletes() => _timeTrialDeleteController.stream;
+  static Stream<String> getTimeTrialDeletes() =>
+      _timeTrialDeleteController.stream;
 
   static Future<List<LeaderboardTimeTrial>> getLeaderboardTimeTrials(
       String userTrialId) async {

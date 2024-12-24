@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motion_sensors/motion_sensors.dart';
+import 'package:time_trial_bloc/time_trial_bloc.dart';
+import 'package:time_trial_bloc/time_trial_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +27,12 @@ void main() async {
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
-    runApp(BlocProvider(
-      create: (_) => CarBloc()..add(AppInitialize()),
+    runApp(MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => CarBloc()..add(CarAppInitialize())),
+        BlocProvider(
+            create: (_) => TimeTrialBloc()..add(TimeTrialAppInitialize())),
+      ],
       child: const HomePage(),
     ));
   });
@@ -42,6 +48,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final StreamSubscription screenOrientationStreamSubscription;
   late final StreamSubscription orientationStreamSubscription;
+  late final StreamSubscription carBlocSelectedCarStreamSubscription;
 
   @override
   void initState() {
@@ -61,6 +68,30 @@ class _HomePageState extends State<HomePage> {
         context.read<CarBloc>().add(UpdateDriveState(angle: angle));
       }
     });
+
+    final carBloc = context.read<CarBloc>();
+    carBlocSelectedCarStreamSubscription = carBloc.stream
+        .distinct((prev, current) =>
+            prev.selectedCarIndex == current.selectedCarIndex)
+        .listen((state) {
+      if (!mounted) return;
+      final timeTrialBloc = context.read<TimeTrialBloc>();
+      final selectedCarIndex = state.selectedCarIndex;
+
+      if (selectedCarIndex != null) {
+        timeTrialBloc
+            .add(SetCar(carName: state.currentCars[selectedCarIndex].name));
+      } else {
+        timeTrialBloc.add(SetCar(carName: null));
+      }
+    });
+
+    // TODO: test
+    final timeTrialBloc = context.read<TimeTrialBloc>();
+    timeTrialBloc.stream.listen((state) {
+      print(
+          "Car name: ${state.carName}, Trial ID: ${state.currentTrial?.id}, User name: ${state.currentTrial?.userName}, Start: ${state.currentTrial?.startTime}, End: ${state.currentTrial?.endTime}, Duration: ${state.currentTrial?.duration}");
+    });
   }
 
   @override
@@ -68,12 +99,16 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
     orientationStreamSubscription.cancel();
     screenOrientationStreamSubscription.cancel();
+    carBlocSelectedCarStreamSubscription.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: BlocProvider.of<CarBloc>(context),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: BlocProvider.of<CarBloc>(context)),
+        BlocProvider.value(value: BlocProvider.of<TimeTrialBloc>(context)),
+      ],
       child: MaterialApp(
         theme: ThemeData(),
         darkTheme: ThemeData.dark(),
