@@ -22,81 +22,86 @@ class _PositionPageState extends State<PositionPage> {
   void initState() {
     super.initState();
 
+    var skipInitialCompleted = false;
     final timeTrialBloc = context.read<TimeTrialBloc>();
     _timeTrialSubscription = timeTrialBloc.stream.distinct((previous, current) {
-      return previous.currentTrial == current.currentTrial;
+      return previous.currentTrial?.id == null ||
+          previous.currentTrial?.id == current.currentTrial?.id;
     }).listen((state) {
+      if (!skipInitialCompleted) {
+        skipInitialCompleted = true;
+        return;
+      }
+
       if (!mounted) return;
+      print("Closing time trial page");
+      print("Navigator can pop: ${Navigator.canPop(context)}");
       Navigator.pop(context);
     });
   }
 
   @override
-  void dispose() async {
-    await _timeTrialSubscription?.cancel();
+  Future<void> dispose() async {
     super.dispose();
+    await _timeTrialSubscription?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final navigator = Navigator.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     return BlocProvider.value(
       value: BlocProvider.of<TimeTrialBloc>(context)..add(RefreshLeaderboard()),
-      child: MaterialApp(
-        theme: ThemeData(),
-        darkTheme: ThemeData.dark(),
-        home: Scaffold(
-          body: SafeArea(
-            child: BlocBuilder<TimeTrialBloc, TimeTrialState>(
-              buildWhen: (previous, current) {
-                if (previous.leaderboard != current.leaderboard) {
-                  return true;
-                }
+      child: Scaffold(
+        body: BlocBuilder<TimeTrialBloc, TimeTrialState>(
+          buildWhen: (previous, current) {
+            if (previous.leaderboard != current.leaderboard) {
+              return true;
+            }
 
-                return false;
-              },
-              builder: (context, state) {
-                if (state.playerPosition == null) {
-                  return LoadingView(message: "Loading position...");
-                }
+            return false;
+          },
+          builder: (context, state) {
+            if (state.playerPosition == null) {
+              return LoadingView(message: "Loading position...");
+            }
 
-                return Center(
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.emoji_events,
-                        color: Colors.yellow[isDark ? 300 : 700],
-                        size: 96,
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Text(
-                        toOrdinal(state.playerPosition!),
-                        style: theme.textTheme.headlineSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text("Congratulations!"),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      FilledButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text("Done"),
-                      )
-                    ],
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.emoji_events,
+                    color: Colors.yellow[isDark ? 300 : 700],
+                    size: 96,
                   ),
-                );
-              },
-            ),
-          ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Text(
+                    toOrdinal(state.playerPosition! + 1),
+                    style: theme.textTheme.headlineSmall!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text("Congratulations!"),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  FilledButton(
+                    onPressed: () {
+                      navigator.pop();
+                    },
+                    child: Text("Done"),
+                  )
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

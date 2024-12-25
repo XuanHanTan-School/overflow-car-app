@@ -63,12 +63,12 @@ class TimeTrialManager {
         trials.indexWhere((eachTrial) => eachTrial.id == userTrialId);
     if (userTrialIndex <= 2) {
       // Return top 10
-      return trials.sublist(0, 10);
+      return trials.sublist(0, min(10, trials.length));
     }
 
     // Return top 3 + upper 3 + lower 3
-    final leaderboard = trials.sublist(0, 3) +
-        trials.sublist(max(0, userTrialIndex - 3), userTrialIndex + 4);
+    final leaderboard = trials.sublist(0, min(3, trials.length)) +
+        trials.sublist(max(0, userTrialIndex - 3), min(userTrialIndex + 4, trials.length));
     final Set<String> uniqueIds = {};
     leaderboard.retainWhere((eachTrial) => uniqueIds.add(eachTrial.id));
     return leaderboard;
@@ -90,11 +90,12 @@ class LeaderboardTimeTrial extends TimeTrial {
 
   LeaderboardTimeTrial({
     required super.id,
-    super.userName,
-    super.startTime,
-    super.endTime,
+    required super.userName,
+    required super.startTime,
+    required super.endTime,
     required super.carName,
     required this.position,
+    required super.duration,
   });
 
   factory LeaderboardTimeTrial.fromMap(
@@ -109,6 +110,7 @@ class LeaderboardTimeTrial extends TimeTrial {
       endTime: TimeTrial.convertToDateTime(map["endTime"]),
       carName: map["carName"],
       position: position,
+      duration: TimeTrial.convertToDuration(map["duration"]),
     );
   }
 }

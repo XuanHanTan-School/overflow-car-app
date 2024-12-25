@@ -33,7 +33,11 @@ void main() async {
         BlocProvider(
             create: (_) => TimeTrialBloc()..add(TimeTrialAppInitialize())),
       ],
-      child: const HomePage(),
+      child: MaterialApp(
+        theme: ThemeData(),
+        darkTheme: ThemeData.dark(),
+        home: const HomePage(),
+      ),
     ));
   });
 }
@@ -102,56 +106,52 @@ class _HomePageState extends State<HomePage> {
         BlocProvider.value(value: BlocProvider.of<CarBloc>(context)),
         BlocProvider.value(value: BlocProvider.of<TimeTrialBloc>(context)),
       ],
-      child: MaterialApp(
-        theme: ThemeData(),
-        darkTheme: ThemeData.dark(),
-        home: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: BlocBuilder<CarBloc, CarState>(
-            buildWhen: (previous, current) {
-              if (previous.isInitialized != current.isInitialized) {
-                return true;
-              }
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: BlocBuilder<CarBloc, CarState>(
+          buildWhen: (previous, current) {
+            if (previous.isInitialized != current.isInitialized) {
+              return true;
+            }
 
-              if (previous.selectedCarIndex != current.selectedCarIndex) {
-                return true;
-              }
+            if (previous.selectedCarIndex != current.selectedCarIndex) {
+              return true;
+            }
 
-              if (previous.connectionState != current.connectionState) {
-                return true;
-              }
+            if (previous.connectionState != current.connectionState) {
+              return true;
+            }
 
-              return false;
-            },
-            builder: (context, state) {
-              final selectedCarIndex = state.selectedCarIndex;
+            return false;
+          },
+          builder: (context, state) {
+            final selectedCarIndex = state.selectedCarIndex;
 
-              if (!state.isInitialized) {
-                return LoadingView(message: "Initialising...");
-              }
+            if (!state.isInitialized) {
+              return LoadingView(message: "Initialising...");
+            }
 
-              if (selectedCarIndex == null) {
-                return Center(child: NoCarAddedView());
-              }
+            if (selectedCarIndex == null) {
+              return Center(child: NoCarAddedView());
+            }
 
-              return Builder(
-                builder: (context) {
-                  final currentCar = state.currentCars[selectedCarIndex];
+            return Builder(
+              builder: (context) {
+                final currentCar = state.currentCars[selectedCarIndex];
 
-                  switch (state.connectionState) {
-                    case CarConnectionState.disconnected:
-                      return Center(
-                        child: CarDisconnectedView(car: currentCar),
-                      );
-                    case CarConnectionState.connecting:
-                      return LoadingView(message: "Connecting...");
-                    case CarConnectionState.connected:
-                      return CarControlView(state: state);
-                  }
-                },
-              );
-            },
-          ),
+                switch (state.connectionState) {
+                  case CarConnectionState.disconnected:
+                    return Center(
+                      child: CarDisconnectedView(car: currentCar),
+                    );
+                  case CarConnectionState.connecting:
+                    return LoadingView(message: "Connecting...");
+                  case CarConnectionState.connected:
+                    return CarControlView(state: state);
+                }
+              },
+            );
+          },
         ),
       ),
     );
