@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:time_trial_api/time_trial_api.dart';
 import 'package:time_trial_bloc/time_trial_event.dart';
 import 'package:time_trial_bloc/time_trial_state.dart';
 
 class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
-  StreamController<TimeTrial?>? _currentTimeTrialStreamController;
+  BehaviorSubject<TimeTrial?>? _currentTimeTrialStreamController;
   StreamSubscription<TimeTrial>? _timeTrialUpdatesStreamSubscription;
   StreamSubscription<String>? _timeTrialDeletesStreamSubscription;
 
@@ -24,7 +25,7 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     await _timeTrialUpdatesStreamSubscription?.cancel();
     await _timeTrialDeletesStreamSubscription?.cancel();
     await _currentTimeTrialStreamController?.close();
-    _currentTimeTrialStreamController = StreamController.broadcast();
+    _currentTimeTrialStreamController = BehaviorSubject();
 
     _timeTrialUpdatesStreamSubscription =
         TimeTrialManager.getTimeTrialUpdates().listen((trial) {
@@ -35,9 +36,7 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
 
     _timeTrialDeletesStreamSubscription =
         TimeTrialManager.getTimeTrialDeletes().listen((trialId) async {
-          print("del $trialId"); // TODO: broken
-      if (trialId !=
-          (await _currentTimeTrialStreamController?.stream.last)?.id) {
+      if (trialId != (_currentTimeTrialStreamController?.value)?.id) {
         return;
       }
 
