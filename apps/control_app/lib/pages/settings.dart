@@ -25,51 +25,47 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(),
-      darkTheme: ThemeData.dark(),
-      home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back),
-          ),
-          title: Text("Settings"),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
         ),
-        body: SafeArea(
-          child: ListView(
-            children: [
-              ListTile(
-                leading: Icon(Icons.directions_car_outlined),
-                title: Text("Cars"),
-                subtitle: Text("Edit, add and remove cars"),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CarManagementPage()));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.speed_outlined),
-                title: Text("Performance"),
-                subtitle: Text("Command update interval, video cache duration"),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PerformanceManagementPage()));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.restore_outlined),
-                title: Text("Reset"),
-                subtitle: Text("Restore default settings and removes all cars"),
-              ),
-            ],
-          ),
+        title: Text("Settings"),
+      ),
+      body: SafeArea(
+        child: ListView(
+          children: [
+            ListTile(
+              leading: Icon(Icons.directions_car_outlined),
+              title: Text("Cars"),
+              subtitle: Text("Edit, add and remove cars"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CarManagementPage()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.speed_outlined),
+              title: Text("Performance"),
+              subtitle: Text("Command update interval, video cache duration"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PerformanceManagementPage()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.restore_outlined),
+              title: Text("Reset"),
+              subtitle: Text("Restore default settings and removes all cars"),
+            ),
+          ],
         ),
       ),
     );

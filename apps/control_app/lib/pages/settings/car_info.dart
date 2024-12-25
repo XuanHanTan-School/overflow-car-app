@@ -14,112 +14,108 @@ class CarInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return MaterialApp(
-      theme: ThemeData(),
-      darkTheme: ThemeData.dark(),
-      home: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+        title: Text(car.name),
+        actions: [
+          Builder(
+            builder: (context) {
+              return IconButton(
+                onPressed: () {
+                  final carBloc = context.read<CarBloc>();
+                  final currentCars = carBloc.state.currentCars;
+                  if (currentCars.contains(car)) {
+                    carBloc.add(ChangeSelectedCar(currentCars.indexOf(car)));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("${car.name} has been selected."),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                },
+                icon: Icon(Icons.check_outlined),
+              );
             },
-            icon: Icon(Icons.arrow_back),
           ),
-          title: Text(car.name),
-          actions: [
-            Builder(
-              builder: (context) {
-                return IconButton(
-                  onPressed: () {
-                    final carBloc = context.read<CarBloc>();
-                    final currentCars = carBloc.state.currentCars;
-                    if (currentCars.contains(car)) {
-                      carBloc.add(ChangeSelectedCar(currentCars.indexOf(car)));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("${car.name} has been selected."),
-                          behavior: SnackBarBehavior.floating,
+        ],
+      ),
+      body: SafeArea(
+        child: ListView(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: Text(
+                car.host,
+                style: theme.textTheme.displayMedium,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ListTile(
+              title: Text("Command port"),
+              subtitle: Text(car.commandPort.toString()),
+            ),
+            ListTile(
+              title: Text("Video port"),
+              subtitle: Text(car.videoPort.toString()),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.delete_outlined,
+                color: theme.colorScheme.error,
+              ),
+              title: Text(
+                "Delete car",
+                style: theme.textTheme.bodyLarge!
+                    .copyWith(color: theme.colorScheme.error),
+              ),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => AlertDialog(
+                    title: Text("Confirm delete car"),
+                    content: Text(
+                        "Are you sure you want to delete ${car.name}? You will have to import or add it again."),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(dialogContext);
+                        },
+                        child: Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          final carBloc = dialogContext.read<CarBloc>();
+                          carBloc.add(DeleteCar(car: car));
+                          Navigator.pop(dialogContext);
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Delete",
+                          style: theme.textTheme.labelLarge!
+                              .copyWith(color: theme.colorScheme.error),
                         ),
-                      );
-                    }
-                  },
-                  icon: Icon(Icons.check_outlined),
+                      ),
+                    ],
+                  ),
                 );
               },
-            ),
+            )
           ],
-        ),
-        body: SafeArea(
-          child: ListView(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: Text(
-                  car.host,
-                  style: theme.textTheme.displayMedium,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ListTile(
-                title: Text("Command port"),
-                subtitle: Text(car.commandPort.toString()),
-              ),
-              ListTile(
-                title: Text("Video port"),
-                subtitle: Text(car.videoPort.toString()),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.delete_outlined,
-                  color: theme.colorScheme.error,
-                ),
-                title: Text(
-                  "Delete car",
-                  style: theme.textTheme.bodyLarge!
-                      .copyWith(color: theme.colorScheme.error),
-                ),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (dialogContext) => AlertDialog(
-                      title: Text("Confirm delete car"),
-                      content: Text(
-                          "Are you sure you want to delete ${car.name}? You will have to import or add it again."),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(dialogContext);
-                          },
-                          child: Text("Cancel"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            final carBloc = dialogContext.read<CarBloc>();
-                            carBloc.add(DeleteCar(car: car));
-                            Navigator.pop(dialogContext);
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            "Delete",
-                            style: theme.textTheme.labelLarge!
-                                .copyWith(color: theme.colorScheme.error),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              )
-            ],
-          ),
         ),
       ),
     );

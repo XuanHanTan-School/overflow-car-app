@@ -236,50 +236,46 @@ Change the time between each update depending on the hardware and network capabi
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: BlocProvider.of<CarBloc>(context),
-      child: MaterialApp(
-        theme: ThemeData(),
-        darkTheme: ThemeData.dark(),
-        home: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back),
-            ),
-            title: Text("Performance"),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back),
           ),
-          body: SafeArea(
-            child: BlocBuilder<CarBloc, CarState>(
-              buildWhen: (previous, current) =>
-                  previous.perfSettings != current.perfSettings,
-              builder: (context, state) {
-                final perfSettings = state.perfSettings;
+          title: Text("Performance"),
+        ),
+        body: SafeArea(
+          child: BlocBuilder<CarBloc, CarState>(
+            buildWhen: (previous, current) =>
+                previous.perfSettings != current.perfSettings,
+            builder: (context, state) {
+              final perfSettings = state.perfSettings;
 
-                return ListView(
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.gamepad_outlined),
-                      title: Text("Update command interval"),
-                      subtitle: Text("${perfSettings.updateIntervalMillis}ms"),
-                      onTap: () {
-                        updateCommandInterval(
-                            perfSettings: perfSettings, context: context);
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.videocam_outlined),
-                      title: Text("Live video cache duration"),
-                      subtitle: Text("${perfSettings.cacheMillis}ms"),
-                      onTap: () {
-                        updateCacheDuration(
-                            perfSettings: perfSettings, context: context);
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
+              return ListView(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.gamepad_outlined),
+                    title: Text("Update command interval"),
+                    subtitle: Text("${perfSettings.updateIntervalMillis}ms"),
+                    onTap: () {
+                      updateCommandInterval(
+                          perfSettings: perfSettings, context: context);
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.videocam_outlined),
+                    title: Text("Live video cache duration"),
+                    subtitle: Text("${perfSettings.cacheMillis}ms"),
+                    onTap: () {
+                      updateCacheDuration(
+                          perfSettings: perfSettings, context: context);
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

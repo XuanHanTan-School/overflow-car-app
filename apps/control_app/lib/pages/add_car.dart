@@ -73,124 +73,120 @@ class _AddCarPageState extends State<AddCarPage> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: BlocProvider.of<CarBloc>(context),
-      child: MaterialApp(
-        theme: ThemeData(),
-        darkTheme: ThemeData.dark(),
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text("Add car"),
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back),
-            ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Add car"),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back),
           ),
-          body: Form(
-            key: _formKey,
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  spacing: 10,
-                  children: [
-                    Expanded(
-                      child: ListView(
-                        children: [
-                          const SizedBox(
-                            height: 16,
+        ),
+        body: Form(
+          key: _formKey,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                spacing: 10,
+                children: [
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            label: Text("Name"),
+                            border: OutlineInputBorder(),
                           ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              label: Text("Name"),
-                              border: OutlineInputBorder(),
-                            ),
-                            controller: nameController,
-                            validator: validateName,
-                            autovalidateMode: AutovalidateMode.onUnfocus,
-                            onChanged: (value) {
-                              setState(() {
-                                name = value;
-                              });
-                            },
+                          controller: nameController,
+                          validator: validateName,
+                          autovalidateMode: AutovalidateMode.onUnfocus,
+                          onChanged: (value) {
+                            setState(() {
+                              name = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            label: Text("Host"),
+                            border: OutlineInputBorder(),
                           ),
-                          const SizedBox(
-                            height: 20,
+                          controller: hostController,
+                          validator: validateHost,
+                          autovalidateMode: AutovalidateMode.onUnfocus,
+                          onChanged: (value) {
+                            setState(() {
+                              host = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            label: Text("Command port"),
+                            border: OutlineInputBorder(),
                           ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              label: Text("Host"),
-                              border: OutlineInputBorder(),
-                            ),
-                            controller: hostController,
-                            validator: validateHost,
-                            autovalidateMode: AutovalidateMode.onUnfocus,
-                            onChanged: (value) {
-                              setState(() {
-                                host = value;
-                              });
-                            },
+                          controller: commandPortController,
+                          keyboardType: TextInputType.number,
+                          validator: validatePort,
+                          autovalidateMode: AutovalidateMode.onUnfocus,
+                          onChanged: (value) {
+                            setState(() {
+                              commandPort = int.tryParse(value);
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            label: Text("Video port"),
+                            border: OutlineInputBorder(),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              label: Text("Command port"),
-                              border: OutlineInputBorder(),
-                            ),
-                            controller: commandPortController,
-                            keyboardType: TextInputType.number,
-                            validator: validatePort,
-                            autovalidateMode: AutovalidateMode.onUnfocus,
-                            onChanged: (value) {
-                              setState(() {
-                                commandPort = int.tryParse(value);
-                              });
-                            },
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              label: Text("Video port"),
-                              border: OutlineInputBorder(),
-                            ),
-                            controller: videoPortController,
-                            keyboardType: TextInputType.number,
-                            validator: validatePort,
-                            autovalidateMode: AutovalidateMode.onUnfocus,
-                            onChanged: (value) {
-                              setState(() {
-                                videoPort = int.tryParse(value);
-                              });
-                            },
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
+                          controller: videoPortController,
+                          keyboardType: TextInputType.number,
+                          validator: validatePort,
+                          autovalidateMode: AutovalidateMode.onUnfocus,
+                          onChanged: (value) {
+                            setState(() {
+                              videoPort = int.tryParse(value);
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
                     ),
-                    FilledButton(
-                      onPressed: _formKey.currentState?.validate() ?? false
-                          ? () {
-                              context.read<CarBloc>().add(
-                                    AddCar(
-                                      name: name!,
-                                      host: host!,
-                                      commandPort: commandPort!,
-                                      videoPort: videoPort!,
-                                    ),
-                                  );
-                              Navigator.pop(context);
-                            }
-                          : null,
-                      child: Text("Finish"),
-                    ),
-                  ],
-                ),
+                  ),
+                  FilledButton(
+                    onPressed: _formKey.currentState?.validate() ?? false
+                        ? () {
+                            context.read<CarBloc>().add(
+                                  AddCar(
+                                    name: name!,
+                                    host: host!,
+                                    commandPort: commandPort!,
+                                    videoPort: videoPort!,
+                                  ),
+                                );
+                            Navigator.pop(context);
+                          }
+                        : null,
+                    child: Text("Finish"),
+                  ),
+                ],
               ),
             ),
           ),

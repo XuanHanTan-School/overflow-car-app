@@ -15,89 +15,85 @@ class CarManagementPage extends StatelessWidget {
 
     return BlocProvider.value(
       value: BlocProvider.of<CarBloc>(context),
-      child: MaterialApp(
-        theme: ThemeData(),
-        darkTheme: ThemeData.dark(),
-        home: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back),
-            ),
-            title: Text("Cars"),
-          ),
-          floatingActionButton: FloatingActionButton(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddCarPage()),
-              );
+              Navigator.pop(context);
             },
-            child: Icon(Icons.add_outlined),
+            icon: Icon(Icons.arrow_back),
           ),
-          body: SafeArea(
-            child: ListView(
-              children: [
-                ListTile(
-                  leading: Icon(Icons.file_upload_outlined),
-                  title: Text("Import cars"),
-                  onTap: () async {
-                    await importCarsFromJson(context: context);
-                  },
+          title: Text("Cars"),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddCarPage()),
+            );
+          },
+          child: Icon(Icons.add_outlined),
+        ),
+        body: SafeArea(
+          child: ListView(
+            children: [
+              ListTile(
+                leading: Icon(Icons.file_upload_outlined),
+                title: Text("Import cars"),
+                onTap: () async {
+                  await importCarsFromJson(context: context);
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Text(
+                  "My cars",
+                  style: theme.textTheme.labelMedium,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  child: Text(
-                    "My cars",
-                    style: theme.textTheme.labelMedium,
-                  ),
-                ),
-                BlocBuilder<CarBloc, CarState>(
-                  buildWhen: (previous, current) {
-                    if (previous.currentCars != current.currentCars) {
-                      return true;
-                    }
+              ),
+              BlocBuilder<CarBloc, CarState>(
+                buildWhen: (previous, current) {
+                  if (previous.currentCars != current.currentCars) {
+                    return true;
+                  }
 
-                    if (previous.selectedCarIndex != current.selectedCarIndex) {
-                      return true;
-                    }
+                  if (previous.selectedCarIndex != current.selectedCarIndex) {
+                    return true;
+                  }
 
-                    return false;
-                  },
-                  builder: (context, state) {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final car = state.currentCars[index];
+                  return false;
+                },
+                builder: (context, state) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final car = state.currentCars[index];
 
-                        return ListTile(
-                          title: Text(car.name),
-                          trailing: state.selectedCarIndex == index
-                              ? Icon(
-                                  Icons.check_outlined,
-                                  color: Colors.green[
-                                      theme.brightness == Brightness.light
-                                          ? 700
-                                          : 300],
-                                )
-                              : null,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CarInfoPage(car: car)),
-                            );
-                          },
-                        );
-                      },
-                      itemCount: state.currentCars.length,
-                    );
-                  },
-                ),
-              ],
-            ),
+                      return ListTile(
+                        title: Text(car.name),
+                        trailing: state.selectedCarIndex == index
+                            ? Icon(
+                                Icons.check_outlined,
+                                color: Colors.green[
+                                    theme.brightness == Brightness.light
+                                        ? 700
+                                        : 300],
+                              )
+                            : null,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CarInfoPage(car: car)),
+                          );
+                        },
+                      );
+                    },
+                    itemCount: state.currentCars.length,
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),
