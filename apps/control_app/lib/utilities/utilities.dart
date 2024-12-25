@@ -8,13 +8,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:car_api/overflow_car.dart';
 
 Future<void> importCarsFromJson({required BuildContext context}) async {
-  var result = await FilePicker.platform
-      .pickFiles(type: FileType.custom, allowedExtensions: ['json'], );
+  var result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: ['json'],
+  );
 
   // The result will be null, if the user aborted the dialog
   if (result != null) {
     final file = result.files.single.xFile;
-    
+
     try {
       final bytes = await file.readAsBytes();
       final jsonString = utf8.decode(bytes);
@@ -50,5 +52,20 @@ Future<void> importCarsFromJson({required BuildContext context}) async {
         ),
       );
     }
+  }
+}
+
+String toOrdinal(int number) {
+  if (number < 0) throw Exception('Invalid Number');
+
+  switch (number % 10) {
+    case 1:
+      return '${number}st';
+    case 2:
+      return '${number}nd';
+    case 3:
+      return '${number}rd';
+    default:
+      return '${number}th';
   }
 }

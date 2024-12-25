@@ -40,13 +40,23 @@ class TimeTrialManager {
     final trialsSnapshot = await _dbRef.orderByChild("duration").get();
     final List<LeaderboardTimeTrial> trials = [];
     final trialSnapshotList = trialsSnapshot.children.toList();
-    for (var i = 0; i < trialSnapshotList.length; i++) {
-      final eachTrialData = trialSnapshotList[i];
-      trials.add(LeaderboardTimeTrial.fromMap(
+    var position = 0;
+    int? prevDuration;
+    for (final eachTrialData in trialSnapshotList) {
+      final trial = LeaderboardTimeTrial.fromMap(
         eachTrialData.key!,
         Map.from(eachTrialData.value as Map),
-        position: i,
-      ));
+        position: position,
+      );
+      if (trial.duration == null) continue;
+
+      final currentDuration = trial.duration!.inMilliseconds;
+      if (prevDuration != null && prevDuration != currentDuration) {
+        position++;
+      }
+      prevDuration = currentDuration;
+      trial.position = position;
+      trials.add(trial);
     }
 
     final userTrialIndex =
@@ -76,9 +86,9 @@ class TimeTrialManager {
 }
 
 class LeaderboardTimeTrial extends TimeTrial {
-  final int position;
+  int position;
 
-  const LeaderboardTimeTrial({
+  LeaderboardTimeTrial({
     required super.id,
     super.userName,
     super.startTime,

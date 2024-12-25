@@ -7,3 +7,5 @@ final class SetCar extends TimeTrialEvent {
 
   SetCar({required this.carName});
 }
+
+final class RefreshLeaderboard extends TimeTrialEvent {}

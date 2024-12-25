@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:control_app/pages/position.dart';
 import 'package:control_app/views/loading_view.dart';
 import 'package:control_app/widgets/elapsed_time_display.dart';
 import 'package:control_app/widgets/video_overlay_text.dart';
@@ -15,8 +18,25 @@ class TimeTrialOverlay extends StatefulWidget {
 
 class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
   final _formKey = GlobalKey<FormState>();
+  late final StreamSubscription<TimeTrialState>? _timeTrialSubscription;
   var _nameLoad = false;
   var name = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    final timeTrialBloc = context.read<TimeTrialBloc>();
+    _timeTrialSubscription = timeTrialBloc.stream.distinct((previous, current) {
+      return previous.currentTrial?.endTime == current.currentTrial?.endTime;
+    }).listen((state) {
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => PositionPage()),
+      );
+    });
+  }
 
   String? validateName(String? value) {
     if (value == null || value.isEmpty) {
@@ -24,6 +44,12 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
     }
 
     return null;
+  }
+
+  @override
+  void dispose() async {
+    await _timeTrialSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -133,17 +159,6 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
               padding: EdgeInsets.only(top: mediaQuery.viewPadding.top),
               child: ElapsedTimeDisplay(
                 startTime: currentTrial.startTime!,
-              ),
-            );
-          }
-
-          // TODO: temporary
-          if (currentTrial.startTime != null && currentTrial.endTime != null) {
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                "Time trial completed",
-                style: theme.textTheme.displayMedium,
               ),
             );
           }
