@@ -85,13 +85,6 @@ class _HomePageState extends State<HomePage> {
         timeTrialBloc.add(SetCar(carName: null));
       }
     });
-
-    // TODO: test
-    final timeTrialBloc = context.read<TimeTrialBloc>();
-    timeTrialBloc.stream.listen((state) {
-      print(
-          "Car name: ${state.carName}, Trial ID: ${state.currentTrial?.id}, User name: ${state.currentTrial?.userName}, Start: ${state.currentTrial?.startTime}, End: ${state.currentTrial?.endTime}, Duration: ${state.currentTrial?.duration}");
-    });
   }
 
   @override
@@ -113,6 +106,7 @@ class _HomePageState extends State<HomePage> {
         theme: ThemeData(),
         darkTheme: ThemeData.dark(),
         home: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: BlocBuilder<CarBloc, CarState>(
             buildWhen: (previous, current) {
               if (previous.isInitialized != current.isInitialized) {

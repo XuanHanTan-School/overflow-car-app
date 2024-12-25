@@ -4,6 +4,7 @@ import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
 import 'package:car_bloc/car_state.dart';
 import 'package:control_app/pages/settings.dart';
+import 'package:control_app/views/overlays/time_trial_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,8 +61,7 @@ class _CarControlViewState extends State<CarControlView> {
             child: Center(
               child: Text(
                 "Waiting for video stream...",
-                style:
-                    theme.textTheme.bodyLarge!.copyWith(color: Colors.white),
+                style: theme.textTheme.bodyLarge!.copyWith(color: Colors.white),
               ),
             ),
           ),
@@ -179,6 +179,7 @@ class _CarControlViewState extends State<CarControlView> {
             ],
           ),
         ),
+        Positioned.fill(child: TimeTrialOverlay()),
       ],
     );
   }
