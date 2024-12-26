@@ -28,10 +28,12 @@ Future<void> importCarsFromJson({required BuildContext context}) async {
       for (final carJson in decodedJson) {
         final car = Car.fromJson(jsonEncode(carJson));
         carBloc.add(AddCar(
-            name: car.name,
-            host: car.host,
-            commandPort: car.commandPort,
-            videoPort: car.videoPort));
+          name: car.name,
+          host: car.host,
+          commandPort: car.commandPort,
+          videoPort: car.videoPort,
+          aspectRatio: car.aspectRatio,
+        ));
       }
     } catch (e) {
       if (!context.mounted) return;

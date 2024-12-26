@@ -22,6 +22,7 @@ class _AddCarPageState extends State<AddCarPage> {
   String? host;
   int? commandPort;
   int? videoPort;
+  String aspectRatio = "16:9";
 
   @override
   void initState() {
@@ -71,6 +72,8 @@ class _AddCarPageState extends State<AddCarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocProvider.value(
       value: BlocProvider.of<CarBloc>(context),
       child: Scaffold(
@@ -167,6 +170,29 @@ class _AddCarPageState extends State<AddCarPage> {
                         const SizedBox(
                           height: 10,
                         ),
+                        Row(
+                          spacing: 14,
+                          children: [
+                            Text("Video aspect ratio: ", style: theme.textTheme.bodyLarge,),
+                            DropdownButton<String>(
+                              value: aspectRatio,
+                              items: ["16:9", "4:3", "1:1"]
+                                  .map((aspectRatio) => DropdownMenuItem(
+                                        value: aspectRatio,
+                                        child: Text(aspectRatio),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  aspectRatio = value!;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                       ],
                     ),
                   ),
@@ -179,6 +205,7 @@ class _AddCarPageState extends State<AddCarPage> {
                                     host: host!,
                                     commandPort: commandPort!,
                                     videoPort: videoPort!,
+                                    aspectRatio: aspectRatio,
                                   ),
                                 );
                             Navigator.pop(context);

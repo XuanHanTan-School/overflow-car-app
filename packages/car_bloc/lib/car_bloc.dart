@@ -54,6 +54,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       host: event.host,
       commandPort: event.commandPort,
       videoPort: event.videoPort,
+      aspectRatio: event.aspectRatio,
     );
 
     if (state.currentCars.any((eachCar) => eachCar.name == car.name)) {
@@ -158,6 +159,12 @@ class CarBloc extends Bloc<CarEvent, CarState> {
   }
 
   Future<void> onDeleteCar(DeleteCar event, Emitter emit) async {
+    if (state.selectedCarIndex != null &&
+        state.currentCars[state.selectedCarIndex!] == event.car &&
+        state.connectionState == CarConnectionState.connected) {
+      await onDisconnectSelectedCar(DisconnectSelectedCar(), emit);
+    }
+
     var newSelectedCarIndex = state.selectedCarIndex;
 
     if (state.currentCars.length - 1 <= (newSelectedCarIndex ?? 0)) {

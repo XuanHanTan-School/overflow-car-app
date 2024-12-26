@@ -9,12 +9,14 @@ final class AddCar extends CarEvent {
   final String host;
   final int commandPort;
   final int videoPort;
+  final String aspectRatio;
 
   AddCar({
     required this.name,
     required this.host,
     required this.commandPort,
     required this.videoPort,
+    required this.aspectRatio,
   });
 }
 

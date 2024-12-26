@@ -70,6 +70,10 @@ class CarInfoPage extends StatelessWidget {
               title: Text("Video port"),
               subtitle: Text(car.videoPort.toString()),
             ),
+            ListTile(
+              title: Text("Video aspect ratio"),
+              subtitle: Text(car.aspectRatio),
+            ),
             const SizedBox(
               height: 20,
             ),

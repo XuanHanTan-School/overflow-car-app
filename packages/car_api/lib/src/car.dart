@@ -9,16 +9,23 @@ class Car {
   final String host;
   final int commandPort;
   final int videoPort;
+  final String aspectRatio;
   final StreamController<bool> connectionState = StreamController.broadcast();
 
   bool _isConnected = false;
   WebSocket? socket;
+
+  double get aspectRatioValue {
+    final splitAspectRatio = aspectRatio.split(":");
+    return double.parse(splitAspectRatio[0]) / double.parse(splitAspectRatio[1]);
+  }
 
   Car({
     required this.name,
     required this.host,
     required this.commandPort,
     required this.videoPort,
+    required this.aspectRatio,
   });
 
   factory Car.fromJson(String json) {
@@ -28,6 +35,7 @@ class Car {
       host: data["host"],
       commandPort: data["commandPort"],
       videoPort: data["videoPort"],
+      aspectRatio: data["aspectRatio"],
     );
   }
 
@@ -76,6 +84,7 @@ class Car {
       "host": host,
       "commandPort": commandPort,
       "videoPort": videoPort,
+      "aspectRatio": aspectRatio,
     });
   }
 }

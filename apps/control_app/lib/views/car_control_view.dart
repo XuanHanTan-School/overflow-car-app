@@ -50,8 +50,10 @@ class _CarControlViewState extends State<CarControlView> {
     final mediaQuery = MediaQuery.of(context);
     final theme = Theme.of(context);
 
-    final videoZoom =
-        mediaQuery.size.width / (mediaQuery.size.height * (16 / 9));
+    final videoZoom = mediaQuery.size.width /
+        (mediaQuery.size.height *
+            widget.state.currentCars[widget.state.selectedCarIndex!]
+                .aspectRatioValue);
 
     return Stack(
       children: [
