@@ -1,10 +1,15 @@
-import 'package:control_app/pages/add_car.dart';
-import 'package:control_app/utilities/utilities.dart';
+import 'package:car_bloc/car_bloc.dart';
+import 'package:car_bloc/car_event.dart';
+import 'package:shared_car_components/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:car_api/overflow_car.dart';
 
-class NoCarAddedView extends StatelessWidget {
-  const NoCarAddedView({super.key});
+class CarDisconnectedView extends StatelessWidget {
+  final Car car;
+
+  const CarDisconnectedView({super.key, required this.car});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +19,13 @@ class NoCarAddedView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "No cars added",
+          "${car.name} is disconnected",
           style: theme.textTheme.titleLarge,
         ),
         const SizedBox(
           height: 30,
         ),
-        const Text("Add a car or import settings to get started."),
+        const Text("Ensure that the car is powered on."),
         const SizedBox(
           height: 50,
         ),
@@ -29,25 +34,21 @@ class NoCarAddedView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FilledButton(
-              onPressed: () async {
-                await importCarsFromJson(context: context);
+              onPressed: () {
+                context.read<CarBloc>().add(ConnectSelectedCar());
               },
-              child: const Text("Import cars"),
+              child: const Text("Connect"),
             ),
             OutlinedButton(
               onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddCarPage(),
-                  ),
-                );
+                await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SettingsPage()));
                 SystemChrome.setPreferredOrientations([
                   DeviceOrientation.landscapeRight,
                   DeviceOrientation.landscapeLeft
                 ]);
               },
-              child: const Text("Add car"),
+              child: const Text("Settings"),
             )
           ],
         )

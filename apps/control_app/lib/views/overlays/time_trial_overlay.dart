@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:control_app/pages/position.dart';
-import 'package:control_app/views/loading_view.dart';
-import 'package:control_app/widgets/elapsed_time_display.dart';
-import 'package:control_app/widgets/video_overlay_text.dart';
+import 'package:shared_car_components/views/loading_view.dart';
+import 'package:shared_car_components/widgets/elapsed_time_display.dart';
+import 'package:shared_car_components/widgets/video_overlay_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:time_trial_bloc/time_trial_bloc.dart';
@@ -39,7 +39,6 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
       }
 
       if (!mounted) return;
-      print("Time trial ended");
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => PositionPage()),

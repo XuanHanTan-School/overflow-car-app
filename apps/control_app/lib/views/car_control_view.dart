@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
 import 'package:car_bloc/car_state.dart';
-import 'package:control_app/pages/settings.dart';
+import 'package:shared_car_components/pages/settings.dart';
 import 'package:control_app/views/overlays/time_trial_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

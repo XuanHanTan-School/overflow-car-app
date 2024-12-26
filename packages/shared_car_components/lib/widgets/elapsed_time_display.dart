@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:control_app/widgets/video_overlay_text.dart';
+import 'package:shared_car_components/widgets/video_overlay_text.dart';
 import 'package:flutter/material.dart';
 
 class ElapsedTimeDisplay extends StatefulWidget {

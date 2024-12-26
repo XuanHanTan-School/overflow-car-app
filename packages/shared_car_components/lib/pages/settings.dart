@@ -1,5 +1,5 @@
-import 'package:control_app/pages/settings/car_management.dart';
-import 'package:control_app/pages/settings/performance_management.dart';
+import 'package:shared_car_components/pages/settings/car_management.dart';
+import 'package:shared_car_components/pages/settings/performance_management.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:control_app/utilities/utilities.dart';
-import 'package:control_app/views/loading_view.dart';
+import 'package:app_utilities/app_utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_car_components/views/loading_view.dart';
 import 'package:time_trial_bloc/time_trial_bloc.dart';
 import 'package:time_trial_bloc/time_trial_event.dart';
 import 'package:time_trial_bloc/time_trial_state.dart';
@@ -34,8 +34,6 @@ class _PositionPageState extends State<PositionPage> {
       }
 
       if (!mounted) return;
-      print("Closing time trial page");
-      print("Navigator can pop: ${Navigator.canPop(context)}");
       Navigator.pop(context);
     });
   }

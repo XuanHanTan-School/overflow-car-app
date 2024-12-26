@@ -1,8 +1,8 @@
+import 'package:app_utilities/app_utilities.dart';
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_state.dart';
-import 'package:control_app/pages/add_car.dart';
-import 'package:control_app/pages/settings/car_info.dart';
-import 'package:control_app/utilities/utilities.dart';
+import 'package:shared_car_components/pages/add_car.dart';
+import 'package:shared_car_components/pages/settings/car_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

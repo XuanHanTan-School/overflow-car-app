@@ -82,7 +82,6 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
 
     final leaderboard =
         await TimeTrialManager.getLeaderboardTimeTrials(userTrialId);
-        print("leaderboard: $leaderboard");
     emit(state.copyWith(leaderboard: leaderboard));
   }
 }
