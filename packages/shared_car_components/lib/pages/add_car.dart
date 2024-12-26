@@ -96,105 +96,110 @@ class _AddCarPageState extends State<AddCarPage> {
                 spacing: 10,
                 children: [
                   Expanded(
-                    child: ListView(
-                      children: [
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            label: Text("Name"),
-                            border: OutlineInputBorder(),
-                          ),
-                          controller: nameController,
-                          validator: validateName,
-                          autovalidateMode: AutovalidateMode.onUnfocus,
-                          onChanged: (value) {
-                            setState(() {
-                              name = value;
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            label: Text("Host"),
-                            border: OutlineInputBorder(),
-                          ),
-                          controller: hostController,
-                          validator: validateHost,
-                          autovalidateMode: AutovalidateMode.onUnfocus,
-                          onChanged: (value) {
-                            setState(() {
-                              host = value;
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            label: Text("Command port"),
-                            border: OutlineInputBorder(),
-                          ),
-                          controller: commandPortController,
-                          keyboardType: TextInputType.number,
-                          validator: validatePort,
-                          autovalidateMode: AutovalidateMode.onUnfocus,
-                          onChanged: (value) {
-                            setState(() {
-                              commandPort = int.tryParse(value);
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            label: Text("Video port"),
-                            border: OutlineInputBorder(),
-                          ),
-                          controller: videoPortController,
-                          keyboardType: TextInputType.number,
-                          validator: validatePort,
-                          autovalidateMode: AutovalidateMode.onUnfocus,
-                          onChanged: (value) {
-                            setState(() {
-                              videoPort = int.tryParse(value);
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          spacing: 14,
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 400),
+                        child: ListView(
                           children: [
-                            Text("Video aspect ratio: ", style: theme.textTheme.bodyLarge,),
-                            DropdownButton<String>(
-                              value: aspectRatio,
-                              items: ["16:9", "4:3", "1:1"]
-                                  .map((aspectRatio) => DropdownMenuItem(
-                                        value: aspectRatio,
-                                        child: Text(aspectRatio),
-                                      ))
-                                  .toList(),
+                            const SizedBox(
+                              height: 16 + (kIsWeb ? 16: 0),
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                label: Text("Name"),
+                                border: OutlineInputBorder(),
+                              ),
+                              controller: nameController,
+                              validator: validateName,
+                              autovalidateMode: AutovalidateMode.onUnfocus,
                               onChanged: (value) {
                                 setState(() {
-                                  aspectRatio = value!;
+                                  name = value;
                                 });
                               },
                             ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                label: Text("Host"),
+                                border: OutlineInputBorder(),
+                              ),
+                              controller: hostController,
+                              validator: validateHost,
+                              autovalidateMode: AutovalidateMode.onUnfocus,
+                              onChanged: (value) {
+                                setState(() {
+                                  host = value;
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                label: Text("Command port"),
+                                border: OutlineInputBorder(),
+                              ),
+                              controller: commandPortController,
+                              keyboardType: TextInputType.number,
+                              validator: validatePort,
+                              autovalidateMode: AutovalidateMode.onUnfocus,
+                              onChanged: (value) {
+                                setState(() {
+                                  commandPort = int.tryParse(value);
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                label: Text("Video port"),
+                                border: OutlineInputBorder(),
+                              ),
+                              controller: videoPortController,
+                              keyboardType: TextInputType.number,
+                              validator: validatePort,
+                              autovalidateMode: AutovalidateMode.onUnfocus,
+                              onChanged: (value) {
+                                setState(() {
+                                  videoPort = int.tryParse(value);
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              spacing: 14,
+                              children: [
+                                Text("Video aspect ratio: ", style: theme.textTheme.bodyLarge,),
+                                DropdownButton<String>(
+                                  value: aspectRatio,
+                                  items: ["16:9", "4:3", "1:1"]
+                                      .map((aspectRatio) => DropdownMenuItem(
+                                            value: aspectRatio,
+                                            child: Text(aspectRatio),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      aspectRatio = value!;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                   FilledButton(
