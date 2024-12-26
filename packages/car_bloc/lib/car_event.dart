@@ -50,3 +50,5 @@ final class EditPerformanceSettings extends CarEvent {
 
   EditPerformanceSettings({this.cacheMillis, this.updateIntervalMillis});
 }
+
+final class ResetCarBloc extends CarEvent {}

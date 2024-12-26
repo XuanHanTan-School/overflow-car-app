@@ -8,15 +8,23 @@ import 'package:time_trial_api/src/time_trial.dart';
 import 'package:uuid/uuid.dart';
 
 class TimeTrialManager {
-  static final _timeTrialController = BehaviorSubject<TimeTrial>();
+  static var _timeTrialController = BehaviorSubject<TimeTrial>();
   static StreamSubscription<DatabaseEvent>? _timeTrialStreamSubscription;
-  static final _timeTrialDeleteController = BehaviorSubject<String>();
+  static var _timeTrialDeleteController = BehaviorSubject<String>();
   static StreamSubscription<DatabaseEvent>? _timeTrialDeleteStreamSubscription;
 
   static DatabaseReference get _dbRef =>
       FirebaseDatabase.instance.ref("trials");
 
   static Future<void> startTimeTrialListeners() async {
+    await _timeTrialStreamSubscription?.cancel();
+    await _timeTrialDeleteStreamSubscription?.cancel();
+    await _timeTrialController.close();
+    await _timeTrialDeleteController.close();
+
+    _timeTrialController = BehaviorSubject();
+    _timeTrialDeleteController = BehaviorSubject();
+
     _timeTrialStreamSubscription =
         StreamGroup.merge([_dbRef.onChildAdded, _dbRef.onChildChanged])
             .listen((event) {
@@ -82,6 +90,8 @@ class TimeTrialManager {
   static Future<void> dispose() async {
     await _timeTrialStreamSubscription?.cancel();
     await _timeTrialDeleteStreamSubscription?.cancel();
+    await _timeTrialController.close();
+    await _timeTrialDeleteController.close();
   }
 }
 

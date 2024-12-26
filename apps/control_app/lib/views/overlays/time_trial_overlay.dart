@@ -55,9 +55,9 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
   }
 
   @override
-  void dispose() async {
-    await _timeTrialSubscription?.cancel();
+  Future<void> dispose() async {
     super.dispose();
+    await _timeTrialSubscription?.cancel();
   }
 
   @override

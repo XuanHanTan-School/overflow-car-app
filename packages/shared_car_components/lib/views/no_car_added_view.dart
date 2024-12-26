@@ -2,6 +2,7 @@ import 'package:app_utilities/app_utilities.dart';
 import 'package:shared_car_components/pages/add_car.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_car_components/pages/settings.dart';
 
 class NoCarAddedView extends StatelessWidget {
   const NoCarAddedView({super.key});
@@ -48,6 +49,21 @@ class NoCarAddedView extends StatelessWidget {
                 ]);
               },
               child: const Text("Add car"),
+            ),
+            OutlinedButton(
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsPage(),
+                  ),
+                );
+                SystemChrome.setPreferredOrientations([
+                  DeviceOrientation.landscapeRight,
+                  DeviceOrientation.landscapeLeft
+                ]);
+              },
+              child: const Text("Settings"),
             )
           ],
         )

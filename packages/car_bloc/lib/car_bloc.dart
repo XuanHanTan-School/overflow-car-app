@@ -25,6 +25,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     on<DisconnectSelectedCar>(onDisconnectSelectedCar);
     on<DeleteCar>(onDeleteCar);
     on<EditPerformanceSettings>(onEditPerformanceSettings);
+    on<ResetCarBloc>(onResetCarBloc);
   }
 
   Future<void> onAppInitialize(CarAppInitialize event, Emitter emit) async {
@@ -183,5 +184,17 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     );
     await LocalStorage.storeSettings(newSettings.toMap());
     emit(state.copyWith(perfSettings: newSettings));
+  }
+
+  Future<void> onResetCarBloc(ResetCarBloc event, Emitter emit) async {
+    if (state.selectedCarIndex != null) {
+      await onDisconnectSelectedCar(DisconnectSelectedCar(), emit);
+    }
+    await LocalStorage.clear();
+    emit(CarState(
+      isInitialized: false,
+      currentCars: [],
+      perfSettings: PerformanceSettings(),
+    ));
   }
 }

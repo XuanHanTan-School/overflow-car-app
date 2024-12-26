@@ -16,6 +16,7 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     on<SetCar>(onSetCar);
     on<UpdateCurrentTrial>(onUpdateCurrentTrial);
     on<RefreshLeaderboard>(onRefreshLeaderboard);
+    on<ResetTimeTrialBloc>(onResetTimeTrialBloc);
   }
 
   Future<void> onAppInitialize(
@@ -83,5 +84,18 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     final leaderboard =
         await TimeTrialManager.getLeaderboardTimeTrials(userTrialId);
     emit(state.copyWith(leaderboard: leaderboard));
+  }
+
+  Future<void> onResetTimeTrialBloc(
+      ResetTimeTrialBloc event, Emitter emit) async {
+    await _timeTrialUpdatesStreamSubscription?.cancel();
+    await _timeTrialDeletesStreamSubscription?.cancel();
+    await _currentTimeTrialStreamController?.close();
+
+    _timeTrialUpdatesStreamSubscription = null;
+    _timeTrialDeletesStreamSubscription = null;
+    _currentTimeTrialStreamController = null;
+
+    emit(TimeTrialState());
   }
 }

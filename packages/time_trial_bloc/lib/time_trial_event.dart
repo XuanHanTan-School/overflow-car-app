@@ -17,3 +17,5 @@ final class UpdateCurrentTrial extends TimeTrialEvent {
 }
 
 final class RefreshLeaderboard extends TimeTrialEvent {}
+
+final class ResetTimeTrialBloc extends TimeTrialEvent {}
