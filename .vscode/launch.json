@@ -1,10 +1,16 @@
 {
     "configurations": [
         {
-            "name": "Flutter",
+            "name": "Flutter (Control App)",
             "type": "dart",
             "request": "launch",
             "program": "apps/control_app/lib/main.dart"
+        },
+        {
+            "name": "Flutter (Live View App)",
+            "type": "dart",
+            "request": "launch",
+            "program": "apps/live_view_app/lib/main.dart"
         }
     ]
 }

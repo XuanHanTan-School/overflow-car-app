@@ -1,5 +1,6 @@
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,7 +91,7 @@ class _AddCarPageState extends State<AddCarPage> {
           key: _formKey,
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16 + (kIsWeb ? 16: 0)),
               child: Column(
                 spacing: 10,
                 children: [
