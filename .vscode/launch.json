@@ -10,7 +10,7 @@
             "name": "Flutter (Live View App)",
             "type": "dart",
             "request": "launch",
-            "program": "apps/live_view_app/lib/main.dart"
+            "program": "apps/live_view_app/lib/main.dart",
         }
     ]
 }

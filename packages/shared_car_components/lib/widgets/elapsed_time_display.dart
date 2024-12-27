@@ -42,7 +42,7 @@ class _ElapsedTimeDisplayState extends State<ElapsedTimeDisplay> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        VideoOverlayText(text: formattedElapsedTime),
+        VideoOverlayText(text: formattedElapsedTime, tabularFigures: true,),
       ],
     );
   }

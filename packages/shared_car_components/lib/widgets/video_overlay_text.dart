@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class VideoOverlayText extends StatelessWidget {
   final String text;
+  final bool tabularFigures;
 
-  const VideoOverlayText({super.key, required this.text});
+  const VideoOverlayText({super.key, required this.text, this.tabularFigures = false});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,7 @@ class VideoOverlayText extends StatelessWidget {
         style: theme.textTheme.titleLarge!.copyWith(
           color: theme.colorScheme.onPrimary,
           fontWeight: FontWeight.w500,
+          fontFeatures: tabularFigures ? [FontFeature.tabularFigures()] : null,
         ),
         textAlign: TextAlign.center,
       ),
