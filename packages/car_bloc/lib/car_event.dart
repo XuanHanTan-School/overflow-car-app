@@ -9,14 +9,12 @@ final class AddCar extends CarEvent {
   final String host;
   final int commandPort;
   final int videoPort;
-  final String aspectRatio;
 
   AddCar({
     required this.name,
     required this.host,
     required this.commandPort,
     required this.videoPort,
-    required this.aspectRatio,
   });
 }
 
@@ -47,10 +45,10 @@ final class DeleteCar extends CarEvent {
 }
 
 final class EditPerformanceSettings extends CarEvent {
-  final int? cacheMillis;
+  final bool? lowLatency;
   final int? updateIntervalMillis;
 
-  EditPerformanceSettings({this.cacheMillis, this.updateIntervalMillis});
+  EditPerformanceSettings({this.lowLatency, this.updateIntervalMillis});
 }
 
 final class ResetCarBloc extends CarEvent {}

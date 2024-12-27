@@ -54,7 +54,6 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       host: event.host,
       commandPort: event.commandPort,
       videoPort: event.videoPort,
-      aspectRatio: event.aspectRatio,
     );
 
     if (state.currentCars.any((eachCar) => eachCar.name == car.name)) {
@@ -100,7 +99,9 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       final player = Player();
       if (player.platform is NativePlayer) {
         NativePlayer playerNative = player.platform as NativePlayer;
-        playerNative.setProperty('profile', 'low-latency');
+        if (state.perfSettings.lowLatency) {
+          playerNative.setProperty('profile', 'low-latency');
+        }
       }
       await player.open(Media(
           "rtsp://${currentCar.host}:${currentCar.videoPort}/video_stream"));
@@ -187,7 +188,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
   Future<void> onEditPerformanceSettings(
       EditPerformanceSettings event, Emitter emit) async {
     final newSettings = state.perfSettings.copyWith(
-      cacheMillis: event.cacheMillis,
+      lowLatency: event.lowLatency,
       updateIntervalMillis: event.updateIntervalMillis,
     );
     await LocalStorage.storeSettings(newSettings.toMap());

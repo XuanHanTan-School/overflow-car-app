@@ -154,7 +154,7 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
 
           if (currentTrial.startTime == null) {
             return Padding(
-              padding: EdgeInsets.only(top: mediaQuery.viewPadding.top),
+              padding: EdgeInsets.only(top: mediaQuery.viewPadding.top + 20),
               child: Column(
                 children: [
                   VideoOverlayText(text: 'Waiting for time trial to start...')
@@ -165,7 +165,7 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
 
           if (currentTrial.startTime != null && currentTrial.endTime == null) {
             return Padding(
-              padding: EdgeInsets.only(top: mediaQuery.viewPadding.top),
+              padding: EdgeInsets.only(top: mediaQuery.viewPadding.top + 20),
               child: ElapsedTimeDisplay(
                 startTime: currentTrial.startTime!,
               ),

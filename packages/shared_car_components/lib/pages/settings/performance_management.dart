@@ -26,21 +26,15 @@ class PerformanceManagementPage extends StatelessWidget {
     carBloc.add(ConnectSelectedCar());
   }
 
-  void updateCacheDuration(
-      {required PerformanceSettings perfSettings,
-      required BuildContext context}) {
+  void updateLowLatencyMode({required BuildContext context}) {
     showDialog(
       context: context,
       builder: (dialogContext) {
-        String cacheDurationStr = perfSettings.cacheMillis.toString();
-        final cacheDurationController =
-            TextEditingController(text: cacheDurationStr);
-        final formKey = GlobalKey<FormState>();
         String? loadMsg;
 
         return StatefulBuilder(
           builder: (context, setStateDiag) => AlertDialog(
-            title: Text("Change video cache duration"),
+            title: Text("Change video latency"),
             content: loadMsg != null
                 ? SizedBox(
                     height: 200,
@@ -52,39 +46,49 @@ class PerformanceManagementPage extends StatelessWidget {
                     child: ListView(
                       children: [
                         Text(
-                            """Overflow Car automatically creates a video buffer of the specified duration, making the video smoother during unstable network conditions.
+                            """Increasing latency can help with video playback stability, especially on slower networks.
                             
-Decreasing the buffer will decrease latency, but a stable network connection is required."""),
+Decreasing the latency will make the experience more responsive, but a stable network connection is required."""),
                         const SizedBox(
                           height: 30,
                         ),
-                        Form(
-                          key: formKey,
-                          child: Row(
-                            spacing: 10,
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  maxLines: 1,
-                                  validator: validateMs,
-                                  controller: cacheDurationController,
-                                  decoration: InputDecoration(
-                                    hintText: "100",
-                                    label: Text("Cache duration"),
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onChanged: (value) {
-                                    formKey.currentState?.validate();
-                                    setStateDiag(() {
-                                      cacheDurationStr = value;
-                                    });
-                                  },
-                                ),
-                              ),
-                              Text("ms"),
-                            ],
-                          ),
+                        BlocBuilder<CarBloc, CarState>(
+                          buildWhen: (previous, current) =>
+                              previous.perfSettings.lowLatency !=
+                              current.perfSettings.lowLatency,
+                          builder: (context, state) {
+                            final perfSettings = state.perfSettings;
+
+                            return SwitchListTile(
+                              title: Text("Low-latency video"),
+                              value: perfSettings.lowLatency,
+                              onChanged: (newValue) async {
+                                setStateDiag(() {
+                                  loadMsg = "Updating settings...";
+                                });
+
+                                final carBloc = context.read<CarBloc>();
+
+                                carBloc.add(EditPerformanceSettings(
+                                    lowLatency: newValue));
+                                await carBloc.stream.firstWhere((state) =>
+                                    state.perfSettings.lowLatency == newValue);
+
+                                if (carBloc.state.selectedCarIndex != null &&
+                                    carBloc.state.connectionState ==
+                                        CarConnectionState.connected) {
+                                  setStateDiag(() {
+                                    loadMsg = "Restarting connection...";
+                                  });
+                                  await restartConnection(carBloc: carBloc);
+                                }
+
+                                setStateDiag(() {
+                                  loadMsg = null;
+                                });
+                              },
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -96,38 +100,6 @@ Decreasing the buffer will decrease latency, but a stable network connection is 
                       onPressed: () {
                         Navigator.pop(dialogContext);
                       },
-                      child: Text("Cancel"),
-                    ),
-                    TextButton(
-                      onPressed: formKey.currentState?.validate() == true
-                          ? () async {
-                              setStateDiag(() {
-                                loadMsg = "Updating settings...";
-                              });
-
-                              final carBloc = context.read<CarBloc>();
-                              var newCacheDuration = 100;
-                              if (cacheDurationStr != "") {
-                                newCacheDuration = int.parse(cacheDurationStr);
-                              }
-
-                              carBloc.add(EditPerformanceSettings(
-                                  cacheMillis: newCacheDuration));
-                              await carBloc.stream.firstWhere((state) =>
-                                  state.perfSettings.cacheMillis ==
-                                  newCacheDuration);
-
-                              if (carBloc.state.selectedCarIndex != null) {
-                                setStateDiag(() {
-                                  loadMsg = "Restarting connection...";
-                                });
-                                await restartConnection(carBloc: carBloc);
-                              }
-
-                              if (!dialogContext.mounted) return;
-                              Navigator.pop(dialogContext);
-                            }
-                          : null,
                       child: Text("Done"),
                     ),
                   ],
@@ -230,7 +202,9 @@ Change the time between each update depending on the hardware and network capabi
                                   state.perfSettings.updateIntervalMillis ==
                                   newUpdateInterval);
 
-                              if (carBloc.state.selectedCarIndex != null) {
+                              if (carBloc.state.selectedCarIndex != null &&
+                                  carBloc.state.connectionState ==
+                                      CarConnectionState.connected) {
                                 setStateDiag(() {
                                   loadMsg = "Restarting connection...";
                                 });
@@ -283,12 +257,12 @@ Change the time between each update depending on the hardware and network capabi
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.storage_outlined),
-                    title: Text("Live video cache duration"),
-                    subtitle: Text("${perfSettings.cacheMillis}ms"),
+                    leading: Icon(Icons.videocam_outlined),
+                    title: Text("Low-latency video"),
+                    subtitle:
+                        Text(perfSettings.lowLatency ? "Enabled" : "Disabled"),
                     onTap: () {
-                      updateCacheDuration(
-                          perfSettings: perfSettings, context: context);
+                      updateLowLatencyMode(context: context);
                     },
                   ),
                 ],

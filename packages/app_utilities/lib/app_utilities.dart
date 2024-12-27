@@ -32,7 +32,6 @@ Future<void> importCarsFromJson({required BuildContext context}) async {
           host: car.host,
           commandPort: car.commandPort,
           videoPort: car.videoPort,
-          aspectRatio: car.aspectRatio,
         ));
       }
     } catch (e) {

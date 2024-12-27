@@ -60,7 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ListTile(
               leading: Icon(Icons.speed_outlined),
               title: Text("Performance"),
-              subtitle: Text("Command update interval, video cache duration"),
+              subtitle: Text("Command update interval, video latency"),
               onTap: () {
                 Navigator.push(
                     context,

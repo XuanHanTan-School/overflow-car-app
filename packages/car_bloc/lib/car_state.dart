@@ -61,7 +61,11 @@ class CarState {
     VideoController? videoPlayerController;
 
     if (player == null) {
-      await this.player?.dispose();
+      try {
+        await this.player?.dispose();
+      } catch (e) {
+        print("Error disposing player: $e");
+      }
       videoPlayerController = null;
     } else {
       videoPlayerController = VideoController(player);
@@ -114,32 +118,32 @@ class CarDrivingState {
 }
 
 class PerformanceSettings {
-  final int cacheMillis;
+  final bool lowLatency;
   final int updateIntervalMillis;
 
   const PerformanceSettings(
-      {this.cacheMillis = 100, this.updateIntervalMillis = 30});
+      {this.lowLatency = true, this.updateIntervalMillis = 30});
 
   factory PerformanceSettings.fromMap(Map<String, dynamic> map) {
     return PerformanceSettings(
-      cacheMillis: map["cacheMillis"] ?? 100,
+      lowLatency: map["lowLatency"] ?? true,
       updateIntervalMillis: map["updateIntervalMillis"] ?? 30,
     );
   }
 
   PerformanceSettings copyWith({
-    int? cacheMillis,
+    bool? lowLatency,
     int? updateIntervalMillis,
   }) {
     return PerformanceSettings(
-      cacheMillis: cacheMillis ?? this.cacheMillis,
+      lowLatency: lowLatency ?? this.lowLatency,
       updateIntervalMillis: updateIntervalMillis ?? this.updateIntervalMillis,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      "cacheMillis": cacheMillis,
+      "lowLatency": lowLatency,
       "updateIntervalMillis": updateIntervalMillis,
     };
   }
