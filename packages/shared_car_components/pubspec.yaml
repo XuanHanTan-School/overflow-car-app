@@ -40,7 +40,6 @@ dependencies:
   time_trial_api: ^1.0.0
   time_trial_bloc: ^1.0.0
   app_utilities: ^1.0.0
-  flutter_vlc_player: ^7.4.2
 
 dev_dependencies:
   flutter_test:

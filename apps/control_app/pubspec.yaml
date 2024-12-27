@@ -41,7 +41,6 @@ dependencies:
   time_trial_api: ^1.0.0
   time_trial_bloc: ^1.0.0
   app_utilities: ^1.0.0
-  flutter_vlc_player: ^7.4.2
   sensors_plus: ^6.1.0
   web_socket: ^0.1.6
   flutter_bloc: ^8.1.6
@@ -51,6 +50,9 @@ dependencies:
       ref: 360c0f05cfc14503046469382480bfb7162a277c
   file_picker: ^8.1.6
   firebase_core: ^3.9.0
+  media_kit: ^1.1.11
+  media_kit_video: ^1.2.5
+  media_kit_libs_video: ^1.0.5
 
 dev_dependencies:
   flutter_test:

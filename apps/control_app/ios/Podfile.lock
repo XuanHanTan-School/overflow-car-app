@@ -60,9 +60,6 @@ PODS:
     - leveldb-library (~> 1.22)
   - FirebaseSharedSwift (11.6.0)
   - Flutter (1.0.0)
-  - flutter_vlc_player (3.0.3):
-    - Flutter
-    - MobileVLCKit (~> 3.6.0b12)
   - GoogleUtilities/Environment (8.0.2):
     - GoogleUtilities/Privacy
   - GoogleUtilities/Logger (8.0.2):
@@ -75,8 +72,17 @@ PODS:
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - leveldb-library (1.22.6)
-  - MobileVLCKit (3.6.1b1)
+  - media_kit_libs_ios_video (1.0.4):
+    - Flutter
+  - media_kit_native_event_loop (1.0.0):
+    - Flutter
+  - media_kit_video (0.0.1):
+    - Flutter
   - motion_sensors (0.0.1):
+    - Flutter
+  - package_info_plus (0.4.5):
+    - Flutter
+  - screen_brightness_ios (0.1.0):
     - Flutter
   - SDWebImage (5.20.0):
     - SDWebImage/Core (= 5.20.0)
@@ -87,16 +93,26 @@ PODS:
     - Flutter
     - FlutterMacOS
   - SwiftyGif (5.4.5)
+  - volume_controller (0.0.1):
+    - Flutter
+  - wakelock_plus (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - Flutter (from `Flutter`)
-  - flutter_vlc_player (from `.symlinks/plugins/flutter_vlc_player/ios`)
+  - media_kit_libs_ios_video (from `.symlinks/plugins/media_kit_libs_ios_video/ios`)
+  - media_kit_native_event_loop (from `.symlinks/plugins/media_kit_native_event_loop/ios`)
+  - media_kit_video (from `.symlinks/plugins/media_kit_video/ios`)
   - motion_sensors (from `.symlinks/plugins/motion_sensors/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - screen_brightness_ios (from `.symlinks/plugins/screen_brightness_ios/ios`)
   - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - volume_controller (from `.symlinks/plugins/volume_controller/ios`)
+  - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
 
 SPEC REPOS:
   trunk:
@@ -110,7 +126,6 @@ SPEC REPOS:
     - FirebaseSharedSwift
     - GoogleUtilities
     - leveldb-library
-    - MobileVLCKit
     - SDWebImage
     - SwiftyGif
 
@@ -123,14 +138,26 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_database/ios"
   Flutter:
     :path: Flutter
-  flutter_vlc_player:
-    :path: ".symlinks/plugins/flutter_vlc_player/ios"
+  media_kit_libs_ios_video:
+    :path: ".symlinks/plugins/media_kit_libs_ios_video/ios"
+  media_kit_native_event_loop:
+    :path: ".symlinks/plugins/media_kit_native_event_loop/ios"
+  media_kit_video:
+    :path: ".symlinks/plugins/media_kit_video/ios"
   motion_sensors:
     :path: ".symlinks/plugins/motion_sensors/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
+  screen_brightness_ios:
+    :path: ".symlinks/plugins/screen_brightness_ios/ios"
   sensors_plus:
     :path: ".symlinks/plugins/sensors_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  volume_controller:
+    :path: ".symlinks/plugins/volume_controller/ios"
+  wakelock_plus:
+    :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
@@ -145,15 +172,20 @@ SPEC CHECKSUMS:
   FirebaseDatabase: ccd11f02c170076ffeeef40020cbb2f6d33e718c
   FirebaseSharedSwift: a4e5dfca3e210633bb3a3dfb94176c019211948b
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_vlc_player: 68553dec38187c14a7800e6d27a30bf9b25b53bc
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
-  MobileVLCKit: 2d9c7c373393ae43086aeeff890bf0b1afc15c5c
+  media_kit_libs_ios_video: a5fe24bc7875ccd6378a0978c13185e1344651c1
+  media_kit_native_event_loop: e6b2ab20cf0746eb1c33be961fcf79667304fa2a
+  media_kit_video: 5da63f157170e5bf303bf85453b7ef6971218a2e
   motion_sensors: 03f55b7c637a7e365a0b5f9697a449f9059d5d91
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+  screen_brightness_ios: 715ca807df953bf676d339f11464e438143ee625
   SDWebImage: 73c6079366fea25fa4bb9640d5fb58f0893facd8
   sensors_plus: 7229095999f30740798f0eeef5cd120357a8f4f2
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
+  volume_controller: 531ddf792994285c9b17f9d8a7e4dcdd29b3eae9
+  wakelock_plus: 373cfe59b235a6dd5837d0fb88791d2f13a90d56
 
 PODFILE CHECKSUM: c416d5f2ea58019930981685580573a98dd6fb91
 

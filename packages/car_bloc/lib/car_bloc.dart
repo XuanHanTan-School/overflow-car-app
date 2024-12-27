@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:car_bloc/car_event.dart';
 import 'package:car_bloc/car_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:local_storage/local_storage.dart';
 import 'package:car_api/overflow_car.dart';
+import 'package:media_kit/media_kit.dart';
 
 class CarBloc extends Bloc<CarEvent, CarState> {
   Timer? sendDriveCommandTimer;
@@ -97,16 +97,16 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     try {
       await currentCar.connect();
 
-      final videoPlayerController = VlcPlayerController.network(
-        "rtsp://${currentCar.host}:${currentCar.videoPort}/video_stream",
-        options: VlcPlayerOptions(
-            rtp: VlcRtpOptions(
-                [":network-caching=${state.perfSettings.cacheMillis}"])),
-      );
+      final player = Player();
+      if (player.platform is NativePlayer) {
+        NativePlayer playerNative = player.platform as NativePlayer;
+        playerNative.setProperty('profile', 'low-latency');
+      }
+      await player.open(Media(
+          "rtsp://${currentCar.host}:${currentCar.videoPort}/video_stream"));
       emit(await state
           .copyWith(connectionState: CarConnectionState.connected)
-          .copyWithVideoPlayerController(
-              videoPlayerController: videoPlayerController));
+          .copyWithVideoPlayer(player: player));
 
       CarDrivingState? prevDriveState;
       sendDriveCommandTimer = Timer.periodic(
@@ -118,6 +118,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
         }
       });
     } catch (e) {
+      print("Error connecting to car: $e");
       await Future.delayed(Duration(milliseconds: 100));
       emit(state.copyWith(connectionState: CarConnectionState.disconnected));
     }
@@ -128,7 +129,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
         sendDriveCommandTimer = null;
         emit(await state
             .copyWith(connectionState: CarConnectionState.disconnected)
-            .copyWithVideoPlayerController(videoPlayerController: null));
+            .copyWithVideoPlayer(player: null));
         break;
       }
     }

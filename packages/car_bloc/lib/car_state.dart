@@ -1,5 +1,6 @@
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:car_api/overflow_car.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
 class CarState {
   final bool isInitialized;
@@ -7,11 +8,13 @@ class CarState {
   int? _selectedCarIndex;
   final CarConnectionState connectionState;
   late final CarDrivingState drivingState;
-  VlcPlayerController? _videoPlayerController;
+  VideoController? _videoPlayerController;
+  Player? _player;
   final PerformanceSettings perfSettings;
 
   int? get selectedCarIndex => _selectedCarIndex;
-  VlcPlayerController? get videoPlayerController => _videoPlayerController;
+  VideoController? get videoPlayerController => _videoPlayerController;
+  Player? get player => _player;
 
   CarState(
       {required this.isInitialized,
@@ -19,12 +22,14 @@ class CarState {
       int? selectedCarIndex,
       this.connectionState = CarConnectionState.disconnected,
       CarDrivingState? drivingState,
-      VlcPlayerController? videoPlayerController,
+      VideoController? videoPlayerController,
+      Player? player,
       required this.perfSettings}) {
     this.drivingState = drivingState ??
         CarDrivingState(angle: 0, forward: true, accelerate: false);
     _selectedCarIndex = selectedCarIndex;
     _videoPlayerController = videoPlayerController;
+    _player = player;
   }
 
   CarState copyWith({
@@ -41,6 +46,7 @@ class CarState {
       connectionState: connectionState ?? this.connectionState,
       drivingState: drivingState ?? this.drivingState,
       videoPlayerController: _videoPlayerController,
+      player: _player,
       perfSettings: perfSettings ?? this.perfSettings,
     );
   }
@@ -49,13 +55,21 @@ class CarState {
     return copyWith().._selectedCarIndex = selectedCarIndex;
   }
 
-  Future<CarState> copyWithVideoPlayerController({
-    required VlcPlayerController? videoPlayerController,
+  Future<CarState> copyWithVideoPlayer({
+    required Player? player,
   }) async {
-    if (videoPlayerController == null) {
-      await _videoPlayerController?.dispose();
+    VideoController? videoPlayerController;
+
+    if (player == null) {
+      await this.player?.dispose();
+      videoPlayerController = null;
+    } else {
+      videoPlayerController = VideoController(player);
     }
-    return copyWith().._videoPlayerController = videoPlayerController;
+
+    return copyWith()
+      .._videoPlayerController = videoPlayerController
+      .._player = player;
   }
 }
 

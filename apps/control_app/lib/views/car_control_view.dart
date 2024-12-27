@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
 import 'package:car_bloc/car_state.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:shared_car_components/pages/settings.dart';
 import 'package:control_app/views/overlays/time_trial_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
 class CarControlView extends StatefulWidget {
   final CarState state;
@@ -50,11 +50,6 @@ class _CarControlViewState extends State<CarControlView> {
     final mediaQuery = MediaQuery.of(context);
     final theme = Theme.of(context);
 
-    final videoZoom = mediaQuery.size.width /
-        (mediaQuery.size.height *
-            widget.state.currentCars[widget.state.selectedCarIndex!]
-                .aspectRatioValue);
-
     return Stack(
       children: [
         Positioned.fill(
@@ -69,11 +64,11 @@ class _CarControlViewState extends State<CarControlView> {
           ),
         ),
         if (widget.state.videoPlayerController != null)
-          Transform.scale(
-            scale: videoZoom,
-            child: VlcPlayer(
+          Positioned.fill(
+            child: Video(
               controller: widget.state.videoPlayerController!,
-              aspectRatio: mediaQuery.size.aspectRatio,
+              controls: NoVideoControls,
+              fit: BoxFit.cover,
             ),
           ),
         Positioned.fill(

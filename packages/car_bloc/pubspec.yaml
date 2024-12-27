@@ -11,7 +11,8 @@ dependencies:
   car_api: ^1.0.0
   local_storage: ^1.0.0
   flutter_bloc: ^8.1.6
-  flutter_vlc_player: ^7.4.2
+  media_kit: ^1.1.5
+  media_kit_video: ^1.2.5
 
 dev_dependencies:
   lints: ^5.0.0

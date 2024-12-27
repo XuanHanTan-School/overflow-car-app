@@ -6,10 +6,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:time_trial_bloc/time_trial_bloc.dart';
 import 'package:time_trial_bloc/time_trial_event.dart';
 
 void main() async {
+  MediaKit.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(

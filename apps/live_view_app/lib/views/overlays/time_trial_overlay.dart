@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:live_view_app/pages/position.dart';
 import 'package:shared_car_components/widgets/elapsed_time_display.dart';
@@ -53,6 +52,7 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.of(context);
+    final isLargeScreen = mediaQuery.size.width > 600;
 
     return BlocProvider.value(
       value: context.read<TimeTrialBloc>(),
@@ -87,7 +87,7 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
 
           if (currentTrial.startTime == null) {
             return Padding(
-              padding: EdgeInsets.only(top: mediaQuery.viewPadding.top + (Platform.isIOS ? 20: 0)),
+              padding: EdgeInsets.only(top: mediaQuery.viewPadding.top + (isLargeScreen ? 20: 0)),
               child: Column(
                 children: [
                   VideoOverlayText(text: 'Waiting for time trial to start...')
@@ -98,7 +98,7 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
 
           if (currentTrial.startTime != null && currentTrial.endTime == null) {
             return Padding(
-              padding: EdgeInsets.only(top: mediaQuery.viewPadding.top + (Platform.isIOS ? 20: 0)),
+              padding: EdgeInsets.only(top: mediaQuery.viewPadding.top + (isLargeScreen ? 20: 0)),
               child: ElapsedTimeDisplay(
                 startTime: currentTrial.startTime!,
               ),
