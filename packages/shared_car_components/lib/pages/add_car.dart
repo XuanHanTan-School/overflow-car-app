@@ -1,6 +1,5 @@
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,6 +73,8 @@ class _AddCarPageState extends State<AddCarPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final mediaQuery = MediaQuery.of(context);
+    final isLargeScreen = mediaQuery.size.width > 600;
 
     return BlocProvider.value(
       value: BlocProvider.of<CarBloc>(context),
@@ -91,7 +92,7 @@ class _AddCarPageState extends State<AddCarPage> {
           key: _formKey,
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16 + (kIsWeb ? 16: 0)),
+              padding: EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16 + (isLargeScreen ? 16: 0)),
               child: Column(
                 spacing: 10,
                 children: [
@@ -101,8 +102,8 @@ class _AddCarPageState extends State<AddCarPage> {
                         constraints: BoxConstraints(maxWidth: 400),
                         child: ListView(
                           children: [
-                            const SizedBox(
-                              height: 16 + (kIsWeb ? 16: 0),
+                            SizedBox(
+                              height: 16 + (isLargeScreen ? 16: 0),
                             ),
                             TextFormField(
                               decoration: InputDecoration(
