@@ -74,7 +74,7 @@ class _CarVideoViewState extends State<CarVideoView> {
         Positioned(
           left: 24,
           right: 24,
-          top: mediaQuery.viewPadding.top + 10,
+          top: mediaQuery.viewPadding.top + 20,
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,

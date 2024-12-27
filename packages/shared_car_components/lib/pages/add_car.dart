@@ -74,7 +74,7 @@ class _AddCarPageState extends State<AddCarPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.of(context);
-    final isLargeScreen = mediaQuery.size.width > 600;
+    final isLargeScreen = mediaQuery.size.shortestSide > 600;
 
     return BlocProvider.value(
       value: BlocProvider.of<CarBloc>(context),
