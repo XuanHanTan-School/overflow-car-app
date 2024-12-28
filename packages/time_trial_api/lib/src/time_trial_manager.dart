@@ -48,13 +48,19 @@ class TimeTrialManager {
     var position = 0;
     int? prevDuration;
     final List<LeaderboardTimeTrial> leaderboardTrials = [];
+    trials.sort((a, b) {
+      if (a.duration == null) return -1;
+      if (b.duration == null) return -1;
+
+      return a.duration!.compareTo(b.duration!);
+    });
     for (final eachTrial in trials) {
       final leaderboardTrial = LeaderboardTimeTrial.fromMap(
         eachTrial.id,
         eachTrial.toMap(),
         position: position,
       );
-      
+
       final currentDuration = leaderboardTrial.duration?.inMilliseconds;
       if (currentDuration != null) {
         if (prevDuration != null && prevDuration != currentDuration) {

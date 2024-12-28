@@ -8,6 +8,7 @@ import 'package:time_trial_bloc/time_trial_state.dart';
 
 class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
   BehaviorSubject<TimeTrial?>? _currentTimeTrialStreamController;
+  BehaviorSubject<List<LeaderboardTimeTrial>>? _fullLeaderboardStreamController;
   StreamSubscription<TimeTrial>? _timeTrialUpdatesStreamSubscription;
   StreamSubscription<String>? _timeTrialDeletesStreamSubscription;
 
@@ -88,6 +89,8 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
       ListenToLeaderboard event, Emitter emit) async {
     await _timeTrialUpdatesStreamSubscription?.cancel();
     await _timeTrialDeletesStreamSubscription?.cancel();
+    await _fullLeaderboardStreamController?.close();
+    _fullLeaderboardStreamController = BehaviorSubject();
 
     _timeTrialUpdatesStreamSubscription =
         TimeTrialManager.getTimeTrialUpdates().listen((trial) {
@@ -96,7 +99,7 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
 
       final leaderboard =
           TimeTrialManager.convertAllTimeTrialsToLeaderboard(_allTimeTrials);
-      emit(state.copyWith(leaderboard: leaderboard));
+      _fullLeaderboardStreamController?.add(leaderboard);
     });
 
     _timeTrialDeletesStreamSubscription =
@@ -104,8 +107,12 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
       _allTimeTrials.removeWhere((eachTrial) => eachTrial.id == trialId);
       final leaderboard =
           TimeTrialManager.convertAllTimeTrialsToLeaderboard(_allTimeTrials);
-      emit(state.copyWith(leaderboard: leaderboard));
+      _fullLeaderboardStreamController?.add(leaderboard);
     });
+
+    await for (final leaderboard in _fullLeaderboardStreamController!.stream) {
+      emit(state.copyWith(leaderboard: leaderboard));
+    }
   }
 
   Future<void> onRefreshLeaderboard(
