@@ -11,6 +11,15 @@
             "type": "dart",
             "request": "launch",
             "program": "apps/live_view_app/lib/main.dart",
+        },
+        {
+            "name": "Flutter (Management App)",
+            "type": "dart",
+            "request": "launch",
+            "program": "apps/management_app/lib/main.dart",
+            "args": [
+                "--web-port=50000"
+            ]
         }
     ]
 }
