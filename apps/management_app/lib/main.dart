@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:management_app/pages/no_car_added.dart';
 import 'package:shared_car_components/views/loading_view.dart';
+import 'package:shared_car_components/ui/theme.dart';
 import 'package:time_trial_bloc/time_trial_bloc.dart';
 import 'package:time_trial_bloc/time_trial_event.dart';
 
@@ -32,8 +33,8 @@ void main() async {
               create: (_) => TimeTrialBloc()..add(TimeTrialAppInitialize())),
         ],
         child: MaterialApp(
-          theme: ThemeData(),
-          darkTheme: ThemeData.dark(),
+          theme: lightTheme,
+          darkTheme: darkTheme,
           home: BlocBuilder<CarManagementBloc, CarManagementState>(
             buildWhen: (previous, current) =>
                 previous.isInitialized != current.isInitialized ||

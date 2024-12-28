@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:time_trial_bloc/time_trial_bloc.dart';
 import 'package:time_trial_bloc/time_trial_event.dart';
+import 'package:shared_car_components/ui/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,8 +30,8 @@ void main() async {
             create: (_) => TimeTrialBloc()..add(TimeTrialAppInitialize())),
       ],
       child: MaterialApp(
-        theme: ThemeData(),
-        darkTheme: ThemeData.dark(),
+        theme: lightTheme,
+        darkTheme: darkTheme,
         home: const HomePage(),
       ),
     ));

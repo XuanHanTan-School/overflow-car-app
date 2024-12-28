@@ -10,8 +10,7 @@ class LeaderboardItem extends StatelessWidget {
   final LeaderboardTimeTrial trial;
   final String? userTrialId;
   final bool isManagementMode;
-  final void Function(OptionsNavigationPath navigationPath)?
-      onManagementAction;
+  final void Function(OptionsNavigationPath navigationPath)? onManagementAction;
 
   const LeaderboardItem({
     super.key,
@@ -108,13 +107,6 @@ class LeaderboardItem extends StatelessWidget {
                             width: 10,
                           ),
                           MenuAnchor(
-                            style: MenuStyle(
-                              shape: WidgetStatePropertyAll(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                              ),
-                            ), // TODO: Move to custom theme
                             builder: (BuildContext context,
                                 MenuController controller, Widget? child) {
                               return IconButton(
@@ -131,7 +123,8 @@ class LeaderboardItem extends StatelessWidget {
                                 icon: Icons.sports_esports_outlined,
                                 label: "Continue time trial",
                                 onPressed: () {
-                                  onManagementAction?.call(OptionsNavigationPath.continueTrial);
+                                  onManagementAction?.call(
+                                      OptionsNavigationPath.continueTrial);
                                 },
                               ),
                               MenuItem(
@@ -139,7 +132,8 @@ class LeaderboardItem extends StatelessWidget {
                                 label: "Delete time trial",
                                 isImportantAction: true,
                                 onPressed: () {
-                                  onManagementAction?.call(OptionsNavigationPath.deleteTrial);
+                                  onManagementAction
+                                      ?.call(OptionsNavigationPath.deleteTrial);
                                 },
                               ),
                             ],
