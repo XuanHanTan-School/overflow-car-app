@@ -10,7 +10,7 @@ packages:
     source: hosted
     version: "1.3.48"
   app_utilities:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: "../../packages/app_utilities"
       relative: true

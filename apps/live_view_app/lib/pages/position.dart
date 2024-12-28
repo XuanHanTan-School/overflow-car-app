@@ -39,6 +39,8 @@ class _PositionPageState extends State<PositionPage> {
       if (!mounted) return;
       Navigator.pop(context);
     });
+
+    // TODO: Add auto close in 30s
   }
 
   @override
@@ -76,6 +78,7 @@ class _PositionPageState extends State<PositionPage> {
                 return LoadingView(message: "Loading...");
               }
 
+              // TODO: Use leaderboard item
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

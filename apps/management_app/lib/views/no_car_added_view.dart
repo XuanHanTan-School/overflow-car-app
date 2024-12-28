@@ -1,7 +1,7 @@
 import 'package:app_utilities/app_utilities.dart';
-import 'package:shared_car_components/pages/add_car.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:management_app/pages/home.dart';
+import 'package:management_app/utilities/utilities.dart';
 
 class NoCarAddedView extends StatelessWidget {
   const NoCarAddedView({super.key});
@@ -30,27 +30,30 @@ class NoCarAddedView extends StatelessWidget {
           children: [
             FilledButton(
               onPressed: () async {
-                await importCarsFromJson(context: context);
+                await importCarsFromJson(
+                    context: context, isManagementMode: true);
               },
               child: const Text("Import cars"),
             ),
             OutlinedButton(
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddCarPage(),
-                  ),
-                );
-                SystemChrome.setPreferredOrientations([
-                  DeviceOrientation.landscapeRight,
-                  DeviceOrientation.landscapeLeft
-                ]);
+              onPressed: () {
+                addCar(context: context);
               },
               child: const Text("Add car"),
             ),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ),
+                );
+              },
+              child: const Text("Skip"),
+            ),
           ],
-        )
+        ),
       ],
     );
   }

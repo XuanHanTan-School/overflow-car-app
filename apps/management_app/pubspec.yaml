@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  app_utilities: ^1.0.0
   car_management_bloc: ^1.0.0
   time_trial_api: ^1.0.0
   time_trial_bloc: ^1.0.0
