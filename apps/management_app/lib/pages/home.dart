@@ -1,6 +1,7 @@
 import 'package:car_management_bloc/car_management_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:management_app/pages/settings.dart';
 import 'package:management_app/pages/trial_configuration.dart';
 import 'package:shared_car_components/views/loading_view.dart';
 import 'package:shared_car_components/widgets/leaderboard_item.dart';
@@ -116,7 +117,10 @@ class HomePage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                // TODO: Open settings page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
               },
               icon: Icon(Icons.settings_outlined),
             ),

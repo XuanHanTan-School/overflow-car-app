@@ -144,10 +144,13 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     await _timeTrialUpdatesStreamSubscription?.cancel();
     await _timeTrialDeletesStreamSubscription?.cancel();
     await _currentTimeTrialStreamController?.close();
+    await _fullLeaderboardStreamController?.close();
 
     _timeTrialUpdatesStreamSubscription = null;
     _timeTrialDeletesStreamSubscription = null;
     _currentTimeTrialStreamController = null;
+    _fullLeaderboardStreamController = null;
+    _allTimeTrials.clear();
 
     emit(TimeTrialState());
   }
