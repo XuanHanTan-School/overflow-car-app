@@ -21,7 +21,7 @@ class NoCarAddedView extends StatelessWidget {
         const SizedBox(
           height: 30,
         ),
-        const Text("Add a car or import settings to get started."),
+        const Text("Add a car or import cars to get started."),
         const SizedBox(
           height: 50,
         ),

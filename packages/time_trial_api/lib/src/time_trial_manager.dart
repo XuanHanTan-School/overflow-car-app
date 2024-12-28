@@ -43,6 +43,33 @@ class TimeTrialManager {
   static Stream<String> getTimeTrialDeletes() =>
       _timeTrialDeleteController.stream;
 
+  static List<LeaderboardTimeTrial> convertAllTimeTrialsToLeaderboard(
+      List<TimeTrial> trials) {
+    var position = 0;
+    int? prevDuration;
+    final List<LeaderboardTimeTrial> leaderboardTrials = [];
+    for (final eachTrial in trials) {
+      final leaderboardTrial = LeaderboardTimeTrial.fromMap(
+        eachTrial.id,
+        eachTrial.toMap(),
+        position: position,
+      );
+      
+      final currentDuration = leaderboardTrial.duration?.inMilliseconds;
+      if (currentDuration != null) {
+        if (prevDuration != null && prevDuration != currentDuration) {
+          position++;
+        }
+        prevDuration = currentDuration;
+      }
+
+      leaderboardTrial.position = position;
+      leaderboardTrials.add(leaderboardTrial);
+    }
+
+    return leaderboardTrials;
+  }
+
   static Future<List<LeaderboardTimeTrial>> getLeaderboardTimeTrials(
       String userTrialId) async {
     final trialsSnapshot = await _dbRef.orderByChild("duration").get();
@@ -76,7 +103,8 @@ class TimeTrialManager {
 
     // Return top 3 + upper 3 + lower 3
     final leaderboard = trials.sublist(0, min(3, trials.length)) +
-        trials.sublist(max(0, userTrialIndex - 3), min(userTrialIndex + 4, trials.length));
+        trials.sublist(
+            max(0, userTrialIndex - 3), min(userTrialIndex + 4, trials.length));
     final Set<String> uniqueIds = {};
     leaderboard.retainWhere((eachTrial) => uniqueIds.add(eachTrial.id));
     return leaderboard;

@@ -11,10 +11,14 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
   StreamSubscription<TimeTrial>? _timeTrialUpdatesStreamSubscription;
   StreamSubscription<String>? _timeTrialDeletesStreamSubscription;
 
+  final List<TimeTrial> _allTimeTrials = [];
+
   TimeTrialBloc() : super(TimeTrialState()) {
     on<TimeTrialAppInitialize>(onAppInitialize);
     on<SetCar>(onSetCar);
+    on<AddTimeTrial>(onAddTimeTrial);
     on<UpdateCurrentTrial>(onUpdateCurrentTrial);
+    on<ListenToLeaderboard>(onListenToLeaderboard);
     on<RefreshLeaderboard>(onRefreshLeaderboard);
     on<ResetTimeTrialBloc>(onResetTimeTrialBloc);
   }
@@ -57,6 +61,10 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     }
   }
 
+  Future<void> onAddTimeTrial(AddTimeTrial event, Emitter emit) async {
+    await TimeTrialManager.addTimeTrial(carName: event.carName);
+  }
+
   Future<void> onUpdateCurrentTrial(
       UpdateCurrentTrial event, Emitter emit) async {
     assert(state.currentTrial != null);
@@ -74,6 +82,30 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
       endTime: event.endTime,
       duration: duration,
     );
+  }
+
+  Future<void> onListenToLeaderboard(
+      ListenToLeaderboard event, Emitter emit) async {
+    await _timeTrialUpdatesStreamSubscription?.cancel();
+    await _timeTrialDeletesStreamSubscription?.cancel();
+
+    _timeTrialUpdatesStreamSubscription =
+        TimeTrialManager.getTimeTrialUpdates().listen((trial) {
+      _allTimeTrials.removeWhere((eachTrial) => eachTrial.id == trial.id);
+      _allTimeTrials.add(trial);
+
+      final leaderboard =
+          TimeTrialManager.convertAllTimeTrialsToLeaderboard(_allTimeTrials);
+      emit(state.copyWith(leaderboard: leaderboard));
+    });
+
+    _timeTrialDeletesStreamSubscription =
+        TimeTrialManager.getTimeTrialDeletes().listen((trialId) async {
+      _allTimeTrials.removeWhere((eachTrial) => eachTrial.id == trialId);
+      final leaderboard =
+          TimeTrialManager.convertAllTimeTrialsToLeaderboard(_allTimeTrials);
+      emit(state.copyWith(leaderboard: leaderboard));
+    });
   }
 
   Future<void> onRefreshLeaderboard(

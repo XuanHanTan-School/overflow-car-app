@@ -8,6 +8,12 @@ final class SetCar extends TimeTrialEvent {
   SetCar({required this.carName});
 }
 
+final class AddTimeTrial extends TimeTrialEvent {
+  final String carName;
+
+  AddTimeTrial({required this.carName});
+}
+
 final class UpdateCurrentTrial extends TimeTrialEvent {
   final String? userName;
   final DateTime? startTime;
@@ -15,6 +21,8 @@ final class UpdateCurrentTrial extends TimeTrialEvent {
 
   UpdateCurrentTrial({this.userName, this.startTime, this.endTime});
 }
+
+final class ListenToLeaderboard extends TimeTrialEvent {}
 
 final class RefreshLeaderboard extends TimeTrialEvent {
   final String userTrialId;
