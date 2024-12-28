@@ -1,3 +1,5 @@
+import 'package:time_trial_api/time_trial_api.dart';
+
 sealed class TimeTrialEvent {}
 
 final class TimeTrialAppInitialize extends TimeTrialEvent {}
@@ -20,6 +22,12 @@ final class UpdateCurrentTrial extends TimeTrialEvent {
   final DateTime? endTime;
 
   UpdateCurrentTrial({this.userName, this.startTime, this.endTime});
+}
+
+final class DeleteTimeTrial extends TimeTrialEvent {
+  final TimeTrial trial;
+
+  DeleteTimeTrial({required this.trial});
 }
 
 final class ListenToLeaderboard extends TimeTrialEvent {}

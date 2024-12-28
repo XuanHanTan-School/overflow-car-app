@@ -19,6 +19,7 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     on<SetCar>(onSetCar);
     on<AddTimeTrial>(onAddTimeTrial);
     on<UpdateCurrentTrial>(onUpdateCurrentTrial);
+    on<DeleteTimeTrial>(onDeleteTimeTrial);
     on<ListenToLeaderboard>(onListenToLeaderboard);
     on<RefreshLeaderboard>(onRefreshLeaderboard);
     on<ResetTimeTrialBloc>(onResetTimeTrialBloc);
@@ -83,6 +84,10 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
       endTime: event.endTime,
       duration: duration,
     );
+  }
+
+  Future<void> onDeleteTimeTrial(DeleteTimeTrial event, Emitter emit) async {
+    await event.trial.delete();
   }
 
   Future<void> onListenToLeaderboard(

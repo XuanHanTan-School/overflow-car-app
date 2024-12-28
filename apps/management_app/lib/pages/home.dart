@@ -38,8 +38,7 @@ class HomePage extends StatelessWidget {
           icon: Icon(Icons.add_outlined),
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16)
-              .copyWith(bottom: 16 + (isLargeScreen ? 16 : 0)),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: BlocBuilder<TimeTrialBloc, TimeTrialState>(
             buildWhen: (previous, current) {
               if (previous.leaderboard != current.leaderboard) {
@@ -59,11 +58,27 @@ class HomePage extends StatelessWidget {
               }
 
               return ListView.builder(
-                itemBuilder: (context, index) => Center(
-                  child: LeaderboardItem(
-                    trial: state.leaderboard[index],
-                  ),
-                ),
+                padding: const EdgeInsets.all(20),
+                itemBuilder: (context, index) {
+                  final trial = state.leaderboard[index];
+
+                  return Center(
+                    child: LeaderboardItem(
+                      trial: trial,
+                      isManagementMode: true,
+                      onManagementAction: (navigationPath) {
+                        switch (navigationPath) {
+                          case OptionsNavigationPath.continueTrial:
+                            break;
+                          case OptionsNavigationPath.deleteTrial:
+                            final timeTrialBloc = context.read<TimeTrialBloc>();
+                            timeTrialBloc.add(DeleteTimeTrial(trial: trial));
+                            break;
+                        }
+                      },
+                    ),
+                  );
+                },
                 itemCount: state.leaderboard.length,
               );
             },
