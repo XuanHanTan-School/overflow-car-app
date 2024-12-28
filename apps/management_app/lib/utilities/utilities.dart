@@ -32,21 +32,24 @@ Future<void> addCar({required BuildContext context}) async {
                   height: 200,
                   child: LoadingView(message: loadMsg!),
                 )
-              : Form(
-                  key: formKey,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      label: Text("Name"),
-                      border: OutlineInputBorder(),
+              : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Form(
+                    key: formKey,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        label: Text("Name"),
+                        border: OutlineInputBorder(),
+                      ),
+                      controller: nameController,
+                      validator: validateName,
+                      autovalidateMode: AutovalidateMode.onUnfocus,
+                      onChanged: (value) {
+                        setStateDiag(() {
+                          name = value;
+                        });
+                      },
                     ),
-                    controller: nameController,
-                    validator: validateName,
-                    autovalidateMode: AutovalidateMode.onUnfocus,
-                    onChanged: (value) {
-                      setStateDiag(() {
-                        name = value;
-                      });
-                    },
                   ),
                 ),
           actions: loadMsg != null

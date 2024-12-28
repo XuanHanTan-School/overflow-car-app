@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:management_app/views/no_car_added_view.dart';
+import 'package:management_app/pages/no_car_added.dart';
 import 'package:shared_car_components/views/loading_view.dart';
 import 'package:time_trial_bloc/time_trial_bloc.dart';
 import 'package:time_trial_bloc/time_trial_event.dart';
@@ -44,7 +44,7 @@ void main() async {
               }
 
               if (state.currentCars.isEmpty) {
-                return const NoCarAddedView();
+                return const NoCarAddedPage();
               }
 
               return const HomePage();

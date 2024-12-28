@@ -8,6 +8,9 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  flutter:
+    sdk: flutter
+  
   car_api: ^1.0.0
   local_storage: ^1.0.0
   flutter_bloc: ^8.1.6

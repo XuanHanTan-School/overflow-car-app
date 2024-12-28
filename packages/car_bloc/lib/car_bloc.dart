@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:car_bloc/car_event.dart';
 import 'package:car_bloc/car_state.dart';
+import 'package:car_bloc/utilities/media_kit_stub.dart'
+  if (dart.library.io) 'package:car_bloc/utilities/media_kit_io.dart'
+  if (dart.library.html) 'package:car_bloc/utilities/media_kit_web.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_storage/local_storage.dart';
 import 'package:car_api/overflow_car.dart';
@@ -97,12 +100,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       await currentCar.connect();
 
       final player = Player();
-      if (player.platform is NativePlayer) {
-        NativePlayer playerNative = player.platform as NativePlayer;
-        if (state.perfSettings.lowLatency) {
-          playerNative.setProperty('profile', 'low-latency');
-        }
-      }
+      configureLowLatencyPlayback(state.perfSettings.lowLatency, player: player);
       await player.open(Media(
           "rtsp://${currentCar.host}:${currentCar.videoPort}/video_stream"));
       emit(await state
