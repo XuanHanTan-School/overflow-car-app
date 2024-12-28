@@ -1,3 +1,5 @@
+import 'package:car_management_bloc/car_management_bloc.dart';
+import 'package:car_management_bloc/car_management_event.dart';
 import 'package:management_app/firebase_options.dart';
 import 'package:management_app/pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,6 +22,8 @@ void main() async {
       .then((_) {
     runApp(MultiBlocProvider(
       providers: [
+        BlocProvider(
+            create: (_) => CarManagementBloc()..add(CarAppInitialize())),
         BlocProvider(
             create: (_) => TimeTrialBloc()..add(TimeTrialAppInitialize())),
       ],

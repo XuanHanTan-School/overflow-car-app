@@ -70,6 +70,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  car_management_bloc:
+    dependency: "direct overridden"
+    description:
+      path: "../car_management_bloc"
+      relative: true
+    source: path
+    version: "1.0.0"
   characters:
     dependency: transitive
     description:
