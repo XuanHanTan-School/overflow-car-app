@@ -135,9 +135,9 @@ class _CarControlViewState extends State<CarControlView> {
           ),
         ),
         Positioned(
-          left: 30,
-          right: 30,
-          bottom: mediaQuery.viewPadding.bottom + 50,
+          left: 90,
+          right: 90,
+          bottom: mediaQuery.viewPadding.bottom + 90,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

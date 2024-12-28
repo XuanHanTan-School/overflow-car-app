@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:control_app/pages/position.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_car_components/views/loading_view.dart';
 import 'package:shared_car_components/widgets/elapsed_time_display.dart';
 import 'package:shared_car_components/widgets/video_overlay_text.dart';
@@ -93,63 +94,73 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
                   key: _formKey,
                   child: _nameLoad
                       ? LoadingView(message: "Setting name...")
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 20,
-                          children: [
-                            Text(
-                              "Enter your name",
-                              style: theme.textTheme.displaySmall,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
-                              width: 400,
-                              child: TextFormField(
-                                decoration: const InputDecoration(
-                                  labelText: "Name",
-                                  border: OutlineInputBorder(),
+                      : SingleChildScrollView(
+                          child: SizedBox(
+                            height: mediaQuery.size.height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 20,
+                              children: [
+                                Text(
+                                  "Enter your name",
+                                  style: theme.textTheme.displaySmall,
                                 ),
-                                validator: validateName,
-                                autovalidateMode: AutovalidateMode.onUnfocus,
-                                onChanged: (value) {
-                                  setState(() {
-                                    name = value;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            FilledButton(
-                              onPressed: _formKey.currentState?.validate() ==
-                                      true
-                                  ? () async {
-                                      final timeTrialBloc =
-                                          context.read<TimeTrialBloc>();
-
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  width: 400,
+                                  child: TextFormField(
+                                    decoration: const InputDecoration(
+                                      labelText: "Name",
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    maxLength: 100,
+                                    maxLengthEnforcement:
+                                        MaxLengthEnforcement.enforced,
+                                    validator: validateName,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUnfocus,
+                                    onChanged: (value) {
                                       setState(() {
-                                        _nameLoad = true;
+                                        name = value;
                                       });
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                FilledButton(
+                                  onPressed: _formKey.currentState
+                                              ?.validate() ==
+                                          true
+                                      ? () async {
+                                          final timeTrialBloc =
+                                              context.read<TimeTrialBloc>();
 
-                                      timeTrialBloc.add(
-                                          UpdateCurrentTrial(userName: name));
-                                      await timeTrialBloc.stream.firstWhere(
-                                        (state) =>
-                                            state.currentTrial?.userName !=
-                                            null,
-                                      );
+                                          setState(() {
+                                            _nameLoad = true;
+                                          });
 
-                                      setState(() {
-                                        _nameLoad = false;
-                                      });
-                                    }
-                                  : null,
-                              child: Text("Continue"),
+                                          timeTrialBloc.add(UpdateCurrentTrial(
+                                              userName: name));
+                                          await timeTrialBloc.stream.firstWhere(
+                                            (state) =>
+                                                state.currentTrial?.userName !=
+                                                null,
+                                          );
+
+                                          setState(() {
+                                            _nameLoad = false;
+                                          });
+                                        }
+                                      : null,
+                                  child: Text("Continue"),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                 ),
               ),

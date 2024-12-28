@@ -66,6 +66,15 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
   }
 
   Future<void> onAddTimeTrial(AddTimeTrial event, Emitter emit) async {
+    final unfinishedTrialsForCar = state.leaderboard.where((eachTrial) =>
+        eachTrial.carName == event.carName &&
+        (eachTrial.endTime == null ||
+            eachTrial.startTime == null ||
+            eachTrial.duration == null ||
+            eachTrial.userName == null));
+    await Future.wait(
+        unfinishedTrialsForCar.map((eachTrial) => eachTrial.delete()));
+
     final timeTrial =
         await TimeTrialManager.addTimeTrial(carName: event.carName);
     emit(state.copyWithCurrentTrial(currentTrial: timeTrial));

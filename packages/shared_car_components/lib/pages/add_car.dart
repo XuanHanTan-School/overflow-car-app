@@ -90,7 +90,8 @@ class _AddCarPageState extends State<AddCarPage> {
           key: _formKey,
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16 + (isLargeScreen ? 16: 0)),
+              padding: EdgeInsets.symmetric(horizontal: 16)
+                  .copyWith(bottom: 16 + (isLargeScreen ? 16 : 0)),
               child: Column(
                 spacing: 10,
                 children: [
@@ -101,13 +102,16 @@ class _AddCarPageState extends State<AddCarPage> {
                         child: ListView(
                           children: [
                             SizedBox(
-                              height: 16 + (isLargeScreen ? 16: 0),
+                              height: 16 + (isLargeScreen ? 16 : 0),
                             ),
                             TextFormField(
                               decoration: InputDecoration(
                                 label: Text("Name"),
                                 border: OutlineInputBorder(),
                               ),
+                              maxLength: 40,
+                              maxLengthEnforcement:
+                                  MaxLengthEnforcement.enforced,
                               controller: nameController,
                               validator: validateName,
                               autovalidateMode: AutovalidateMode.onUnfocus,

@@ -22,12 +22,18 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
   void initState() {
     super.initState();
 
+    var skipInitialCompleted = false;
     final timeTrialBloc = context.read<TimeTrialBloc>();
     _timeTrialSubscription = timeTrialBloc.stream.distinct((previous, current) {
       return previous.currentTrial == null ||
           current.currentTrial?.endTime == null ||
           previous.currentTrial?.endTime == current.currentTrial?.endTime;
     }).listen((state) {
+      if (!skipInitialCompleted) {
+        skipInitialCompleted = true;
+        return;
+      }
+
       if (!mounted) return;
       Navigator.push(
         context,

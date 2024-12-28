@@ -53,7 +53,8 @@ class _PositionPageState extends State<PositionPage> {
     final isDark = theme.brightness == Brightness.dark;
 
     return BlocProvider.value(
-      value: BlocProvider.of<TimeTrialBloc>(context)..add(RefreshLeaderboard(userTrialId: widget.userTrialId)),
+      value: BlocProvider.of<TimeTrialBloc>(context)
+        ..add(RefreshLeaderboard(userTrialId: widget.userTrialId)),
       child: Scaffold(
         body: BlocBuilder<TimeTrialBloc, TimeTrialState>(
           buildWhen: (previous, current) {
@@ -96,7 +97,7 @@ class _PositionPageState extends State<PositionPage> {
                     onPressed: () {
                       navigator.pop();
                     },
-                    child: Text("Done"),
+                    child: Text("Close"),
                   )
                 ],
               ),

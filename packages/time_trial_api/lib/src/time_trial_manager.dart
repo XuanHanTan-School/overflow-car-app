@@ -81,6 +81,16 @@ class TimeTrialManager {
     final trialsSnapshot = await _dbRef.orderByChild("duration").get();
     final List<LeaderboardTimeTrial> trials = [];
     final trialSnapshotList = trialsSnapshot.children.toList();
+    trialSnapshotList.sort((a, b) {
+      final durationA = (a.value as Map)["duration"];
+      final durationB = (b.value as Map)["duration"];
+
+      if (durationA == null) return 1;
+      if (durationB == null) return -1;
+
+      return durationA.compareTo(durationB);
+    });
+
     var position = 0;
     int? prevDuration;
     for (final eachTrialData in trialSnapshotList) {

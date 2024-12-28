@@ -79,7 +79,6 @@ class _HomePageState extends State<HomePage> {
         BlocProvider.value(value: BlocProvider.of<TimeTrialBloc>(context)),
       ],
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         body: BlocBuilder<CarBloc, CarState>(
           buildWhen: (previous, current) {
             if (previous.isInitialized != current.isInitialized) {

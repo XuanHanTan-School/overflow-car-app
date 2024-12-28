@@ -1,6 +1,7 @@
 import 'package:car_management_bloc/car_management_bloc.dart';
 import 'package:car_management_bloc/car_management_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_car_components/views/loading_view.dart';
 
@@ -41,6 +42,8 @@ Future<void> addCar({required BuildContext context}) async {
                         label: Text("Name"),
                         border: OutlineInputBorder(),
                       ),
+                      maxLength: 40,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       controller: nameController,
                       validator: validateName,
                       autovalidateMode: AutovalidateMode.onUnfocus,
