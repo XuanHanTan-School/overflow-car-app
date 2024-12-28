@@ -9,7 +9,9 @@ import 'package:time_trial_bloc/time_trial_event.dart';
 import 'package:time_trial_bloc/time_trial_state.dart';
 
 class PositionPage extends StatefulWidget {
-  const PositionPage({super.key});
+  final String userTrialId;
+
+  const PositionPage({super.key, required this.userTrialId});
 
   @override
   State<PositionPage> createState() => _PositionPageState();
@@ -51,7 +53,7 @@ class _PositionPageState extends State<PositionPage> {
     final isDark = theme.brightness == Brightness.dark;
 
     return BlocProvider.value(
-      value: BlocProvider.of<TimeTrialBloc>(context)..add(RefreshLeaderboard()),
+      value: BlocProvider.of<TimeTrialBloc>(context)..add(RefreshLeaderboard(userTrialId: widget.userTrialId)),
       child: Scaffold(
         body: BlocBuilder<TimeTrialBloc, TimeTrialState>(
           buildWhen: (previous, current) {

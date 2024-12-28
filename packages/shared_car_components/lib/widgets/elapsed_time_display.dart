@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_utilities/app_utilities.dart';
 import 'package:shared_car_components/widgets/video_overlay_text.dart';
 import 'package:flutter/material.dart';
 
@@ -22,12 +23,8 @@ class _ElapsedTimeDisplayState extends State<ElapsedTimeDisplay> {
 
     timer = Timer.periodic(Duration(milliseconds: 1), (timer) {
       final elapsedTime = DateTime.now().difference(widget.startTime);
-      final minutes = elapsedTime.inMinutes.toString();
-      final seconds = (elapsedTime.inSeconds % 60).toString().padLeft(2, "0");
-      final milliseconds = (elapsedTime.inMilliseconds % 1000).toString().padLeft(3, "0");
-
       setState(() {
-        formattedElapsedTime = "$minutes:$seconds.$milliseconds";
+        formattedElapsedTime = generateElapsedTimeString(elapsedTime);
       });
     });
   }
@@ -42,7 +39,10 @@ class _ElapsedTimeDisplayState extends State<ElapsedTimeDisplay> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        VideoOverlayText(text: formattedElapsedTime, tabularFigures: true,),
+        VideoOverlayText(
+          text: formattedElapsedTime,
+          tabularFigures: true,
+        ),
       ],
     );
   }

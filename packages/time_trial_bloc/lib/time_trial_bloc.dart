@@ -78,11 +78,8 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
 
   Future<void> onRefreshLeaderboard(
       RefreshLeaderboard event, Emitter emit) async {
-    final userTrialId = (_currentTimeTrialStreamController?.value)?.id;
-    if (userTrialId == null) return;
-
     final leaderboard =
-        await TimeTrialManager.getLeaderboardTimeTrials(userTrialId);
+        await TimeTrialManager.getLeaderboardTimeTrials(event.userTrialId);
     emit(state.copyWith(leaderboard: leaderboard));
   }
 

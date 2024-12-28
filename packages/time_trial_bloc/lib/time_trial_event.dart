@@ -16,6 +16,10 @@ final class UpdateCurrentTrial extends TimeTrialEvent {
   UpdateCurrentTrial({this.userName, this.startTime, this.endTime});
 }
 
-final class RefreshLeaderboard extends TimeTrialEvent {}
+final class RefreshLeaderboard extends TimeTrialEvent {
+  final String userTrialId;
+
+  RefreshLeaderboard({required this.userTrialId});
+}
 
 final class ResetTimeTrialBloc extends TimeTrialEvent {}

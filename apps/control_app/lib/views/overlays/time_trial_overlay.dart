@@ -41,7 +41,11 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
       if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => PositionPage()),
+        MaterialPageRoute(
+          builder: (context) => PositionPage(
+            userTrialId: state.currentTrial!.id,
+          ),
+        ),
       );
     });
   }

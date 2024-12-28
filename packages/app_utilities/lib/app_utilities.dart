@@ -70,3 +70,12 @@ String toOrdinal(int number) {
       return '${number}th';
   }
 }
+
+String generateElapsedTimeString(Duration elapsedTime) {
+  final minutes = elapsedTime.inMinutes.toString();
+  final seconds = (elapsedTime.inSeconds % 60).toString().padLeft(2, "0");
+  final milliseconds =
+      (elapsedTime.inMilliseconds % 1000).toString().padLeft(3, "0");
+
+  return "$minutes:$seconds.$milliseconds";
+}
