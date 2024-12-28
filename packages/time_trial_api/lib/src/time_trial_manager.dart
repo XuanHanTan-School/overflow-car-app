@@ -49,7 +49,7 @@ class TimeTrialManager {
     int? prevDuration;
     final List<LeaderboardTimeTrial> leaderboardTrials = [];
     trials.sort((a, b) {
-      if (a.duration == null) return -1;
+      if (a.duration == null) return 1;
       if (b.duration == null) return -1;
 
       return a.duration!.compareTo(b.duration!);
@@ -116,9 +116,10 @@ class TimeTrialManager {
     return leaderboard;
   }
 
-  static Future<void> addTimeTrial({required String carName}) async {
+  static Future<TimeTrial> addTimeTrial({required String carName}) async {
     final trial = TimeTrial(id: Uuid().v4(), carName: carName);
     await _dbRef.child(trial.id).set(trial.toMap());
+    return trial;
   }
 
   static Future<void> dispose() async {

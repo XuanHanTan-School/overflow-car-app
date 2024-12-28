@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class MenuItem extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
   final String label;
   final bool isImportantAction;
   final void Function() onPressed;
 
   const MenuItem(
       {super.key,
-      required this.icon,
+      this.icon,
       required this.label,
       required this.onPressed,
       this.isImportantAction = false});
@@ -25,12 +25,13 @@ class MenuItem extends StatelessWidget {
           vertical: 10,
         ),
         child: Row(
+          spacing: 10,
           children: [
-            Icon(
-              icon,
-              color: isImportantAction ? theme.colorScheme.error : null,
-            ),
-            const SizedBox(width: 10),
+            if (icon != null)
+              Icon(
+                icon,
+                color: isImportantAction ? theme.colorScheme.error : null,
+              ),
             Text(
               label,
               style: isImportantAction

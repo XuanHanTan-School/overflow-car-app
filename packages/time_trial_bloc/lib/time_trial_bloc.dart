@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:time_trial_api/time_trial_api.dart';
@@ -18,6 +19,7 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     on<TimeTrialAppInitialize>(onAppInitialize);
     on<SetCar>(onSetCar);
     on<AddTimeTrial>(onAddTimeTrial);
+    on<SetCurrentTrial>(onSetCurrentTrial);
     on<UpdateCurrentTrial>(onUpdateCurrentTrial);
     on<DeleteTimeTrial>(onDeleteTimeTrial);
     on<ListenToLeaderboard>(onListenToLeaderboard);
@@ -64,7 +66,13 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
   }
 
   Future<void> onAddTimeTrial(AddTimeTrial event, Emitter emit) async {
-    await TimeTrialManager.addTimeTrial(carName: event.carName);
+    final timeTrial =
+        await TimeTrialManager.addTimeTrial(carName: event.carName);
+    emit(state.copyWithCurrentTrial(currentTrial: timeTrial));
+  }
+
+  void onSetCurrentTrial(SetCurrentTrial event, Emitter emit) {
+    emit(state.copyWithCurrentTrial(currentTrial: event.currentTrial));
   }
 
   Future<void> onUpdateCurrentTrial(
@@ -116,7 +124,11 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     });
 
     await for (final leaderboard in _fullLeaderboardStreamController!.stream) {
-      emit(state.copyWith(leaderboard: leaderboard));
+      final currentTrial = leaderboard.firstWhereOrNull(
+          (eachTrial) => eachTrial.id == state.currentTrial?.id);
+      emit(state
+          .copyWith(leaderboard: leaderboard)
+          .copyWithCurrentTrial(currentTrial: currentTrial));
     }
   }
 

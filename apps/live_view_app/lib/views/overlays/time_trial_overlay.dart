@@ -16,7 +16,6 @@ class TimeTrialOverlay extends StatefulWidget {
 }
 
 class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
-  final _formKey = GlobalKey<FormState>();
   late final StreamSubscription<TimeTrialState>? _timeTrialSubscription;
 
   @override
@@ -72,12 +71,9 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
             return Container(
               color: theme.colorScheme.surface,
               child: Center(
-                child: Form(
-                  key: _formKey,
-                  child: Text(
-                    "Waiting for name...",
-                    style: theme.textTheme.displaySmall,
-                  ),
+                child: Text(
+                  "Waiting for name...",
+                  style: theme.textTheme.displaySmall,
                 ),
               ),
             );

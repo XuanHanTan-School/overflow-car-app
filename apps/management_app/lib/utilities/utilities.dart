@@ -16,7 +16,7 @@ Future<void> addCar({required BuildContext context}) async {
     return null;
   }
 
-  showDialog(
+  await showDialog(
     context: context,
     builder: (dialogContext) {
       final nameController = TextEditingController();

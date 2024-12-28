@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 
 class ElapsedTimeDisplay extends StatefulWidget {
   final DateTime startTime;
+  final bool overlayMode;
 
-  const ElapsedTimeDisplay({super.key, required this.startTime});
+  const ElapsedTimeDisplay(
+      {super.key, required this.startTime, this.overlayMode = true});
 
   @override
   State<ElapsedTimeDisplay> createState() => _ElapsedTimeDisplayState();
@@ -37,12 +39,20 @@ class _ElapsedTimeDisplayState extends State<ElapsedTimeDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
-        VideoOverlayText(
-          text: formattedElapsedTime,
-          tabularFigures: true,
-        ),
+        widget.overlayMode
+            ? VideoOverlayText(
+                text: formattedElapsedTime,
+                tabularFigures: true,
+              )
+            : Text(
+                formattedElapsedTime,
+                style: theme.textTheme.displaySmall!
+                    .copyWith(fontFeatures: [FontFeature.tabularFigures()]),
+              ),
       ],
     );
   }
