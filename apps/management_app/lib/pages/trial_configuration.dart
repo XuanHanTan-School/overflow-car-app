@@ -21,6 +21,15 @@ class _TrialConfigurationPageState extends State<TrialConfigurationPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Trial configuration"),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.close_outlined),
+        ),
+      ),
       body: SafeArea(
         child: Center(
           child: BlocBuilder<TimeTrialBloc, TimeTrialState>(
@@ -30,7 +39,7 @@ class _TrialConfigurationPageState extends State<TrialConfigurationPage> {
             builder: (context, state) {
               final currentTrial = state.currentTrial;
               if (currentTrial == null) {
-                return LoadingView(message: "Creating trial...");
+                return LoadingView(message: "Creating time trial...");
               }
 
               if (currentTrial.userName == null) {

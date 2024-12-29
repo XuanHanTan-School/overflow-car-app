@@ -119,14 +119,15 @@ class LeaderboardItem extends StatelessWidget {
                               );
                             },
                             menuChildren: <Widget>[
-                              MenuItem(
-                                icon: Icons.sports_esports_outlined,
-                                label: "Continue time trial",
-                                onPressed: () {
-                                  onManagementAction?.call(
-                                      OptionsNavigationPath.continueTrial);
-                                },
-                              ),
+                              if (trial.endTime == null)
+                                MenuItem(
+                                  icon: Icons.sports_esports_outlined,
+                                  label: "Continue time trial",
+                                  onPressed: () {
+                                    onManagementAction?.call(
+                                        OptionsNavigationPath.continueTrial);
+                                  },
+                                ),
                               MenuItem(
                                 icon: Icons.delete_outlined,
                                 label: "Delete time trial",
