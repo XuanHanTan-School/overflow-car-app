@@ -35,6 +35,7 @@ void main() async {
         child: MaterialApp(
           theme: lightTheme,
           darkTheme: darkTheme,
+          title: "Car Management",
           home: BlocBuilder<CarManagementBloc, CarManagementState>(
             buildWhen: (previous, current) =>
                 previous.isInitialized != current.isInitialized ||
