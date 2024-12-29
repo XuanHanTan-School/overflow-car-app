@@ -44,6 +44,8 @@ Future<void> importCarsFromJson(
             host: car.host,
             commandPort: car.commandPort,
             videoPort: car.videoPort,
+            username: car.username,
+            password: car.password,
           ));
         }
       }

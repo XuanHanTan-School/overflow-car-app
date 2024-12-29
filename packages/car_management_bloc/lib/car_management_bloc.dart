@@ -31,6 +31,8 @@ class CarManagementBloc extends Bloc<CarManagementEvent, CarManagementState> {
       host: "",
       commandPort: 0,
       videoPort: 0,
+      username: "",
+      password: "",
     );
 
     if (state.currentCars.any((eachCar) => eachCar.name == car.name)) {

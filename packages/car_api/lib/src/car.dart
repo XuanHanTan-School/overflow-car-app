@@ -9,6 +9,8 @@ class Car {
   final String host;
   final int commandPort;
   final int videoPort;
+  final String username;
+  final String password;
   final StreamController<bool> connectionState = StreamController.broadcast();
 
   bool _isConnected = false;
@@ -19,6 +21,8 @@ class Car {
     required this.host,
     required this.commandPort,
     required this.videoPort,
+    required this.username,
+    required this.password,
   });
 
   factory Car.fromJson(String json) {
@@ -28,6 +32,8 @@ class Car {
       host: data["host"],
       commandPort: data["commandPort"],
       videoPort: data["videoPort"],
+      username: data["username"],
+      password: data["password"],
     );
   }
 
@@ -60,8 +66,11 @@ class Car {
   void sendCommand(Command command) {
     checkIsConnected();
 
-    socket!.sendText(
-        JsonEncoder().convert({"type": command.type.typeStr, ...command.data}));
+    socket!.sendText(JsonEncoder().convert({
+      "type": command.type.typeStr,
+      ...command.data,
+      "token": password,
+    }));
   }
 
   Future<void> disconnect() async {
@@ -76,6 +85,8 @@ class Car {
       "host": host,
       "commandPort": commandPort,
       "videoPort": videoPort,
+      "username": username,
+      "password": password
     });
   }
 }

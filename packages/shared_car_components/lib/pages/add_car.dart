@@ -16,12 +16,16 @@ class _AddCarPageState extends State<AddCarPage> {
   final hostController = TextEditingController();
   final commandPortController = TextEditingController();
   final videoPortController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   String? name;
   String? host;
   int? commandPort;
   int? videoPort;
+  String? username;
+  String? password;
 
   @override
   void initState() {
@@ -67,6 +71,20 @@ class _AddCarPageState extends State<AddCarPage> {
     }
 
     return "Enter a valid port number (0 to 65535)";
+  }
+
+  String? validateUsername(String? username) {
+    if (username == null || username == "") return "Username must not be empty";
+    return RegExp(r"^[a-zA-Z0-9]+$").hasMatch(username)
+        ? null
+        : "Invalid username";
+  }
+
+  String? validatePassword(String? password) {
+    if (password == null || password == "") return "Password must not be empty";
+    return RegExp(r"^[a-zA-Z0-9]+$").hasMatch(password)
+        ? null
+        : "Invalid password";
   }
 
   @override
@@ -175,6 +193,44 @@ class _AddCarPageState extends State<AddCarPage> {
                               },
                             ),
                             const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                label: Text("Username"),
+                                border: OutlineInputBorder(),
+                              ),
+                              maxLength: 40,
+                              maxLengthEnforcement:
+                                  MaxLengthEnforcement.enforced,
+                              controller: usernameController,
+                              validator: validateUsername,
+                              autovalidateMode: AutovalidateMode.onUnfocus,
+                              onChanged: (value) {
+                                setState(() {
+                                  username = value;
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                label: Text("Password"),
+                                border: OutlineInputBorder(),
+                              ),
+                              controller: passwordController,
+                              obscureText: true,
+                              validator: validatePassword,
+                              autovalidateMode: AutovalidateMode.onUnfocus,
+                              onChanged: (value) {
+                                setState(() {
+                                  password = value;
+                                });
+                              },
+                            ),
+                            const SizedBox(
                               height: 10,
                             ),
                           ],
@@ -187,11 +243,12 @@ class _AddCarPageState extends State<AddCarPage> {
                         ? () {
                             context.read<CarBloc>().add(
                                   AddCar(
-                                    name: name!,
-                                    host: host!,
-                                    commandPort: commandPort!,
-                                    videoPort: videoPort!,
-                                  ),
+                                      name: name!,
+                                      host: host!,
+                                      commandPort: commandPort!,
+                                      videoPort: videoPort!,
+                                      username: username!,
+                                      password: password!),
                                 );
                             Navigator.pop(context);
                           }
