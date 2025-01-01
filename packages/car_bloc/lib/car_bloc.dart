@@ -141,7 +141,6 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     emit(state.copyWith(
       drivingState: state.drivingState.copyWith(
         angle: event.angle,
-        forward: event.forward,
         accelerate: event.accelerate,
       ),
     ));

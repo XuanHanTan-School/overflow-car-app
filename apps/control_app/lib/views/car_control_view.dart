@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
 import 'package:car_bloc/car_state.dart';
+import 'package:flutter_joystick/flutter_joystick.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:shared_car_components/pages/settings.dart';
 import 'package:control_app/views/overlays/time_trial_overlay.dart';
@@ -28,21 +29,12 @@ class _CarControlViewState extends State<CarControlView> {
     showSettingsOverlayTimer?.cancel();
   }
 
-  Future<void> onPedalChanged(
-      {required bool isForward, required bool isPressed}) async {
+  void onPedalChanged({required int amount}) {
     final carBloc = context.read<CarBloc>();
 
     carBloc.add(UpdateDriveState(
-      forward: isForward,
-      accelerate: isPressed,
+      accelerate: amount,
     ));
-
-    await carBloc.stream.firstWhere(
-      (state) =>
-          state.drivingState.forward == isForward &&
-          state.drivingState.accelerate == isPressed,
-    );
-    carBloc.add(SendDriveCommand());
   }
 
   @override
@@ -135,45 +127,34 @@ class _CarControlViewState extends State<CarControlView> {
           ),
         ),
         Positioned(
-          left: 90,
-          right: 90,
-          bottom: mediaQuery.viewPadding.bottom + 90,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                child: IconButton.filledTonal(
-                  onPressed: () {},
-                  icon: RotatedBox(
-                    quarterTurns: 1,
-                    child: Icon(Icons.forward), // Reverse
-                  ),
-                  iconSize: 56,
-                ),
-                onTapDown: (details) async {
-                  await onPedalChanged(isForward: false, isPressed: true);
-                },
-                onTapCancel: () async {
-                  await onPedalChanged(isForward: false, isPressed: false);
-                },
+          right: 70,
+          bottom: mediaQuery.viewPadding.bottom + 50,
+          child: Joystick(
+            base: JoystickBase(
+              arrowsDecoration: JoystickArrowsDecoration(
+                color: theme.colorScheme.onSurfaceVariant,
+                enableAnimation: false,
               ),
-              GestureDetector(
-                child: IconButton.filledTonal(
-                  onPressed: () {},
-                  icon: RotatedBox(
-                    quarterTurns: 3,
-                    child: Icon(Icons.forward), // Forward
-                  ),
-                  iconSize: 56,
-                ),
-                onTapDown: (details) async {
-                  await onPedalChanged(isForward: true, isPressed: true);
-                },
-                onTapCancel: () async {
-                  await onPedalChanged(isForward: true, isPressed: false);
-                },
+              decoration: JoystickBaseDecoration(
+                color:
+                    theme.colorScheme.surfaceContainer.withValues(alpha: 0.5),
+                drawOuterCircle: false,
+                drawArrows: true,
+                boxShadows: [],
               ),
-            ],
+              mode: JoystickMode.vertical,
+            ),
+            period: const Duration(milliseconds: 30),
+            stick: JoystickStick(
+              decoration: JoystickStickDecoration(
+                color: theme.colorScheme.onSecondaryContainer,
+              ),
+            ),
+            includeInitialAnimation: false,
+            mode: JoystickMode.vertical,
+            listener: (details) {
+              onPedalChanged(amount: (details.y * -100).round());
+            },
           ),
         ),
         Positioned.fill(child: TimeTrialOverlay()),

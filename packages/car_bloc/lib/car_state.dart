@@ -25,8 +25,8 @@ class CarState {
       VideoController? videoPlayerController,
       Player? player,
       required this.perfSettings}) {
-    this.drivingState = drivingState ??
-        CarDrivingState(angle: 0, forward: true, accelerate: false);
+    this.drivingState =
+        drivingState ?? CarDrivingState(angle: 0, accelerate: 0);
     _selectedCarIndex = selectedCarIndex;
     _videoPlayerController = videoPlayerController;
     _player = player;
@@ -81,22 +81,19 @@ enum CarConnectionState { disconnected, connecting, connected }
 
 class CarDrivingState {
   final int angle;
-  final bool forward;
-  final bool accelerate;
+  final int accelerate;
 
-  const CarDrivingState(
-      {required this.angle, required this.forward, required this.accelerate});
+  const CarDrivingState({required this.angle, required this.accelerate});
 
-  CarDrivingState copyWith({int? angle, bool? forward, bool? accelerate}) {
+  CarDrivingState copyWith({int? angle, int? accelerate}) {
     return CarDrivingState(
       angle: angle ?? this.angle,
-      forward: forward ?? this.forward,
       accelerate: accelerate ?? this.accelerate,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {"angle": angle, "forward": forward, "accelerate": accelerate};
+    return {"angle": angle, "accelerate": accelerate};
   }
 
   @override
@@ -109,12 +106,11 @@ class CarDrivingState {
     }
     return other is CarDrivingState &&
         other.angle == angle &&
-        other.forward == forward &&
         other.accelerate == accelerate;
   }
 
   @override
-  int get hashCode => "$angle-$forward-$accelerate".hashCode;
+  int get hashCode => "$angle-$accelerate".hashCode;
 }
 
 class PerformanceSettings {

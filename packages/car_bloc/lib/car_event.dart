@@ -32,10 +32,9 @@ final class ConnectSelectedCar extends CarEvent {}
 
 final class UpdateDriveState extends CarEvent {
   final int? angle;
-  final bool? forward;
-  final bool? accelerate;
+  final int? accelerate;
 
-  UpdateDriveState({this.angle, this.forward, this.accelerate});
+  UpdateDriveState({this.angle, this.accelerate});
 }
 
 final class SendDriveCommand extends CarEvent {}
