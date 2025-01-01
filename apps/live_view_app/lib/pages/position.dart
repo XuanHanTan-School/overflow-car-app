@@ -87,25 +87,25 @@ class _PositionPageState extends State<PositionPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Spacer(),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        LeaderboardTimeTrial? previousTrial;
-                        final trial = state.leaderboard[index];
-                        if (index > 0) {
-                          previousTrial = state.leaderboard[index - 1];
-                        }
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          LeaderboardTimeTrial? previousTrial;
+                          final trial = state.leaderboard[index];
+                          if (index > 0) {
+                            previousTrial = state.leaderboard[index - 1];
+                          }
 
-                        return LeaderboardItem(
-                          trial: trial,
-                          previousTrial: previousTrial,
-                          userTrialId: widget.userTrialId,
-                        );
-                      },
-                      itemCount: state.leaderboard.length,
+                          return LeaderboardItem(
+                            trial: trial,
+                            previousTrial: previousTrial,
+                            userTrialId: widget.userTrialId,
+                          );
+                        },
+                        itemCount: state.leaderboard.length,
+                      ),
                     ),
-                    Spacer(),
                     const SizedBox(
                       height: 40,
                     ),

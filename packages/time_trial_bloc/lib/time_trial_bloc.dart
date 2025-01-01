@@ -41,13 +41,14 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     _timeTrialUpdatesStreamSubscription =
         TimeTrialManager.getTimeTrialUpdates().listen((trial) {
       if (trial.carName != state.carName) return;
+      if (trial.endTime != null && _currentTimeTrialStreamController?.hasValue == true && trial.id != (_currentTimeTrialStreamController?.value)?.id) return;
 
       _currentTimeTrialStreamController?.add(trial);
     });
 
     _timeTrialDeletesStreamSubscription =
         TimeTrialManager.getTimeTrialDeletes().listen((trialId) async {
-      if (trialId != (_currentTimeTrialStreamController?.value)?.id) {
+      if (_currentTimeTrialStreamController?.hasValue != true || trialId != (_currentTimeTrialStreamController?.value)?.id) {
         return;
       }
 
