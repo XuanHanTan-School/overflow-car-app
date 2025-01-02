@@ -54,11 +54,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
   Future<void> onAddCar(AddCar event, Emitter emit) async {
     final car = Car(
       name: event.name,
-      host: event.host,
-      commandPort: event.commandPort,
-      videoPort: event.videoPort,
-      username: event.username,
-      password: event.password,
+      connectionMethod: event.connectionMethod,
     );
 
     if (state.currentCars.any((eachCar) => eachCar.name == car.name)) {
@@ -104,8 +100,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       final player = Player();
       configureLowLatencyPlayback(state.perfSettings.lowLatency,
           player: player);
-      await player.open(Media(
-          "rtsp://${currentCar.username}:${currentCar.password}@${currentCar.host}:${currentCar.videoPort}/video_stream"));
+      await player.open(Media(currentCar.connectionMethod.videoUrl));
       emit(await state
           .copyWith(connectionState: CarConnectionState.connected)
           .copyWithVideoPlayer(player: player));

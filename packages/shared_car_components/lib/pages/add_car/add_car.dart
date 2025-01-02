@@ -1,11 +1,15 @@
+import 'package:car_api/overflow_car.dart';
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_car_components/pages/add_car/select_connection_method.dart';
 
 class AddCarPage extends StatefulWidget {
-  const AddCarPage({super.key});
+  final ConnectionMethodType connectionMethodType;
+
+  const AddCarPage({super.key, required this.connectionMethodType});
 
   @override
   State<AddCarPage> createState() => _AddCarPageState();
@@ -16,6 +20,7 @@ class _AddCarPageState extends State<AddCarPage> {
   final hostController = TextEditingController();
   final commandPortController = TextEditingController();
   final videoPortController = TextEditingController();
+  final proxyUrlController = TextEditingController();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -24,6 +29,7 @@ class _AddCarPageState extends State<AddCarPage> {
   String? host;
   int? commandPort;
   int? videoPort;
+  String? proxyUrl;
   String? username;
   String? password;
 
@@ -139,59 +145,81 @@ class _AddCarPageState extends State<AddCarPage> {
                                 });
                               },
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                label: Text("Host"),
-                                border: OutlineInputBorder(),
+                            if (widget.connectionMethodType ==
+                                ConnectionMethodType.direct) ...[
+                              const SizedBox(
+                                height: 20,
                               ),
-                              controller: hostController,
-                              validator: validateHost,
-                              autovalidateMode: AutovalidateMode.onUnfocus,
-                              onChanged: (value) {
-                                setState(() {
-                                  host = value;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                label: Text("Command port"),
-                                border: OutlineInputBorder(),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  label: Text("Host"),
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: hostController,
+                                validator: validateHost,
+                                autovalidateMode: AutovalidateMode.onUnfocus,
+                                onChanged: (value) {
+                                  setState(() {
+                                    host = value;
+                                  });
+                                },
                               ),
-                              controller: commandPortController,
-                              keyboardType: TextInputType.number,
-                              validator: validatePort,
-                              autovalidateMode: AutovalidateMode.onUnfocus,
-                              onChanged: (value) {
-                                setState(() {
-                                  commandPort = int.tryParse(value);
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                label: Text("Video port"),
-                                border: OutlineInputBorder(),
+                              const SizedBox(
+                                height: 20,
                               ),
-                              controller: videoPortController,
-                              keyboardType: TextInputType.number,
-                              validator: validatePort,
-                              autovalidateMode: AutovalidateMode.onUnfocus,
-                              onChanged: (value) {
-                                setState(() {
-                                  videoPort = int.tryParse(value);
-                                });
-                              },
-                            ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  label: Text("Command port"),
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: commandPortController,
+                                keyboardType: TextInputType.number,
+                                validator: validatePort,
+                                autovalidateMode: AutovalidateMode.onUnfocus,
+                                onChanged: (value) {
+                                  setState(() {
+                                    commandPort = int.tryParse(value);
+                                  });
+                                },
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  label: Text("Video port"),
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: videoPortController,
+                                keyboardType: TextInputType.number,
+                                validator: validatePort,
+                                autovalidateMode: AutovalidateMode.onUnfocus,
+                                onChanged: (value) {
+                                  setState(() {
+                                    videoPort = int.tryParse(value);
+                                  });
+                                },
+                              ),
+                            ] else if (widget.connectionMethodType ==
+                                ConnectionMethodType.reverseProxy) ...[
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  label: Text("Proxy URL"),
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: proxyUrlController,
+                                validator: validateHost,
+                                autovalidateMode: AutovalidateMode.onUnfocus,
+                                onChanged: (value) {
+                                  setState(() {
+                                    proxyUrl = value;
+                                  });
+                                },
+                              ),
+                            ],
                             const SizedBox(
                               height: 20,
                             ),
@@ -241,14 +269,33 @@ class _AddCarPageState extends State<AddCarPage> {
                   FilledButton(
                     onPressed: _formKey.currentState?.validate() ?? false
                         ? () {
+                            final CarConnectionMethod connectionMethod;
+
+                            switch (widget.connectionMethodType) {
+                              case ConnectionMethodType.direct:
+                                connectionMethod = CarConnectionMethodDirect(
+                                  host: host!,
+                                  commandPort: commandPort!,
+                                  videoPort: videoPort!,
+                                  username: username!,
+                                  password: password!,
+                                );
+                                break;
+                              case ConnectionMethodType.reverseProxy:
+                                connectionMethod =
+                                    CarConnectionMethodReverseProxy(
+                                  proxyUrl: proxyUrl!,
+                                  username: username!,
+                                  password: password!,
+                                );
+                                break;
+                            }
+
                             context.read<CarBloc>().add(
                                   AddCar(
-                                      name: name!,
-                                      host: host!,
-                                      commandPort: commandPort!,
-                                      videoPort: videoPort!,
-                                      username: username!,
-                                      password: password!),
+                                    name: name!,
+                                    connectionMethod: connectionMethod,
+                                  ),
                                 );
                             Navigator.pop(context);
                           }

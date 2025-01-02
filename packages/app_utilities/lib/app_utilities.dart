@@ -41,11 +41,7 @@ Future<void> importCarsFromJson(
           final car = Car.fromJson(jsonEncode(carJson));
           carBloc.add(car_event.AddCar(
             name: car.name,
-            host: car.host,
-            commandPort: car.commandPort,
-            videoPort: car.videoPort,
-            username: car.username,
-            password: car.password,
+            connectionMethod: car.connectionMethod,
           ));
         }
       }

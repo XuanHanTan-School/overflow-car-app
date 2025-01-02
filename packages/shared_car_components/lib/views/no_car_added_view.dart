@@ -1,7 +1,7 @@
 import 'package:app_utilities/app_utilities.dart';
-import 'package:shared_car_components/pages/add_car.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_car_components/pages/add_car/select_connection_method.dart';
 
 class NoCarAddedView extends StatelessWidget {
   const NoCarAddedView({super.key});
@@ -39,7 +39,7 @@ class NoCarAddedView extends StatelessWidget {
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AddCarPage(),
+                    builder: (context) => const SelectConnectionMethodPage(),
                   ),
                 );
                 SystemChrome.setPreferredOrientations([

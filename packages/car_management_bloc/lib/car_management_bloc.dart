@@ -28,11 +28,11 @@ class CarManagementBloc extends Bloc<CarManagementEvent, CarManagementState> {
   Future<void> onAddCar(AddCar event, Emitter emit) async {
     final car = Car(
       name: event.name,
-      host: "",
-      commandPort: 0,
-      videoPort: 0,
-      username: "",
-      password: "",
+      connectionMethod: CarConnectionMethodReverseProxy(
+        proxyUrl: "",
+        username: "",
+        password: "",
+      ),
     );
 
     if (state.currentCars.any((eachCar) => eachCar.name == car.name)) {

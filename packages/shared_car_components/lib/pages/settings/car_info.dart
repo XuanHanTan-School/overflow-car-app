@@ -13,6 +13,8 @@ class CarInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isReverseProxy =
+        car.connectionMethod is CarConnectionMethodReverseProxy;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -55,21 +57,36 @@ class CarInfoPage extends StatelessWidget {
             ),
             Center(
               child: Text(
-                car.host,
+                isReverseProxy
+                    ? (car.connectionMethod as CarConnectionMethodReverseProxy)
+                        .proxyUrl
+                    : (car.connectionMethod as CarConnectionMethodDirect).host,
                 style: theme.textTheme.displayMedium,
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            ListTile(
-              title: Text("Command port"),
-              subtitle: Text(car.commandPort.toString()),
-            ),
-            ListTile(
-              title: Text("Video port"),
-              subtitle: Text(car.videoPort.toString()),
-            ),
+            if (!isReverseProxy)
+              Builder(
+                builder: (context) {
+                  final connectionMethod =
+                      car.connectionMethod as CarConnectionMethodDirect;
+
+                  return Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ListTile(
+                        title: Text("Command port"),
+                        subtitle: Text(connectionMethod.commandPort.toString()),
+                      ),
+                      ListTile(
+                        title: Text("Video port"),
+                        subtitle: Text(connectionMethod.videoPort.toString()),
+                      ),
+                    ],
+                  );
+                },
+              ),
             const SizedBox(
               height: 20,
             ),

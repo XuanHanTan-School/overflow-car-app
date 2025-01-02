@@ -1,7 +1,7 @@
 import 'package:app_utilities/app_utilities.dart';
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_state.dart';
-import 'package:shared_car_components/pages/add_car.dart';
+import 'package:shared_car_components/pages/add_car/select_connection_method.dart';
 import 'package:shared_car_components/pages/settings/car_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +29,9 @@ class CarManagementPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddCarPage()),
+              MaterialPageRoute(
+                builder: (context) => const SelectConnectionMethodPage(),
+              ),
             );
           },
           child: Icon(Icons.add_outlined),

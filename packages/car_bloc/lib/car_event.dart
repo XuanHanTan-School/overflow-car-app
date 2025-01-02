@@ -6,19 +6,11 @@ final class CarAppInitialize extends CarEvent {}
 
 final class AddCar extends CarEvent {
   final String name;
-  final String host;
-  final int commandPort;
-  final int videoPort;
-  final String username;
-  final String password;
+  final CarConnectionMethod connectionMethod;
 
   AddCar({
     required this.name,
-    required this.host,
-    required this.commandPort,
-    required this.videoPort,
-    required this.username,
-    required this.password,
+    required this.connectionMethod,
   });
 }
 
