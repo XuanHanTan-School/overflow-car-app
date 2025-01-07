@@ -97,6 +97,8 @@ class CarBloc extends Bloc<CarEvent, CarState> {
       ConnectSelectedCar event, Emitter emit) async {
     checkCarSelected();
     emit(state.copyWith(connectionState: CarConnectionState.connecting));
+    emit(
+        state.copyWith(drivingState: CarDrivingState(angle: 0, accelerate: 0)));
     final currentCar = state.currentCars[state.selectedCarIndex!];
     try {
       await currentCar.connect();
