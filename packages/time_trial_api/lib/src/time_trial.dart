@@ -6,6 +6,7 @@ class TimeTrial {
   final DateTime? startTime;
   final DateTime? endTime;
   final Duration? duration;
+  final Duration? addedTime;
   final String carName;
 
   DatabaseReference get _dbRef =>
@@ -17,6 +18,7 @@ class TimeTrial {
     this.startTime,
     this.endTime,
     this.duration,
+    this.addedTime,
     required this.carName,
   });
 
@@ -39,6 +41,7 @@ class TimeTrial {
       startTime: convertToDateTime(map["startTime"]),
       endTime: convertToDateTime(map["endTime"]),
       duration: convertToDuration(map["duration"]),
+      addedTime: convertToDuration(map["addedTime"]),
       carName: map["carName"],
     );
   }
@@ -49,6 +52,7 @@ class TimeTrial {
       "startTime": startTime?.millisecondsSinceEpoch,
       "endTime": endTime?.millisecondsSinceEpoch,
       "duration": duration?.inMilliseconds,
+      "addedTime": addedTime?.inMilliseconds,
       "carName": carName,
     };
   }
@@ -57,11 +61,13 @@ class TimeTrial {
       {String? userName,
       DateTime? startTime,
       DateTime? endTime,
+      Duration? addedTime,
       Duration? duration}) async {
     final newTrial = copyWith(
       userName: userName,
       startTime: startTime,
       endTime: endTime,
+      addedTime: addedTime,
       duration: duration,
     );
     await _dbRef.set(newTrial.toMap());
@@ -75,6 +81,7 @@ class TimeTrial {
       {String? userName,
       DateTime? startTime,
       DateTime? endTime,
+      Duration? addedTime,
       Duration? duration}) {
     return TimeTrial(
       id: id,
@@ -82,6 +89,7 @@ class TimeTrial {
       userName: userName ?? this.userName,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
+      addedTime: addedTime ?? this.addedTime,
       duration: duration ?? this.duration,
     );
   }

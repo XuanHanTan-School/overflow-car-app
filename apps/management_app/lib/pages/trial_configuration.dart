@@ -69,10 +69,13 @@ class _TrialConfigurationPageState extends State<TrialConfigurationPage> {
                               final timeTrialBloc =
                                   context.read<TimeTrialBloc>();
                               final startTime = DateTime.now();
-                              timeTrialBloc.add(
-                                  UpdateCurrentTrial(startTime: startTime));
+                              timeTrialBloc.add(UpdateCurrentTrial(
+                                  startTime: startTime,
+                                  addedTime: Duration.zero));
                               await timeTrialBloc.stream.firstWhere((state) =>
-                                  state.currentTrial!.startTime == startTime);
+                                  state.currentTrial!.startTime == startTime &&
+                                  state.currentTrial!.addedTime ==
+                                      Duration.zero);
 
                               setState(() {
                                 isLoading = false;
@@ -94,7 +97,35 @@ class _TrialConfigurationPageState extends State<TrialConfigurationPage> {
                   children: [
                     ElapsedTimeDisplay(
                       startTime: currentTrial.startTime!,
+                      addedTime: currentTrial.addedTime!,
                       overlayMode: false,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 20,
+                      children: [1, 3, 5].map((add) {
+                        return IconButton.filledTonal(
+                          onPressed: () async {
+                            final timeTrialBloc = context.read<TimeTrialBloc>();
+                            final newAddedTime = currentTrial.addedTime! +
+                                Duration(seconds: add);
+                            timeTrialBloc.add(
+                                UpdateCurrentTrial(addedTime: newAddedTime));
+                            await timeTrialBloc.stream.firstWhere((state) =>
+                                state.currentTrial!.addedTime == newAddedTime);
+                          },
+                          icon: SizedBox(
+                            width: 36,
+                            height: 36,
+                            child: Center(
+                              child: Text(
+                                "+$add",
+                                style: theme.textTheme.headlineSmall,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                     IconButton.filled(
                       onPressed: isLoading

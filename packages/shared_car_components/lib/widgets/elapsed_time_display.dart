@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 
 class ElapsedTimeDisplay extends StatefulWidget {
   final DateTime startTime;
+  final Duration addedTime;
   final bool overlayMode;
 
   const ElapsedTimeDisplay(
-      {super.key, required this.startTime, this.overlayMode = true});
+      {super.key, required this.startTime, required this.addedTime, this.overlayMode = true});
 
   @override
   State<ElapsedTimeDisplay> createState() => _ElapsedTimeDisplayState();
@@ -24,7 +25,7 @@ class _ElapsedTimeDisplayState extends State<ElapsedTimeDisplay> {
     super.initState();
 
     timer = Timer.periodic(Duration(milliseconds: 1), (timer) {
-      final elapsedTime = DateTime.now().difference(widget.startTime);
+      final elapsedTime = DateTime.now().difference(widget.startTime) + widget.addedTime;
       setState(() {
         formattedElapsedTime = generateElapsedTimeString(elapsedTime);
       });

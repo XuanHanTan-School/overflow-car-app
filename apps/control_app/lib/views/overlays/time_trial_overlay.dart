@@ -183,6 +183,7 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
               padding: EdgeInsets.only(top: mediaQuery.viewPadding.top + 20),
               child: ElapsedTimeDisplay(
                 startTime: currentTrial.startTime!,
+                addedTime: currentTrial.addedTime!,
               ),
             );
           }

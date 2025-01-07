@@ -74,6 +74,8 @@ Future<void> importCarsFromJson(
 String toOrdinal(int number) {
   if (number < 0) throw Exception('Invalid Number');
 
+  if ((number % 100) ~/ 10 == 1) return '${number}th';
+
   switch (number % 10) {
     case 1:
       return '${number}st';

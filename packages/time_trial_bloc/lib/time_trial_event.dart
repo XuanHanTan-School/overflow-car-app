@@ -25,9 +25,10 @@ final class SetCurrentTrial extends TimeTrialEvent {
 final class UpdateCurrentTrial extends TimeTrialEvent {
   final String? userName;
   final DateTime? startTime;
+  final Duration? addedTime;
   final DateTime? endTime;
 
-  UpdateCurrentTrial({this.userName, this.startTime, this.endTime});
+  UpdateCurrentTrial({this.userName, this.startTime, this.addedTime, this.endTime});
 }
 
 final class DeleteTimeTrial extends TimeTrialEvent {
