@@ -22,6 +22,7 @@ class CarControlView extends StatefulWidget {
 class _CarControlViewState extends State<CarControlView> {
   Timer? showSettingsOverlayTimer;
   var isSettingsOverlayVisible = false;
+  var prevJoystickSteering = 0.0;
 
   @override
   void dispose() {
@@ -131,6 +132,7 @@ class _CarControlViewState extends State<CarControlView> {
           bottom: mediaQuery.viewPadding.bottom + 50,
           child: Joystick(
             base: JoystickBase(
+              size: 250,
               arrowsDecoration: JoystickArrowsDecoration(
                 color: theme.colorScheme.onSurfaceVariant,
                 enableAnimation: false,
@@ -142,17 +144,24 @@ class _CarControlViewState extends State<CarControlView> {
                 drawArrows: true,
                 boxShadows: [],
               ),
-              mode: JoystickMode.vertical,
+              mode: JoystickMode.all,
             ),
             period: const Duration(milliseconds: 30),
             stick: JoystickStick(
+              size: 65,
               decoration: JoystickStickDecoration(
                 color: theme.colorScheme.onSecondaryContainer,
               ),
             ),
             includeInitialAnimation: false,
-            mode: JoystickMode.vertical,
+            mode: JoystickMode.all,
             listener: (details) {
+              if (details.x != prevJoystickSteering) {
+                context
+                    .read<CarBloc>()
+                    .add(UpdateDriveState(angle: (details.x * 90).toInt()));
+                prevJoystickSteering = details.x;
+              }
               onPedalChanged(amount: (details.y * -100).round());
             },
           ),

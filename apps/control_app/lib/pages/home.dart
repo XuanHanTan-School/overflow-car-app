@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     int? screenOrientationAngle;
+    int prevSteeringAngle = 0;
     screenOrientationStreamSubscription =
         motionSensors.screenOrientation.listen((event) {
       screenOrientationAngle = event.angle?.toInt();
@@ -41,7 +42,10 @@ class _HomePageState extends State<HomePage> {
         if (screenOrientationAngle == -90) {
           angle *= -1;
         }
-        context.read<CarBloc>().add(UpdateDriveState(angle: angle));
+        if (angle != prevSteeringAngle && (angle <= prevSteeringAngle - 10 || angle >= prevSteeringAngle + 10)) {
+          context.read<CarBloc>().add(UpdateDriveState(angle: angle));
+          prevSteeringAngle = angle;
+        }
       }
     });
 
