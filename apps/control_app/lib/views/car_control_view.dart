@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:car_bloc/car_bloc.dart';
 import 'package:car_bloc/car_event.dart';
@@ -21,20 +22,11 @@ class CarControlView extends StatefulWidget {
 class _CarControlViewState extends State<CarControlView> {
   Timer? showSettingsOverlayTimer;
   var isSettingsOverlayVisible = false;
-  var prevJoystickSteering = 0.0;
 
   @override
   void dispose() {
     super.dispose();
     showSettingsOverlayTimer?.cancel();
-  }
-
-  void onPedalChanged({required int amount}) {
-    final carBloc = context.read<CarBloc>();
-
-    carBloc.add(UpdateDriveState(
-      accelerate: amount,
-    ));
   }
 
   @override
@@ -178,13 +170,25 @@ class _CarControlViewState extends State<CarControlView> {
                 includeInitialAnimation: false,
                 mode: isTilt ? JoystickMode.vertical : JoystickMode.all,
                 listener: (details) {
+                  final carBloc = context.read<CarBloc>();
+
                   if (state.steeringMode == SteeringMode.joystick) {
-                    context
-                        .read<CarBloc>()
-                        .add(UpdateDriveState(angle: (details.x * 90).toInt()));
-                    prevJoystickSteering = details.x;
+                    final angle = details.y == 0
+                        ? 0
+                        : (atan(details.x / details.y) * 180 / pi)
+                                .toInt().abs() * (details.x.isNegative ? -1: 1);
+                    final accelerate =
+                        (sqrt(pow(details.x, 2) + pow(details.y, 2)) *
+                                (details.y.isNegative ? 1 : -1) *
+                                100)
+                            .toInt();
+                    carBloc.add(
+                        UpdateDriveState(angle: angle, accelerate: accelerate));
+                  } else if (state.steeringMode == SteeringMode.tilt) {
+                    carBloc.add(UpdateDriveState(
+                      accelerate: (details.y * -100).round(),
+                    ));
                   }
-                  onPedalChanged(amount: (details.y * -100).round());
                 },
               ),
             ),
