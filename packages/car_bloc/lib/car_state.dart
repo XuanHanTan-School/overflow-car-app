@@ -8,6 +8,7 @@ class CarState {
   int? _selectedCarIndex;
   final CarConnectionState connectionState;
   late final CarDrivingState drivingState;
+  final SteeringMode steeringMode;
   VideoController? _videoPlayerController;
   Player? _player;
   final PerformanceSettings perfSettings;
@@ -22,6 +23,7 @@ class CarState {
       int? selectedCarIndex,
       this.connectionState = CarConnectionState.disconnected,
       CarDrivingState? drivingState,
+      this.steeringMode = SteeringMode.tilt,
       VideoController? videoPlayerController,
       Player? player,
       required this.perfSettings}) {
@@ -37,6 +39,7 @@ class CarState {
     List<Car>? currentCars,
     CarConnectionState? connectionState,
     CarDrivingState? drivingState,
+    SteeringMode? steeringMode,
     PerformanceSettings? perfSettings,
   }) {
     return CarState(
@@ -45,6 +48,7 @@ class CarState {
       selectedCarIndex: _selectedCarIndex,
       connectionState: connectionState ?? this.connectionState,
       drivingState: drivingState ?? this.drivingState,
+      steeringMode: steeringMode ?? this.steeringMode,
       videoPlayerController: _videoPlayerController,
       player: _player,
       perfSettings: perfSettings ?? this.perfSettings,
@@ -143,4 +147,9 @@ class PerformanceSettings {
       "updateIntervalMillis": updateIntervalMillis,
     };
   }
+}
+
+enum SteeringMode {
+  tilt,
+  joystick,
 }

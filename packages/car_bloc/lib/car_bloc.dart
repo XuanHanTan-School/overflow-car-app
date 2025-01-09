@@ -23,6 +23,7 @@ class CarBloc extends Bloc<CarEvent, CarState> {
     on<AddCar>(onAddCar);
     on<ChangeSelectedCar>(onChangeSelectedCar);
     on<ConnectSelectedCar>(onConnectSelectedCar);
+    on<ChangeDriveSettings>(onChangeDriveSettings);
     on<UpdateDriveState>(onUpdateDriveState);
     on<SendDriveCommand>(onSendDriveCommand);
     on<DisconnectSelectedCar>(onDisconnectSelectedCar);
@@ -137,6 +138,10 @@ class CarBloc extends Bloc<CarEvent, CarState> {
         break;
       }
     }
+  }
+
+  void onChangeDriveSettings(ChangeDriveSettings event, Emitter emit) {
+    emit(state.copyWith(steeringMode: event.steeringMode));
   }
 
   void onUpdateDriveState(UpdateDriveState event, Emitter emit) {

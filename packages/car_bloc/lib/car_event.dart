@@ -1,4 +1,5 @@
 import 'package:car_api/overflow_car.dart';
+import 'package:car_bloc/car_state.dart';
 
 sealed class CarEvent {}
 
@@ -29,6 +30,12 @@ final class ChangeSelectedCar extends CarEvent {
 }
 
 final class ConnectSelectedCar extends CarEvent {}
+
+final class ChangeDriveSettings extends CarEvent {
+  final SteeringMode? steeringMode;
+
+  ChangeDriveSettings({this.steeringMode});
+}
 
 final class UpdateDriveState extends CarEvent {
   final int? angle;

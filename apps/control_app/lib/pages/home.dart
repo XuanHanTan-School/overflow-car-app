@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     int? screenOrientationAngle;
-    int prevSteeringAngle = 0;
     screenOrientationStreamSubscription =
         motionSensors.screenOrientation.listen((event) {
       screenOrientationAngle = event.angle?.toInt();
@@ -42,9 +41,9 @@ class _HomePageState extends State<HomePage> {
         if (screenOrientationAngle == -90) {
           angle *= -1;
         }
-        if (angle != prevSteeringAngle && (angle <= prevSteeringAngle - 10 || angle >= prevSteeringAngle + 10)) {
-          context.read<CarBloc>().add(UpdateDriveState(angle: angle));
-          prevSteeringAngle = angle;
+        final carBloc = context.read<CarBloc>();
+        if (carBloc.state.steeringMode == SteeringMode.tilt) {
+          carBloc.add(UpdateDriveState(angle: angle));
         }
       }
     });
@@ -122,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                   case CarConnectionState.connecting:
                     return LoadingView(message: "Connecting...");
                   case CarConnectionState.connected:
-                    return CarControlView(state: state);
+                    return CarControlView();
                 }
               },
             );
