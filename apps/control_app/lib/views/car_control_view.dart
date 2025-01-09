@@ -176,7 +176,10 @@ class _CarControlViewState extends State<CarControlView> {
                     final angle = details.y == 0
                         ? 0
                         : (atan(details.x / details.y) * 180 / pi)
-                                .toInt().abs() * (details.x.isNegative ? -1: 1);
+                                .toInt()
+                                .abs() *
+                            (details.x.isNegative ? -1 : 1) *
+                            (details.y.isNegative ? 1 : -1);
                     final accelerate =
                         (sqrt(pow(details.x, 2) + pow(details.y, 2)) *
                                 (details.y.isNegative ? 1 : -1) *
