@@ -22,6 +22,8 @@ final class SetCurrentTrial extends TimeTrialEvent {
   SetCurrentTrial({required this.currentTrial});
 }
 
+final class ResetCurrentTrial extends TimeTrialEvent {}
+
 final class UpdateCurrentTrial extends TimeTrialEvent {
   final String? userName;
   final DateTime? startTime;

@@ -7,6 +7,7 @@ import 'package:shared_car_components/views/loading_view.dart';
 
 Future<void> addCar({required BuildContext context}) async {
   String? validateName(String? name) {
+    name = name?.trim();
     if (name == null || name == "") return "Name must not be empty";
 
     final carBloc = context.read<CarManagementBloc>();
@@ -49,7 +50,7 @@ Future<void> addCar({required BuildContext context}) async {
                       autovalidateMode: AutovalidateMode.onUnfocus,
                       onChanged: (value) {
                         setStateDiag(() {
-                          name = value;
+                          name = value.trim();
                         });
                       },
                     ),

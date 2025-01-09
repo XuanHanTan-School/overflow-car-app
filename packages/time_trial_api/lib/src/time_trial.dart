@@ -57,6 +57,11 @@ class TimeTrial {
     };
   }
 
+  Future<void> reset() async {
+    final newTrial = TimeTrial(id: id, carName: carName, userName: userName);
+    await _dbRef.set(newTrial.toMap());
+  }
+
   Future<void> update(
       {String? userName,
       DateTime? startTime,

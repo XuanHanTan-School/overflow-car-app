@@ -20,6 +20,7 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
     on<SetCar>(onSetCar);
     on<AddTimeTrial>(onAddTimeTrial);
     on<SetCurrentTrial>(onSetCurrentTrial);
+    on<ResetCurrentTrial>(onResetCurrentTrial);
     on<UpdateCurrentTrial>(onUpdateCurrentTrial);
     on<DeleteTimeTrial>(onDeleteTimeTrial);
     on<ListenToLeaderboard>(onListenToLeaderboard);
@@ -88,6 +89,13 @@ class TimeTrialBloc extends Bloc<TimeTrialEvent, TimeTrialState> {
 
   void onSetCurrentTrial(SetCurrentTrial event, Emitter emit) {
     emit(state.copyWithCurrentTrial(currentTrial: event.currentTrial));
+  }
+
+  Future<void> onResetCurrentTrial(ResetCurrentTrial event, Emitter emit) async {
+    assert(state.currentTrial != null);
+
+    final currentTrial = state.currentTrial!;
+    await currentTrial.reset();
   }
 
   Future<void> onUpdateCurrentTrial(

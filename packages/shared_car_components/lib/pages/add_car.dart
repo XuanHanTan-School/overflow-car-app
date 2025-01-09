@@ -40,6 +40,7 @@ class _AddCarPageState extends State<AddCarPage> {
   }
 
   String? validateName(String? name) {
+    name = name?.trim();
     if (name == null || name == "") return "Name must not be empty";
 
     final carBloc = context.read<CarBloc>();
@@ -135,7 +136,7 @@ class _AddCarPageState extends State<AddCarPage> {
                               autovalidateMode: AutovalidateMode.onUnfocus,
                               onChanged: (value) {
                                 setState(() {
-                                  name = value;
+                                  name = value.trim();
                                 });
                               },
                             ),

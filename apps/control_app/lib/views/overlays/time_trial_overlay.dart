@@ -52,6 +52,7 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
   }
 
   String? validateName(String? value) {
+    value = value?.trim();
     if (value == null || value.isEmpty) {
       return "Name is required";
     }
@@ -123,7 +124,7 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
                                         AutovalidateMode.onUnfocus,
                                     onChanged: (value) {
                                       setState(() {
-                                        name = value;
+                                        name = value.trim();
                                       });
                                     },
                                   ),
@@ -144,7 +145,7 @@ class _TimeTrialOverlayState extends State<TimeTrialOverlay> {
                                           });
 
                                           timeTrialBloc.add(UpdateCurrentTrial(
-                                              userName: name));
+                                              userName: name.trim()));
                                           await timeTrialBloc.stream.firstWhere(
                                             (state) =>
                                                 state.currentTrial?.userName !=

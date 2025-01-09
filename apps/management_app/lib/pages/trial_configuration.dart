@@ -127,30 +127,57 @@ class _TrialConfigurationPageState extends State<TrialConfigurationPage> {
                         );
                       }).toList(),
                     ),
-                    IconButton.filled(
-                      onPressed: isLoading
-                          ? null
-                          : () async {
-                              setState(() {
-                                isLoading = true;
-                              });
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 30,
+                      children: [
+                        IconButton.outlined(
+                          onPressed: isLoading
+                              ? null
+                              : () async {
+                                  final timeTrialBloc =
+                                      context.read<TimeTrialBloc>();
+                                  timeTrialBloc
+                                      .add(ResetCurrentTrial());
+                                  await timeTrialBloc.stream.firstWhere(
+                                      (state) =>
+                                          state.currentTrial!.startTime ==
+                                          null);
+                                },
+                          icon: Icon(Icons.replay_outlined),
+                          iconSize: 28,
+                          padding: EdgeInsets.all(12),
+                        ),
+                        IconButton.filled(
+                          onPressed: isLoading
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
 
-                              final timeTrialBloc =
-                                  context.read<TimeTrialBloc>();
-                              final endTime = DateTime.now();
-                              timeTrialBloc
-                                  .add(UpdateCurrentTrial(endTime: endTime));
-                              await timeTrialBloc.stream.firstWhere((state) =>
-                                  state.currentTrial!.endTime == endTime);
+                                  final timeTrialBloc =
+                                      context.read<TimeTrialBloc>();
+                                  final endTime = DateTime.now();
+                                  timeTrialBloc.add(
+                                      UpdateCurrentTrial(endTime: endTime));
+                                  await timeTrialBloc.stream.firstWhere(
+                                      (state) =>
+                                          state.currentTrial!.endTime ==
+                                          endTime);
 
-                              if (!context.mounted) return;
-                              Navigator.pop(context);
-                            },
-                      icon: isLoading
-                          ? CircularProgressIndicator()
-                          : Icon(Icons.stop_outlined),
-                      iconSize: 48,
-                    )
+                                  if (!context.mounted) return;
+                                  Navigator.pop(context);
+                                },
+                          icon: isLoading
+                              ? CircularProgressIndicator()
+                              : Icon(
+                                  Icons.stop_outlined,
+                                ),
+                          iconSize: 48,
+                        )
+                      ],
+                    ),
                   ],
                 );
               }
