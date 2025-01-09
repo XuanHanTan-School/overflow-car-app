@@ -4,6 +4,9 @@
 
 This project provides a framework to control a robotic vehicle with video streaming capabilities using WebSocket communication. You can use tilt gestures and a joystick to drive the car, along with a live video stream. There is also a time trial feature. It works great with the [Overflow Car Command](https://github.com/XuanHanTan-School/overflow-car-command), which handles the video stream, connection logic and issues drive commands.
 
+## Demo
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xpdiwNy15Jw?si=SkBaPZoYBdhs7LJN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Features
 
 - **Intuitive gestures:** Tilt the phone left and right to steer, and use the joystick to go forwards or backwards.
@@ -40,16 +43,29 @@ The JSON file should be formatted as follows
 ## Apps
 
 ### Control App
+
 This is the app that is used to drive the car.
 
 **Supported platforms: Android, iOS**
 
 ### Live View App
+
+<div style="display: flex; gap: 14px; margin-top: 10px; margin-bottom: 10px">
+   <img src="media/live_view_1.PNG" width=500>
+   <img src="media/live_view_2.PNG" width=500>
+   <img src="media/live_view_3.PNG" width=500>
+</div>
+
 This app is meant to be run on a big screen to let spectators view the POV of the car, current time trial status and the leaderboard at the end of the time trial.
 
 **Supported platforms: macOS**
 
 ### Management App
+
+<div style="display: flex; gap: 14px; margin-top: 10px; margin-bottom: 10px">
+   <img src="media/management_1.PNG" width=500>
+   <img src="media/management_2.PNG" width=500>
+</div>
 
 This app allows admins to create, continue and delete time trials.
 
