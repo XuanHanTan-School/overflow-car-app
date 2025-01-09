@@ -5,7 +5,7 @@
 This project provides a framework to control a robotic vehicle with video streaming capabilities using WebSocket communication. You can use tilt gestures and a joystick to drive the car, along with a live video stream. There is also a time trial feature. It works great with the [Overflow Car Command](https://github.com/XuanHanTan-School/overflow-car-command), which handles the video stream, connection logic and issues drive commands.
 
 ## Demo
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xpdiwNy15Jw?si=SkBaPZoYBdhs7LJN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+Watch it on [YouTube](https://www.youtube.com/watch?v=xpdiwNy15Jw).
 
 ## Features
 
