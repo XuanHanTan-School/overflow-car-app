@@ -2,6 +2,8 @@
 
 > Apps to drive an RC car remotely over a WebSocket connection.
 
+![Cover image](media/cover.jpg)
+
 This project provides a framework to control a robotic vehicle with video streaming capabilities using WebSocket communication. You can use tilt gestures and a joystick to drive the car, along with a live video stream. There is also a time trial feature. It works great with the [Overflow Car Command](https://github.com/XuanHanTan-School/overflow-car-command), which handles the video stream, connection logic and issues drive commands.
 
 ## Demo
@@ -43,6 +45,12 @@ The JSON file should be formatted as follows
 ## Apps
 
 ### Control App
+
+<div style="display: flex; gap: 14px; margin-top: 10px; margin-bottom: 10px">
+   <img src="media/control_1.jpg" width=300>
+   <img src="media/control_2.jpg" width=300>
+   <img src="media/control_3.jpg" width=300>
+</div>
 
 This is the app that is used to drive the car.
 
